@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Administración</span>
+                <div class="spacer"></div>
+                <span id="admin-welcome">Bienvenido, Admin</span>
+                <div class="spacer"></div>
+                <a href="../user/store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">admin</span></a>
+                    <nav class="nav">
+                        <a href="index.html" class="nav-link active"><span data-icon="dashboard" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Dashboard</a>
+                        <a href="users.html" class="nav-link"><span data-icon="user" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Usuarios</a>
+                        <a href="products.html" class="nav-link"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Productos</a>
+                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
+                    </nav>
+                    <div class="header-actions">
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Dashboard de Administración</h1>
+        
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 24px;">
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="users" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">Total Usuarios</h3>
+                    </div>
+                    <div class="price" id="total-users">3</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="package" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">Total Productos</h3>
+                    </div>
+                    <div class="price" id="total-products">20</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="shopping-cart" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">Pedidos Pendientes</h3>
+                    </div>
+                    <div class="price" id="pending-orders">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 24px;">
+            <section class="panel" style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                    <span data-icon="user" style="width:18px;height:18px;color:#6b7280"></span>
+                    <h2 style="color:#374151;margin:0;">Usuarios Recientes</h2>
+                </div>
+                <div id="recent-users">
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;background:#f9fafb;">
+                        <div style="width:40px;height:40px;background:#3b82f6;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;">A</div>
+                        <div style="flex:1;">
+                            <div style="font-weight:600;color:#374151;">Administrador</div>
+                            <div style="color:#6b7280;font-size:14px;">admin@hb.local</div>
+                        </div>
+                        <div style="color:#6b7280;font-size:12px;text-transform:capitalize;padding:4px 8px;background:#e5e7eb;border-radius:4px;">admin</div>
+                    </div>
+                </div>
+            </section>
+            <section class="panel" style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                    <span data-icon="alert-triangle" style="width:18px;height:18px;color:#f59e0b"></span>
+                    <h2 style="color:#374151;margin:0;">Productos con Stock Bajo</h2>
+                </div>
+                <div id="low-stock-products">
+                    <p style="color:#6b7280;text-align:center;padding:20px;">Todos los productos tienen stock suficiente</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones - Panel Admin</small>
+        </div>
+    </footer>
+
+    <script>
+        // Verificar sesión
+        const sessionData = localStorage.getItem('hb_session');
+        if (!sessionData) {
+            window.location.href = '../auth/login.html';
+        } else {
+            try {
+                const session = JSON.parse(sessionData);
+                if (session.role !== 'admin') {
+                    window.location.href = '../auth/login.html';
+                } else {
+                    document.getElementById('admin-welcome').textContent = `Bienvenido, ${session.name}`;
+                }
+            } catch (e) {
+                window.location.href = '../auth/login.html';
+            }
+        }
+
+        // Botón de logout
+        document.getElementById('logout-container').innerHTML = `
+            <button class="btn icon logout" onclick="logout()" title="Cerrar sesión">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 16l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        `;
+
+        function logout() {
+            localStorage.removeItem('hb_session');
+            window.location.href = '../auth/login.html';
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

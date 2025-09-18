@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - Catálogo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+                <div class="spacer"></div>
+                <span>Bienvenido a H&B Importaciones</span>
+                <div class="spacer"></div>
+                <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <a href="src/user/store.html"" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="src/auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">web</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos...">
+                    </div>
+                    <div class="header-icons">
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="compare" style="width:16px;height:16px"></span>
+                            <span class="badge">0</span>
+                        </a>
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="heart" style="width:16px;height:16px"></span>
+                        </a>
+                        <a href="src/user/cart.html" class="icon-btn">
+                            <span class="icon" data-icon="cart" style="width:16px;height:16px"></span>
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                        </a>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Slider -->
+        <section class="hero-slider">
+            <div class="slider-container">
+                <div class="slide active">
+                    <div class="slide-content">
+                        <div class="slide-text">
+                            <h1>DESKTOPS DE ALTO RENDIMIENTO</h1>
+                            <p>Máxima potencia en un solo equipo</p>
+                            <a href="src/user/store.html" class="btn brand">Explorar Productos</a>
+                        </div>
+                        <div class="slide-image">
+                            <div class="hardware-showcase">
+                                <div class="gpu-card">RTX 4080 SUPER</div>
+                                <div class="pc-tower">
+                                    <div class="internal-components">
+                                        <div class="fan blue-glow"></div>
+                                        <div class="gpu-internal">FORCE RTX</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-text">
+                            <h1>NUESTRA MISIÓN</h1>
+                            <p>Proporcionar tecnología de vanguardia y soluciones informáticas de alta calidad para impulsar el éxito de nuestros clientes</p>
+                            <a href="src/user/store.html" class="btn brand">Conocer Más</a>
+                        </div>
+                        <div class="slide-image">
+                            <div class="mission-icon">🎯</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-text">
+                            <h1>NUESTRA VISIÓN</h1>
+                            <p>Ser la empresa líder en importación y distribución de tecnología, reconocida por nuestra excelencia y compromiso con la innovación</p>
+                            <a href="src/user/store.html" class="btn brand">Nuestros Valores</a>
+                        </div>
+                        <div class="slide-image">
+                            <div class="vision-icon">👁️</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-text">
+                            <h1>COMPROMISO DE CALIDAD</h1>
+                            <p>Garantizamos productos originales, soporte técnico especializado y entrega confiable en todo el territorio nacional</p>
+                            <a href="src/user/store.html" class="btn brand">Ver Garantías</a>
+                        </div>
+                        <div class="slide-image">
+                            <div class="quality-icon">⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slider Controls -->
+            <div class="slider-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+        </section>
+
+        <!-- Home Showcase (debajo del slider) -->
+        <section class="container" style="margin-top:24px">
+            <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+                <div style="flex:1 1 320px;min-width:300px;border:1px solid #e5e7eb;border-radius:12px;padding:16px">
+                    <h3 style="margin:0 0 12px 0;color:#111827">Oferta del mes</h3>
+                    <div style="background:#f9fafb;border:1px dashed #e5e7eb;border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:#6b7280">Imagen promocional</div>
+                    <div style="margin-top:12px;color:#111827;font-weight:600">Producto destacado</div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+                        <div style="color:#ef4444;text-decoration:line-through">$614,00</div>
+                        <div style="color:#16a34a;font-weight:700">$590,00</div>
+                    </div>
+                </div>
+                <div style="flex:3 1 640px;min-width:320px">
+                    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+                        <button class="chip">Computadores</button>
+                        <button class="chip">Línea corporativa</button>
+                        <button class="chip">Todo en uno</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px">
+                        <div class="card">
+                            <div class="card-media"></div>
+                            <div class="card-body">
+                                <div class="card-title">CPU Core i7</div>
+                                <div class="card-meta">
+                                    <span class="price">$ 683.000</span>
+                                    <span class="stock">Stock: 8</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-media"></div>
+                            <div class="card-body">
+                                <div class="card-title">CPU Core i5</div>
+                                <div class="card-meta">
+                                    <span class="price">$ 583.000</span>
+                                    <span class="stock">Stock: 12</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-media"></div>
+                            <div class="card-body">
+                                <div class="card-title">CPU Core i3</div>
+                                <div class="card-meta">
+                                    <span class="price">$ 430.000</span>
+                                    <span class="stock">Stock: 5</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Productos Destacados -->
+        <section class="container" style="margin-top:48px">
+            <h2 style="margin-bottom:24px;color:#111827;font-size:28px;font-weight:700">Productos Destacados</h2>
+            
+            <!-- Categorías -->
+            <div style="display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap">
+                <button class="chip" style="background:#3b82f6;color:white;border-color:#3b82f6">Laptops</button>
+                <button class="chip">Trabajo/Estudio</button>
+                <button class="chip">Línea corporativa</button>
+                <button class="chip">Gamers</button>
+            </div>
+
+            <!-- Grid de productos -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px">
+                <!-- Producto 1 -->
+                <div class="card">
+                    <div class="card-media" style="background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:14px">
+                        Laptop ASUS
+                    </div>
+                    <div class="card-body">
+                        <div style="color:#6b7280;font-size:12px;margin-bottom:4px">Regreso a clases, Trabajo/Estudio, Laptops</div>
+                        <div class="card-title">Laptop ASUS X1605VA-MB648 Intel Core i9-13900H 16GB 1TB 16INC</div>
+                        <div class="card-meta">
+                            <span class="price">$ 1.250.000</span>
+                            <span class="stock">Stock: 3</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="card">
+                    <div class="card-media" style="background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:14px">
+                        Laptop DELL
+                    </div>
+                    <div class="card-body">
+                        <div style="color:#6b7280;font-size:12px;margin-bottom:4px">Línea corporativa, Laptops</div>
+                        <div class="card-title">Laptop DELL LATITUDE Core i5 | 8GB RAM, SSD 256GB, Windows 10 Pro</div>
+                        <div class="card-meta">
+                            <span class="price">$ 2.100.000</span>
+                            <span class="stock">Stock: 5</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="card">
+                    <div class="card-media" style="background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:14px">
+                        Laptop HP
+                    </div>
+                    <div class="card-body">
+                        <div style="color:#6b7280;font-size:12px;margin-bottom:4px">Línea corporativa, Laptops</div>
+                        <div class="card-title">Laptop HP ProBook 450 G10 | Core i7, 16GB RAM, SSD 1TB | Windows 11</div>
+                        <div class="card-meta">
+                            <span class="price">$ 2.850.000</span>
+                            <span class="stock">Stock: 2</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón ver más -->
+            <div style="text-align:center;margin-top:32px">
+                <a href="src/user/store.html" class="btn brand" style="padding:12px 32px;font-size:16px">Ver todos los productos</a>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones</small>
+        </div>
+    </footer>
+
+    <script src="js/utils/data.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/icons.js"></script>
+    <script src="js/utils/ui.js"></script>
+    <script src="js/utils/sticky-header.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Slider functionality
+        let slideIndex = 1;
+        
+        function currentSlide(n) {
+            showSlide(slideIndex = n);
+        }
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[slideIndex - 1].classList.add('active');
+            dots[slideIndex - 1].classList.add('active');
+        }
+        
+        // Auto-advance slider
+        setInterval(() => {
+            slideIndex++;
+            if (slideIndex > 4) slideIndex = 1;
+            showSlide(slideIndex);
+        }, 5000);
+        
+        // Initialize slider and UI
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(1);
+            
+            // Inicializar UI si está disponible
+            if (window.UI && window.UI.initUI) {
+                window.UI.initUI();
+            }
+            
+            // Actualizar contador del carrito
+            if (window.UI && window.UI.updateCartHeader) {
+                window.UI.updateCartHeader();
+            }
+        });
+    </script>
+    
+</body>
+</html>
+
+

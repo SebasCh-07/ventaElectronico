@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+                <div class="spacer"></div>
+                <span>Bienvenido a H&B Importaciones</span>
+                <div class="spacer"></div>
+                <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <a href="store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="../../index.html">H&B<span class="web-badge">web</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos...">
+                    </div>
+                    <div class="header-icons">
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="compare" style="width:16px;height:16px"></span>
+                            <span class="badge">0</span>
+                        </a>
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="heart" style="width:16px;height:16px"></span>
+                        </a>
+                        <a href="cart.html" class="icon-btn">
+                            <span class="icon" data-icon="cart" style="width:16px;height:16px"></span>
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                        </a>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Catálogo de Productos</h1>
+        <div id="categories" class="chip-group"></div>
+        <section id="product-grid" class="grid"></section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/data.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script src="../../js/catalog.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Verificar sesión y actualizar UI
+        const sessionData = localStorage.getItem('hb_session');
+        if (sessionData) {
+            try {
+                const session = JSON.parse(sessionData);
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('logout-container').innerHTML = `
+                    <button class="btn icon logout" onclick="logout()" title="Cerrar sesión">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 6H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 16l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                `;
+            } catch (e) {
+                // Sesión inválida, mantener login visible
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('hb_session');
+            window.location.href = '../auth/login.html';
+        }
+    </script>
+</body>
+</html>

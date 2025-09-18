@@ -1,0 +1,438 @@
+/**
+ * Datos quemados para H&B Importaciones
+ * Productos, usuarios, categorías y configuraciones del sistema
+ */
+
+const HBDATA = {
+  // Usuarios demo del sistema
+  users: [
+    {
+      id: 'u1',
+      role: 'admin',
+      name: 'Administrador',
+      email: 'admin@hb.local',
+      password: 'admin123',
+      active: true,
+      createdAt: '2024-01-01',
+      lastLogin: null
+    },
+    {
+      id: 'd1',
+      role: 'distributor',
+      name: 'Distribuidora Alfa',
+      email: 'distri@hb.local',
+      password: 'distri123',
+      active: true,
+      whatsapp: '+573001112233',
+      createdAt: '2024-01-02',
+      lastLogin: null
+    },
+    {
+      id: 'c1',
+      role: 'client',
+      name: 'Cliente Demo',
+      email: 'cliente@hb.local',
+      password: 'cliente123',
+      active: true,
+      phone: '+573001112234',
+      createdAt: '2024-01-03',
+      lastLogin: null
+    }
+  ],
+
+  // Categorías de productos
+  categories: [
+    { id: 'cat1', name: 'Pilas', icon: '🔋', description: 'Pilas recargables y desechables' },
+    { id: 'cat2', name: 'Cargadores', icon: '🔌', description: 'Cargadores universales y específicos' },
+    { id: 'cat3', name: 'Laptops', icon: '💻', description: 'Computadores portátiles' },
+    { id: 'cat4', name: 'Accesorios', icon: '🎧', description: 'Accesorios para dispositivos' },
+    { id: 'cat5', name: 'Audio', icon: '🔊', description: 'Equipos de audio y sonido' },
+    { id: 'cat6', name: 'Gaming', icon: '🎮', description: 'Productos para gaming' }
+  ],
+
+  // Productos del catálogo
+  products: [
+    {
+      id: 'p1',
+      owner: 'd1',
+      name: 'Pila Recargable AA 2500mAh',
+      description: 'Pila recargable de alta capacidad, ideal para dispositivos de alto consumo',
+      pricePublico: 25000,
+      priceDistribuidor: 18000,
+      category: 'Pilas',
+      stock: 50,
+      image: '',
+      sku: 'PIL-AA-2500',
+      brand: 'Energizer',
+      featured: true,
+      sales: 15,
+      createdAt: '2024-01-01'
+    },
+    {
+      id: 'p2',
+      owner: 'd1',
+      name: 'Cargador Universal USB-C 65W',
+      description: 'Cargador rápido universal compatible con múltiples dispositivos',
+      pricePublico: 89000,
+      priceDistribuidor: 65000,
+      category: 'Cargadores',
+      stock: 25,
+      image: '',
+      sku: 'CAR-USB65W',
+      brand: 'Anker',
+      featured: true,
+      sales: 8,
+      createdAt: '2024-01-02'
+    },
+    {
+      id: 'p3',
+      owner: 'd1',
+      name: 'Laptop ASUS X1605VA Core i7',
+      description: 'Laptop profesional con procesador Intel Core i7, 16GB RAM, 1TB SSD',
+      pricePublico: 2850000,
+      priceDistribuidor: 2200000,
+      category: 'Laptops',
+      stock: 3,
+      image: '',
+      sku: 'LAP-ASUS-X1605',
+      brand: 'ASUS',
+      featured: true,
+      sales: 2,
+      createdAt: '2024-01-03'
+    },
+    {
+      id: 'p4',
+      owner: 'd1',
+      name: 'Auriculares Bluetooth Sony WH-1000XM4',
+      description: 'Auriculares inalámbricos con cancelación de ruido activa',
+      pricePublico: 1200000,
+      priceDistribuidor: 950000,
+      category: 'Audio',
+      stock: 8,
+      image: '',
+      sku: 'AUD-SONY-WH1000',
+      brand: 'Sony',
+      featured: false,
+      sales: 5,
+      createdAt: '2024-01-04'
+    },
+    {
+      id: 'p5',
+      owner: 'd1',
+      name: 'Mouse Gaming Logitech G502',
+      description: 'Mouse gaming de alta precisión con 11 botones programables',
+      pricePublico: 180000,
+      priceDistribuidor: 135000,
+      category: 'Gaming',
+      stock: 12,
+      image: '',
+      sku: 'GAM-LOG-G502',
+      brand: 'Logitech',
+      featured: false,
+      sales: 7,
+      createdAt: '2024-01-05'
+    },
+    {
+      id: 'p6',
+      owner: 'd1',
+      name: 'Pila Recargable AAA 1000mAh',
+      description: 'Pila recargable compacta para dispositivos pequeños',
+      pricePublico: 18000,
+      priceDistribuidor: 13000,
+      category: 'Pilas',
+      stock: 35,
+      image: '',
+      sku: 'PIL-AAA-1000',
+      brand: 'Duracell',
+      featured: false,
+      sales: 12,
+      createdAt: '2024-01-06'
+    },
+    {
+      id: 'p7',
+      owner: 'd1',
+      name: 'Cargador Inalámbrico 15W',
+      description: 'Base de carga inalámbrica rápida para smartphones',
+      pricePublico: 45000,
+      priceDistribuidor: 32000,
+      category: 'Cargadores',
+      stock: 18,
+      image: '',
+      sku: 'CAR-WIRELESS-15W',
+      brand: 'Samsung',
+      featured: false,
+      sales: 6,
+      createdAt: '2024-01-07'
+    },
+    {
+      id: 'p8',
+      owner: 'd1',
+      name: 'Laptop HP ProBook 450 G10',
+      description: 'Laptop empresarial con Core i5, 8GB RAM, 256GB SSD',
+      pricePublico: 2100000,
+      priceDistribuidor: 1650000,
+      category: 'Laptops',
+      stock: 5,
+      image: '',
+      sku: 'LAP-HP-PB450',
+      brand: 'HP',
+      featured: true,
+      sales: 3,
+      createdAt: '2024-01-08'
+    },
+    {
+      id: 'p9',
+      owner: 'd1',
+      name: 'Teclado Mecánico RGB',
+      description: 'Teclado mecánico gaming con retroiluminación RGB',
+      pricePublico: 320000,
+      priceDistribuidor: 240000,
+      category: 'Gaming',
+      stock: 7,
+      image: '',
+      sku: 'GAM-KB-RGB',
+      brand: 'Corsair',
+      featured: false,
+      sales: 4,
+      createdAt: '2024-01-09'
+    },
+    {
+      id: 'p10',
+      owner: 'd1',
+      name: 'Altavoz Bluetooth JBL Charge 4',
+      description: 'Altavoz portátil resistente al agua con gran autonomía',
+      pricePublico: 280000,
+      priceDistribuidor: 210000,
+      category: 'Audio',
+      stock: 10,
+      image: '',
+      sku: 'AUD-JBL-CHARGE4',
+      brand: 'JBL',
+      featured: false,
+      sales: 8,
+      createdAt: '2024-01-10'
+    },
+    {
+      id: 'p11',
+      owner: 'd1',
+      name: 'Cable USB-C a USB-C 2m',
+      description: 'Cable de datos y carga de alta velocidad',
+      pricePublico: 25000,
+      priceDistribuidor: 18000,
+      category: 'Accesorios',
+      stock: 30,
+      image: '',
+      sku: 'ACC-USB-C-2M',
+      brand: 'Anker',
+      featured: false,
+      sales: 15,
+      createdAt: '2024-01-11'
+    },
+    {
+      id: 'p12',
+      owner: 'd1',
+      name: 'Monitor 24" Full HD',
+      description: 'Monitor LED 24 pulgadas con resolución Full HD',
+      pricePublico: 450000,
+      priceDistribuidor: 340000,
+      category: 'Accesorios',
+      stock: 6,
+      image: '',
+      sku: 'ACC-MON-24FHD',
+      brand: 'LG',
+      featured: false,
+      sales: 2,
+      createdAt: '2024-01-12'
+    },
+    {
+      id: 'p13',
+      owner: 'd1',
+      name: 'Pila Recargable 9V 600mAh',
+      description: 'Pila recargable para instrumentos musicales y equipos profesionales',
+      pricePublico: 35000,
+      priceDistribuidor: 25000,
+      category: 'Pilas',
+      stock: 15,
+      image: '',
+      sku: 'PIL-9V-600',
+      brand: 'Energizer',
+      featured: false,
+      sales: 3,
+      createdAt: '2024-01-13'
+    },
+    {
+      id: 'p14',
+      owner: 'd1',
+      name: 'Cargador Múltiple 4 Puertos',
+      description: 'Cargador de pared con 4 puertos USB para múltiples dispositivos',
+      pricePublico: 65000,
+      priceDistribuidor: 48000,
+      category: 'Cargadores',
+      stock: 20,
+      image: '',
+      sku: 'CAR-MULTI-4USB',
+      brand: 'Anker',
+      featured: false,
+      sales: 9,
+      createdAt: '2024-01-14'
+    },
+    {
+      id: 'p15',
+      owner: 'd1',
+      name: 'Laptop Dell Inspiron 15 3000',
+      description: 'Laptop básica con procesador Intel Core i3, 4GB RAM, 128GB SSD',
+      pricePublico: 1650000,
+      priceDistribuidor: 1250000,
+      category: 'Laptops',
+      stock: 4,
+      image: '',
+      sku: 'LAP-DELL-INS15',
+      brand: 'Dell',
+      featured: false,
+      sales: 1,
+      createdAt: '2024-01-15'
+    },
+    {
+      id: 'p16',
+      owner: 'd1',
+      name: 'Micrófono USB Condensador',
+      description: 'Micrófono de estudio para streaming y grabación',
+      pricePublico: 180000,
+      priceDistribuidor: 135000,
+      category: 'Audio',
+      stock: 8,
+      image: '',
+      sku: 'AUD-MIC-USB',
+      brand: 'Blue',
+      featured: false,
+      sales: 4,
+      createdAt: '2024-01-16'
+    },
+    {
+      id: 'p17',
+      owner: 'd1',
+      name: 'Mouse Pad Gaming XL',
+      description: 'Alfombrilla gaming extra grande con superficie optimizada',
+      pricePublico: 35000,
+      priceDistribuidor: 26000,
+      category: 'Gaming',
+      stock: 25,
+      image: '',
+      sku: 'GAM-PAD-XL',
+      brand: 'SteelSeries',
+      featured: false,
+      sales: 11,
+      createdAt: '2024-01-17'
+    },
+    {
+      id: 'p18',
+      owner: 'd1',
+      name: 'Hub USB 3.0 7 Puertos',
+      description: 'Concentrador USB con 7 puertos para expandir conectividad',
+      pricePublico: 85000,
+      priceDistribuidor: 62000,
+      category: 'Accesorios',
+      stock: 12,
+      image: '',
+      sku: 'ACC-HUB-USB7',
+      brand: 'ORICO',
+      featured: false,
+      sales: 6,
+      createdAt: '2024-01-18'
+    },
+    {
+      id: 'p19',
+      owner: 'd1',
+      name: 'Pila Recargable D 8000mAh',
+      description: 'Pila recargable de gran capacidad para equipos de alto consumo',
+      pricePublico: 45000,
+      priceDistribuidor: 32000,
+      category: 'Pilas',
+      stock: 8,
+      image: '',
+      sku: 'PIL-D-8000',
+      brand: 'Duracell',
+      featured: false,
+      sales: 2,
+      createdAt: '2024-01-19'
+    },
+    {
+      id: 'p20',
+      owner: 'd1',
+      name: 'Cargador Solar Portátil 20000mAh',
+      description: 'Power bank con panel solar integrado para carga ecológica',
+      pricePublico: 120000,
+      priceDistribuidor: 89000,
+      category: 'Cargadores',
+      stock: 6,
+      image: '',
+      sku: 'CAR-SOLAR-20K',
+      brand: 'Anker',
+      featured: true,
+      sales: 3,
+      createdAt: '2024-01-20'
+    }
+  ],
+
+  // Configuración del sistema
+  config: {
+    companyName: 'H&B Importaciones',
+    companySlogan: 'Tecnología de vanguardia para tu éxito',
+    whatsapp: '+573001112233',
+    email: 'contacto@hbimportaciones.com',
+    address: 'Calle 123 #45-67, Bogotá, Colombia',
+    hours: 'Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00',
+    socialMedia: {
+      facebook: 'https://facebook.com/hbimportaciones',
+      instagram: 'https://instagram.com/hbimportaciones',
+      twitter: 'https://twitter.com/hbimportaciones'
+    },
+    currency: 'COP',
+    currencySymbol: '$',
+    lowStockThreshold: 5,
+    featuredProductsCount: 6
+  },
+
+  // Slider hero banners
+  heroSlides: [
+    {
+      id: 'slide1',
+      title: 'DESKTOPS DE ALTO RENDIMIENTO',
+      subtitle: 'Máxima potencia en un solo equipo',
+      cta: 'Explorar Productos',
+      ctaLink: 'src/user/store.html',
+      background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
+      featured: true
+    },
+    {
+      id: 'slide2',
+      title: 'NUESTRA MISIÓN',
+      subtitle: 'Proporcionar tecnología de vanguardia y soluciones informáticas de alta calidad para impulsar el éxito de nuestros clientes',
+      cta: 'Conocer Más',
+      ctaLink: 'src/user/store.html',
+      background: 'linear-gradient(135deg, #0066cc 0%, #00aaff 50%, #0066cc 100%)',
+      featured: false
+    },
+    {
+      id: 'slide3',
+      title: 'NUESTRA VISIÓN',
+      subtitle: 'Ser la empresa líder en importación y distribución de tecnología, reconocida por nuestra excelencia y compromiso con la innovación',
+      cta: 'Nuestros Valores',
+      ctaLink: 'src/user/store.html',
+      background: 'linear-gradient(135deg, #00aaff 0%, #0066cc 50%, #00aaff 100%)',
+      featured: false
+    },
+    {
+      id: 'slide4',
+      title: 'COMPROMISO DE CALIDAD',
+      subtitle: 'Garantizamos productos originales, soporte técnico especializado y entrega confiable en todo el territorio nacional',
+      cta: 'Ver Garantías',
+      ctaLink: 'src/user/store.html',
+      background: 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 50%, #2d2d2d 100%)',
+      featured: false
+    }
+  ]
+};
+
+// Exportar datos para uso global
+window.HBDATA = HBDATA;

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Distribuidora</span>
+                <div class="spacer"></div>
+                <span id="distri-welcome">Bienvenido, Distribuidora</span>
+                <div class="spacer"></div>
+                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+                <span id="logout-container"></span>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="store.html">H&B<span class="web-badge">distri</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos..." id="search-input">
+                    </div>
+                    <div class="header-icons">
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="compare" style="width:16px;height:16px"></span>
+                            <span class="badge">0</span>
+                        </a>
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="heart" style="width:16px;height:16px"></span>
+                        </a>
+                        <a href="#" class="icon-btn" onclick="alert('Función de carrito no disponible para distribuidoras')">
+                            <span class="icon" data-icon="cart" style="width:16px;height:16px"></span>
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                        </a>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <nav class="breadcrumb">
+            <a href="store.html">Inicio</a> > 
+            <a href="store.html">Tienda</a> > 
+            <span id="breadcrumb-search">Resultados de búsqueda</span>
+        </nav>
+        
+        <div class="search-layout">
+            <aside class="search-sidebar">
+                <h3>Explorar categorías</h3>
+                <div id="categories" class="category-list"></div>
+            </aside>
+            
+            <section class="search-results">
+                <div id="search-info" class="search-info"></div>
+                <div id="product-grid" class="grid"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones - Panel Distribuidora</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script>
+        // Deshabilitar funcionalidad de carrito para distribuidora
+        document.addEventListener('DOMContentLoaded', () => {
+            window.addToCart = function(productId) {
+                alert('Las distribuidoras no pueden agregar productos al carrito. Esta función está disponible solo para clientes.');
+            };
+        });
+    </script>
+    <script src="../../js/search.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Administración</span>
+                <div class="spacer"></div>
+                <span id="admin-welcome">Bienvenido, Admin</span>
+                <div class="spacer"></div>
+                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">admin</span></a>
+                    <nav class="nav">
+                        <a href="index.html" class="nav-link"><span data-icon="dashboard" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Dashboard</a>
+                        <a href="users.html" class="nav-link active"><span data-icon="user" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Usuarios</a>
+                        <a href="products.html" class="nav-link"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Productos</a>
+                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
+                    </nav>
+                    <div class="header-actions">
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Gestión de Usuarios</h1>
+        
+        <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
+            <button class="btn brand" id="add-user-btn"><span data-icon="user-plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Nuevo Usuario</button>
+            <div class="search" style="max-width: 300px;">
+                <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                <input type="text" placeholder="Buscar usuarios..." id="user-search">
+            </div>
+        </div>
+
+        <section class="panel">
+            <div id="users-list"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones - Panel Admin</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script src="../../js/admin/users.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

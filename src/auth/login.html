@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+                <div class="spacer"></div>
+                <span>Bienvenido a H&B Importaciones</span>
+                <div class="spacer"></div>
+                <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <a href="../../index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="../../index.html">H&B<span class="web-badge">web</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos...">
+                    </div>
+                    <div class="header-icons">
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="compare" style="width:16px;height:16px"></span>
+                            <span class="badge">0</span>
+                        </a>
+                        <a href="#" class="icon-btn">
+                            <span class="icon" data-icon="heart" style="width:16px;height:16px"></span>
+                        </a>
+                        <a href="../user/cart.html" class="icon-btn">
+                            <span class="icon" data-icon="cart" style="width:16px;height:16px"></span>
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                        </a>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="auth-grid" style="margin-top:16px;">
+            <section class="auth-section">
+                <h2 class="auth-title">Acceder</h2>
+                <p class="auth-sub">¡Bienvenido de nuevo! Inicia sesión en tu cuenta.</p>
+                <form id="login-form" class="form">
+                    <div class="field">
+                        <label for="email">Nombre de usuario o correo electrónico</label>
+                        <input id="email" type="email" required autocomplete="username" placeholder="tu@correo.com">
+                    </div>
+                    <div class="field">
+                        <label for="password">Contraseña</label>
+                        <input id="password" type="password" required autocomplete="current-password" placeholder="••••••••">
+                    </div>
+                    <div class="actions" style="justify-content:flex-start;gap:8px;align-items:center;">
+                        <label class="muted" style="margin-right:6px">Autocompletar demo</label>
+                        <div class="chip-group">
+                            <button type="button" class="chip" data-fill-user="admin">Admin</button>
+                            <button type="button" class="chip" data-fill-user="distributor">Distribuidora</button>
+                            <button type="button" class="chip" data-fill-user="client">Cliente</button>
+                        </div>
+                    </div>
+                    <div class="actions" style="justify-content:space-between;">
+                        <a class="text-link" href="register.html">¿Olvidaste la contraseña? / Registrarse</a>
+                        <button class="btn brand" type="submit">Acceso</button>
+                    </div>
+                </form>
+            </section>
+            <div class="auth-divider">
+                <span class="pill">O</span>
+            </div>
+            <section class="auth-section">
+                <h2 class="auth-title">Registrarse</h2>
+                <p class="auth-sub">Crea una nueva cuenta hoy para disfrutar de los beneficios de una experiencia de compra personalizada.</p>
+                <form onsubmit="event.preventDefault(); window.location.href='register.html'" class="form">
+                    <div class="field">
+                        <label for="reg-email">Dirección de correo electrónico</label>
+                        <input id="reg-email" type="email" placeholder="tu@correo.com">
+                    </div>
+                    <div class="actions" style="justify-content:flex-start;">
+                        <a class="btn" href="register.html">Registrarse</a>
+                    </div>
+                </form>
+                <div class="benefits">
+                    <div class="benefit"><span class="dot"></span><span>Seguir tus pedidos fácilmente.</span></div>
+                    <div class="benefit"><span class="dot"></span><span>Mantener un registro de todas tus compras.</span></div>
+                    <div class="benefit"><span class="dot"></span><span>Obtener nuestra lista de precios exclusiva.</span></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones</small>
+        </div>
+    </footer>
+
+    <script src="../../js/auth-simple.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

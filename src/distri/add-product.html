@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Distribuidora</span>
+                <div class="spacer"></div>
+                <span id="distri-welcome">Bienvenido, Distribuidora</span>
+                <div class="spacer"></div>
+                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+                <span id="logout-container"></span>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
+                    <nav class="nav">
+                        <a href="index.html" class="nav-link"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Productos</a>
+                        <a href="add-product.html" class="nav-link active"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Agregar Producto</a>
+                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
+                    </nav>
+                    <span id="logout-container"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Agregar Producto</h1>
+        
+        <section class="panel" style="max-width: 600px; margin: 0 auto;">
+            <form id="product-form" class="form">
+                <div class="field">
+                    <label for="name">Nombre del Producto</label>
+                    <input id="name" type="text" required>
+                </div>
+                <div class="field">
+                    <label for="price">Precio (COP)</label>
+                    <input id="price" type="number" required min="0">
+                </div>
+                <div class="field">
+                    <label for="stock">Stock</label>
+                    <input id="stock" type="number" required min="0">
+                </div>
+                <div class="field">
+                    <label for="category">Categoría</label>
+                    <select id="category" required>
+                        <option value="">Seleccionar categoría</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Accesorios">Accesorios</option>
+                        <option value="Electrónicos">Electrónicos</option>
+                        <option value="Hogar">Hogar</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" rows="3" style="background:#f9fafb;border:1px solid #d1d5db;border-radius:8px;padding:10px;color:#374151;resize:vertical;font-family:inherit;"></textarea>
+                </div>
+                <div class="actions">
+                    <a class="btn" href="index.html">Cancelar</a>
+                    <button class="btn brand" type="submit">Guardar Producto</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones - Panel Distribuidora</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script src="../../js/distri/add-product.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

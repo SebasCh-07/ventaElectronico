@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Administración</span>
+                <div class="spacer"></div>
+                <span id="admin-welcome">Bienvenido, Admin</span>
+                <div class="spacer"></div>
+                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">admin</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos...">
+                    </div>
+                    <div class="header-actions">
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Catálogo de Productos</h1>
+        <div id="categories" class="chip-group"></div>
+        <section id="product-grid" class="grid"></section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script>
+        // Deshabilitar funcionalidad de carrito para admin
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sobrescribir la función de agregar al carrito
+            window.addToCart = function(productId) {
+                alert('Los administradores no pueden agregar productos al carrito. Esta función está disponible solo para clientes.');
+            };
+            
+            // Inicializar botón de logout
+            const logoutContainer = document.getElementById('logout-container');
+            if(logoutContainer){
+                const logoutBtn = UI.createLogoutButton();
+                logoutContainer.appendChild(logoutBtn);
+            }
+        });
+    </script>
+    <script src="../../js/catalog.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
