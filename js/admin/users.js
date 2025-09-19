@@ -1,369 +1,370 @@
-/**
- * Sistema de gestión de usuarios para H&B Importaciones - Panel Admin
- * Permite ver, filtrar, buscar, crear, editar y gestionar usuarios
- */
-(function(){
-  'use strict';
+// Gestión de usuarios con pestañas
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar sesión
+    const sessionData = localStorage.getItem('hb_session');
+    if (!sessionData) {
+        window.location.href = '../auth/login.html';
+        return;
+    }
 
-  let allUsers = [];
-  let filteredUsers = [];
-  let editingUserId = null;
-
-  /**
-   * Colores por rol de usuario
-   */
-  const ROLE_COLORS = {
-    admin: { bg: '#fef3c7', color: '#92400e' },
-    distributor: { bg: '#dbeafe', color: '#1e40af' },
-    client: { bg: '#e5e7eb', color: '#374151' }
-  };
-
-  /**
-   * Renderiza la lista de usuarios
-   */
-  function renderUsers(users = null) {
-    const usersToRender = users || filteredUsers;
-    const container = document.getElementById('users-list');
-    
-    if (usersToRender.length === 0) {
-      container.innerHTML = '<p style="color:#6b7280;text-align:center;padding:40px;">No hay usuarios que mostrar</p>';
+    try {
+        const session = JSON.parse(sessionData);
+        if (session.role !== 'admin') {
+            window.location.href = '../auth/login.html';
+            return;
+        }
+    } catch (e) {
+        window.location.href = '../auth/login.html';
       return;
     }
     
-    container.innerHTML = usersToRender.map(user => {
-      const roleColor = ROLE_COLORS[user.role] || ROLE_COLORS.client;
-      const createdDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-CO') : 'N/A';
-      
-      return `
-        <div style="display:flex;align-items:center;gap:16px;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;background:white;">
-          <div style="width:48px;height:48px;background:#f3f4f6;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#6b7280;font-weight:600;font-size:18px;">
-            ${user.name.charAt(0).toUpperCase()}
-          </div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-              <div style="font-weight:600;color:#374151;">${user.name}</div>
-              <span style="padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;text-transform:capitalize;background:${roleColor.bg};color:${roleColor.color};">
-                ${getRoleDisplayName(user.role)}
-              </span>
-            </div>
-            <div style="color:#6b7280;font-size:14px;margin-bottom:2px;">${user.email}</div>
-            <div style="color:#6b7280;font-size:12px;">
-              Registrado: ${createdDate}
-              ${user.whatsapp ? ` • WhatsApp: ${user.whatsapp}` : ''}
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;text-transform:capitalize;${user.active !== false ? 'background:#dcfce7;color:#166534;' : 'background:#fef2f2;color:#dc2626;'}">
-              ${user.active !== false ? 'Activo' : 'Inactivo'}
-            </span>
-            <button class="btn" onclick="editUser('${user.id}')" style="padding:6px 12px;font-size:12px;">
-              Editar
-            </button>
-            <button class="btn" onclick="toggleUser('${user.id}')" style="padding:6px 12px;font-size:12px;">
-              ${user.active !== false ? 'Desactivar' : 'Activar'}
-            </button>
-            <button class="btn" onclick="deleteUser('${user.id}')" style="padding:6px 12px;font-size:12px;background:#ef4444;border-color:#dc2626;color:white;">
-              Eliminar
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  /**
-   * Obtiene el nombre de visualización del rol
-   */
-  function getRoleDisplayName(role) {
-    const roleNames = {
-      admin: 'Administrador',
-      distributor: 'Distribuidor', 
-      client: 'Cliente'
-    };
-    return roleNames[role] || role;
-  }
-
-  /**
-   * Renderiza las estadísticas de usuarios
-   */
-  function renderStats() {
-    const totalUsers = allUsers.length;
-    const activeUsers = allUsers.filter(u => u.active !== false).length;
-    const clients = allUsers.filter(u => u.role === 'client').length;
-    const distributors = allUsers.filter(u => u.role === 'distributor').length;
-
-    document.getElementById('total-users-count').textContent = totalUsers;
-    document.getElementById('active-users-count').textContent = activeUsers;
-    document.getElementById('clients-count').textContent = clients;
-    document.getElementById('distributors-count').textContent = distributors;
-  }
-
-  /**
-   * Filtra usuarios por búsqueda, rol y estado
-   */
-  function filterUsers() {
-    const searchTerm = document.getElementById('user-search').value.toLowerCase().trim();
-    const roleFilter = document.getElementById('role-filter').value;
-    const statusFilter = document.getElementById('status-filter').value;
-    
-    filteredUsers = allUsers.filter(user => {
-      const matchesSearch = !searchTerm || 
-        user.name.toLowerCase().includes(searchTerm) ||
-        user.email.toLowerCase().includes(searchTerm) ||
-        user.role.toLowerCase().includes(searchTerm);
-      
-      const matchesRole = !roleFilter || user.role === roleFilter;
-      
-      const matchesStatus = !statusFilter || 
-        (statusFilter === 'active' && user.active !== false) ||
-        (statusFilter === 'inactive' && user.active === false);
-      
-      return matchesSearch && matchesRole && matchesStatus;
-    });
-
-    renderUsers();
-  }
-
-  /**
-   * Carga y actualiza la lista de usuarios
-   */
-  function loadUsers() {
-    allUsers = StorageAPI.getUsers().sort((a, b) => {
-      const dateA = new Date(a.createdAt || '2024-01-01');
-      const dateB = new Date(b.createdAt || '2024-01-01');
-      return dateB - dateA;
-    });
-    filteredUsers = [...allUsers];
-    renderUsers();
-    renderStats();
-  }
-
-  /**
-   * Activa/desactiva un usuario
-   */
-  function toggleUser(userId) {
-    const users = StorageAPI.getUsers();
-    const user = users.find(u => u.id === userId);
-    if (!user) return;
-    
-    user.active = user.active === false ? true : false;
-    StorageAPI.setUsers(users);
-    loadUsers();
-    filterUsers();
-    alert(`Usuario ${user.active ? 'activado' : 'desactivado'} exitosamente`);
-  }
-
-  /**
-   * Elimina un usuario
-   */
-  function deleteUser(userId) {
-    const user = allUsers.find(u => u.id === userId);
-    if (!user) return;
-    
-    if (!confirm(`¿Estás seguro de que quieres eliminar al usuario "${user.name}"?`)) return;
-    
-    const users = StorageAPI.getUsers();
-    const updatedUsers = users.filter(u => u.id !== userId);
-    StorageAPI.setUsers(updatedUsers);
-    loadUsers();
-    filterUsers();
-    alert('Usuario eliminado exitosamente');
-  }
-
-  /**
-   * Abre el modal para crear un nuevo usuario
-   */
-  function addUser() {
-    editingUserId = null;
-    document.getElementById('user-modal-title').textContent = 'Nuevo Usuario';
-    clearUserForm();
-    document.getElementById('user-modal').style.display = 'flex';
-  }
-
-  /**
-   * Abre el modal para editar un usuario existente
-   */
-  function editUser(userId) {
-    const user = allUsers.find(u => u.id === userId);
-    if (!user) return;
-    
-    editingUserId = userId;
-    document.getElementById('user-modal-title').textContent = 'Editar Usuario';
-    fillUserForm(user);
-    document.getElementById('user-modal').style.display = 'flex';
-  }
-
-  /**
-   * Limpia el formulario de usuario
-   */
-  function clearUserForm() {
-    document.getElementById('user-name').value = '';
-    document.getElementById('user-email').value = '';
-    document.getElementById('user-password').value = '';
-    document.getElementById('user-role').value = '';
-    document.getElementById('user-whatsapp').value = '';
-    document.getElementById('user-active').checked = true;
-    document.getElementById('whatsapp-field').style.display = 'none';
-  }
-
-  /**
-   * Llena el formulario con datos del usuario
-   */
-  function fillUserForm(user) {
-    document.getElementById('user-name').value = user.name || '';
-    document.getElementById('user-email').value = user.email || '';
-    document.getElementById('user-password').value = user.password || '';
-    document.getElementById('user-role').value = user.role || '';
-    document.getElementById('user-whatsapp').value = user.whatsapp || '';
-    document.getElementById('user-active').checked = user.active !== false;
-    
-    // Mostrar campo WhatsApp si es distribuidor
-    const isDistributor = user.role === 'distributor';
-    document.getElementById('whatsapp-field').style.display = isDistributor ? 'block' : 'none';
-  }
-
-  /**
-   * Guarda el usuario (crear o editar)
-   */
-  function saveUser() {
-    const name = document.getElementById('user-name').value.trim();
-    const email = document.getElementById('user-email').value.trim().toLowerCase();
-    const password = document.getElementById('user-password').value;
-    const role = document.getElementById('user-role').value;
-    const whatsapp = document.getElementById('user-whatsapp').value.trim();
-    const active = document.getElementById('user-active').checked;
-
-    // Validaciones
-    if (!name || !email || !password || !role) {
-      alert('Por favor completa todos los campos obligatorios');
-      return;
-    }
-
-    if (!['admin', 'distributor', 'client'].includes(role)) {
-      alert('Rol inválido');
-      return;
-    }
-
-    const users = StorageAPI.getUsers();
-    
-    // Verificar email duplicado (excepto si estamos editando el mismo usuario)
-    const existingUser = users.find(u => u.email.toLowerCase() === email);
-    if (existingUser && existingUser.id !== editingUserId) {
-      alert('Este correo electrónico ya está registrado');
-      return;
-    }
-
-    if (editingUserId) {
-      // Editar usuario existente
-      const userIndex = users.findIndex(u => u.id === editingUserId);
-      if (userIndex !== -1) {
-        users[userIndex] = {
-          ...users[userIndex],
-          name,
-          email,
-          password,
-          role,
-          active,
-          whatsapp: role === 'distributor' ? whatsapp : undefined,
-          updatedAt: new Date().toISOString()
-        };
-      }
-    } else {
-      // Crear nuevo usuario
-      const id = 'u' + Math.random().toString(36).slice(2, 9);
-      const newUser = {
-        id,
-        role,
-        name,
-        email,
-        password,
-        active,
-        createdAt: new Date().toISOString()
-      };
-      
-      if (role === 'distributor') {
-        newUser.whatsapp = whatsapp || '';
-      }
-      
-      users.push(newUser);
-    }
-
-    StorageAPI.setUsers(users);
-    loadUsers();
-    filterUsers();
-    closeUserModal();
-    alert(editingUserId ? 'Usuario actualizado exitosamente' : 'Usuario creado exitosamente');
-  }
-
-  /**
-   * Cierra el modal de usuario
-   */
-  function closeUserModal() {
-    document.getElementById('user-modal').style.display = 'none';
-    editingUserId = null;
-  }
-
-  /**
-   * Actualiza el mensaje de bienvenida
-   */
-  function updateWelcomeMessage() {
-    const session = StorageAPI.getSession();
-    const welcomeEl = document.getElementById('admin-welcome');
-    if (welcomeEl && session) {
-      welcomeEl.textContent = `Bienvenido, ${session.name}`;
-    }
-  }
-
-  // Hacer funciones globales para los botones
-  window.toggleUser = toggleUser;
-  window.deleteUser = deleteUser;
-  window.editUser = editUser;
-  window.saveUser = saveUser;
-  window.closeUserModal = closeUserModal;
-
-  // Inicialización cuando el DOM esté listo
-  document.addEventListener('DOMContentLoaded', () => {
-    // Verificar sesión de admin
-    const session = StorageAPI.getSession();
-    if (!session || session.role !== 'admin') {
-      window.location.href = '../auth/login.html';
-      return;
-    }
-
-    // Cargar usuarios iniciales
-    loadUsers();
-    updateWelcomeMessage();
+    // Inicializar pestañas
+    initTabs();
     
     // Inicializar botón de logout
     const logoutContainer = document.getElementById('logout-container');
     if (logoutContainer) {
-      const logoutBtn = UI.createLogoutButton();
-      logoutContainer.appendChild(logoutBtn);
+        const logoutBtn = UI.createLogoutButton();
+        logoutContainer.appendChild(logoutBtn);
     }
     
+    // Cargar datos
+    loadWorkers();
+    loadRecentClients();
+    
     // Event listeners
-    document.getElementById('add-user-btn').addEventListener('click', addUser);
-    document.getElementById('user-search').addEventListener('input', filterUsers);
-    document.getElementById('role-filter').addEventListener('change', filterUsers);
-    document.getElementById('status-filter').addEventListener('change', filterUsers);
+    setupEventListeners();
+});
 
-    // Mostrar/ocultar campo WhatsApp según el rol seleccionado
-    document.getElementById('user-role').addEventListener('change', (e) => {
-      const isDistributor = e.target.value === 'distributor';
-      document.getElementById('whatsapp-field').style.display = isDistributor ? 'block' : 'none';
+function initTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            
+            // Remover clase active de todos los botones y contenidos
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Agregar clase active al botón clickeado y su contenido
+            button.classList.add('active');
+            document.getElementById(`${targetTab}-tab`).classList.add('active');
+        });
     });
+}
 
-    // Cerrar modal al hacer clic fuera
-    document.getElementById('user-modal').addEventListener('click', (e) => {
-      if (e.target.id === 'user-modal') {
+function setupEventListeners() {
+    // Búsqueda de clientes
+    const clientSearch = document.getElementById('client-search');
+    if (clientSearch) {
+        clientSearch.addEventListener('input', debounce(handleClientSearch, 300));
+    }
+    
+    // Limpiar búsqueda
+    const clearSearch = document.getElementById('clear-search');
+    if (clearSearch) {
+        clearSearch.addEventListener('click', clearClientSearch);
+    }
+    
+    // Actualizar lista de clientes
+    const refreshClients = document.getElementById('refresh-clients');
+    if (refreshClients) {
+        refreshClients.addEventListener('click', loadRecentClients);
+    }
+    
+    // Agregar trabajador
+    const addWorkerBtn = document.getElementById('add-worker-btn');
+    if (addWorkerBtn) {
+        addWorkerBtn.addEventListener('click', () => openUserModal('worker'));
+    }
+}
+
+function loadWorkers() {
+    const workersList = document.getElementById('workers-list');
+    if (!workersList) return;
+    
+    const users = StorageAPI.getUsers();
+    const workers = users.filter(user => user.role === 'admin' || user.role === 'distributor');
+    
+    if (workers.length === 0) {
+        workersList.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <span data-icon="users" style="width:48px;height:48px;display:block;margin:0 auto 1rem;color:var(--text-muted);"></span>
+                <p>No hay trabajadores registrados</p>
+            </div>
+        `;
+        return;
+    }
+    
+    workersList.innerHTML = workers.map(worker => createUserCard(worker, 'worker')).join('');
+}
+
+function loadRecentClients() {
+    const recentClientsList = document.getElementById('recent-clients-list');
+    if (!recentClientsList) return;
+    
+    const users = StorageAPI.getUsers();
+    const clients = users.filter(user => user.role === 'client')
+                         .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+                         .slice(0, 10);
+    
+    if (clients.length === 0) {
+        recentClientsList.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <span data-icon="user" style="width:48px;height:48px;display:block;margin:0 auto 1rem;color:var(--text-muted);"></span>
+                <p>No hay clientes registrados</p>
+            </div>
+        `;
+        return;
+    }
+    
+    recentClientsList.innerHTML = clients.map(client => createUserCard(client, 'client')).join('');
+}
+
+function handleClientSearch(event) {
+    const query = event.target.value.trim().toLowerCase();
+    
+    if (query.length < 2) {
+        clearClientSearch();
+        return;
+    }
+    
+    const users = StorageAPI.getUsers();
+    const clients = users.filter(user => 
+        user.role === 'client' && (
+            user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query) ||
+            (user.whatsapp && user.whatsapp.toLowerCase().includes(query))
+        )
+    );
+    
+    displaySearchResults(clients);
+}
+
+function displaySearchResults(clients) {
+    const searchResults = document.getElementById('search-results');
+    const searchClientsList = document.getElementById('search-clients-list');
+    const recentClientsCard = document.querySelector('#recent-clients-list').closest('.card');
+    
+    if (clients.length === 0) {
+        searchClientsList.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <span data-icon="search" style="width:48px;height:48px;display:block;margin:0 auto 1rem;color:var(--text-muted);"></span>
+                <p>No se encontraron clientes con ese criterio</p>
+            </div>
+        `;
+    } else {
+        searchClientsList.innerHTML = clients.map(client => createUserCard(client, 'client')).join('');
+    }
+    
+    // Mostrar resultados de búsqueda y ocultar últimos clientes
+    searchResults.style.display = 'block';
+    recentClientsCard.style.display = 'none';
+}
+
+function clearClientSearch() {
+    const clientSearch = document.getElementById('client-search');
+    const searchResults = document.getElementById('search-results');
+    const recentClientsCard = document.querySelector('#recent-clients-list').closest('.card');
+    
+    clientSearch.value = '';
+    searchResults.style.display = 'none';
+    recentClientsCard.style.display = 'block';
+}
+
+function createUserCard(user, type) {
+    const avatar = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+    const roleText = getRoleText(user.role);
+    const statusClass = user.active ? 'active' : 'inactive';
+    const statusText = user.active ? 'Activo' : 'Inactivo';
+    const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-ES') : 'N/A';
+    
+    return `
+        <div class="user-card">
+            <div class="user-header">
+                <div class="user-avatar">${avatar}</div>
+                <div class="user-info">
+                    <h4>${user.name || 'Sin nombre'}</h4>
+                    <p>${roleText}</p>
+                </div>
+                <div class="user-status ${statusClass}">
+                    <span data-icon="circle" style="width:8px;height:8px"></span>
+                    ${statusText}
+                </div>
+            </div>
+            
+            <div class="user-details">
+                <div class="user-detail">
+                    <strong>Email:</strong>
+                    <span>${user.email}</span>
+                </div>
+                ${user.whatsapp ? `
+                <div class="user-detail">
+                    <strong>WhatsApp:</strong>
+                    <span>${user.whatsapp}</span>
+                </div>
+                ` : ''}
+                <div class="user-detail">
+                    <strong>Registrado:</strong>
+                    <span>${createdAt}</span>
+                </div>
+            </div>
+            
+            <div class="user-actions">
+                <button class="btn secondary" onclick="editUser('${user.id}')">
+                    <span data-icon="edit" style="width:14px;height:14px;margin-right:4px"></span>
+                    Editar
+                </button>
+                <button class="btn ${user.active ? 'danger' : 'success'}" onclick="toggleUserStatus('${user.id}')">
+                    <span data-icon="${user.active ? 'user-x' : 'user-check'}" style="width:14px;height:14px;margin-right:4px"></span>
+                    ${user.active ? 'Desactivar' : 'Activar'}
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function getRoleText(role) {
+    const roles = {
+        'admin': 'Administrador',
+        'distributor': 'Distribuidor',
+        'client': 'Cliente'
+    };
+    return roles[role] || 'Usuario';
+}
+
+function openUserModal(type, userId = null) {
+    const modal = document.getElementById('user-modal');
+    const title = document.getElementById('user-modal-title');
+    const form = document.getElementById('user-form');
+    
+    if (userId) {
+        const user = StorageAPI.getUserById(userId);
+        title.textContent = 'Editar Usuario';
+    document.getElementById('user-name').value = user.name || '';
+    document.getElementById('user-email').value = user.email || '';
+        document.getElementById('user-password').value = '';
+        document.getElementById('user-password').required = false;
+    document.getElementById('user-role').value = user.role || '';
+    document.getElementById('user-whatsapp').value = user.whatsapp || '';
+    document.getElementById('user-active').checked = user.active !== false;
+    } else {
+        title.textContent = type === 'worker' ? 'Nuevo Trabajador' : 'Nuevo Usuario';
+        form.reset();
+        document.getElementById('user-password').required = true;
+        document.getElementById('user-role').value = type === 'worker' ? 'distributor' : 'client';
+    }
+    
+    // Mostrar/ocultar campo WhatsApp según el rol
+    const roleSelect = document.getElementById('user-role');
+    const whatsappField = document.getElementById('whatsapp-field');
+    
+    function toggleWhatsappField() {
+        const role = roleSelect.value;
+        if (role === 'client' || role === 'distributor') {
+            whatsappField.style.display = 'block';
+        } else {
+            whatsappField.style.display = 'none';
+        }
+    }
+    
+    roleSelect.addEventListener('change', toggleWhatsappField);
+    toggleWhatsappField();
+    
+    modal.style.display = 'block';
+}
+
+function closeUserModal() {
+    document.getElementById('user-modal').style.display = 'none';
+}
+
+// Cerrar modal al hacer clic fuera de él
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('user-modal');
+    if (e.target === modal) {
         closeUserModal();
-      }
-    });
+    }
+});
 
-    // Prevenir envío del formulario
-    document.getElementById('user-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      saveUser();
-    });
-  });
-})();
+// Cerrar modal con tecla Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('user-modal');
+        if (modal && modal.style.display === 'block') {
+            closeUserModal();
+        }
+    }
+});
+
+function saveUser() {
+    const form = document.getElementById('user-form');
+    const formData = new FormData(form);
+    
+    const userData = {
+        name: document.getElementById('user-name').value,
+        email: document.getElementById('user-email').value,
+        password: document.getElementById('user-password').value,
+        role: document.getElementById('user-role').value,
+        whatsapp: document.getElementById('user-whatsapp').value,
+        active: document.getElementById('user-active').checked,
+        createdAt: new Date().toISOString()
+      };
+      
+    if (!userData.name || !userData.email || !userData.role) {
+        alert('Por favor, completa todos los campos requeridos');
+        return;
+      }
+      
+    if (!userData.password && !document.getElementById('user-password').hasAttribute('data-edit')) {
+        alert('La contraseña es requerida');
+        return;
+    }
+
+    try {
+        StorageAPI.addUser(userData);
+    closeUserModal();
+        
+        // Recargar las listas
+        loadWorkers();
+        loadRecentClients();
+        
+        alert('Usuario guardado exitosamente');
+    } catch (error) {
+        alert('Error al guardar el usuario: ' + error.message);
+    }
+}
+
+function editUser(userId) {
+    openUserModal(null, userId);
+}
+
+function toggleUserStatus(userId) {
+    const user = StorageAPI.getUser(userId);
+    const newStatus = !user.active;
+    
+    if (confirm(`¿Estás seguro de que quieres ${newStatus ? 'activar' : 'desactivar'} este usuario?`)) {
+        user.active = newStatus;
+        StorageAPI.updateUser(userId, user);
+        
+        // Recargar las listas
+        loadWorkers();
+        loadRecentClients();
+        
+        alert(`Usuario ${newStatus ? 'activado' : 'desactivado'} exitosamente`);
+    }
+}
+
+// Función de debounce para la búsqueda
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}

@@ -49,15 +49,10 @@
   function ensureSeed(){
     // Cargar datos desde HBDATA si está disponible
     if(window.HBDATA){
-      if(!readJson(STORAGE_KEYS.users)){
-        writeJson(STORAGE_KEYS.users, HBDATA.users);
-      }
-      if(!readJson(STORAGE_KEYS.products)){
-        writeJson(STORAGE_KEYS.products, HBDATA.products);
-      }
-      if(!readJson(STORAGE_KEYS.categories)){
-        writeJson(STORAGE_KEYS.categories, HBDATA.categories);
-      }
+      // Siempre actualizar productos y categorías desde HBDATA para asegurar datos actualizados
+      writeJson(STORAGE_KEYS.users, HBDATA.users);
+      writeJson(STORAGE_KEYS.products, HBDATA.products);
+      writeJson(STORAGE_KEYS.categories, HBDATA.categories);
     } else {
       // Fallback con datos básicos
     if(!readJson(STORAGE_KEYS.users)){
@@ -442,6 +437,19 @@
     });
   }
 
+  /**
+   * Fuerza la recarga de datos desde HBDATA
+   */
+  function reloadFromHBDATA(){
+    if(window.HBDATA){
+      writeJson(STORAGE_KEYS.users, HBDATA.users);
+      writeJson(STORAGE_KEYS.products, HBDATA.products);
+      writeJson(STORAGE_KEYS.categories, HBDATA.categories);
+      return true;
+    }
+    return false;
+  }
+
   // Inicializar datos
   ensureSeed();
 
@@ -485,7 +493,7 @@
     getStats,
     
     // Utilidades
-    clearAllData, exportData, importData
+    clearAllData, exportData, importData, reloadFromHBDATA
   };
 })();
 

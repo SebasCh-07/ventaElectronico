@@ -38,7 +38,7 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container admin-dashboard">
         <h1 class="page-title">Gestión de Productos</h1>
         
         <!-- Estadísticas de productos -->
@@ -102,7 +102,7 @@
             </div>
             <div class="search" style="max-width: 300px;">
                 <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
-                <input type="text" placeholder="Buscar productos..." id="product-search">
+                <input type="text" placeholder="Buscar por nombre, ID, SKU, marca..." id="product-search">
             </div>
         </div>
 
@@ -112,8 +112,9 @@
         </section>
 
         <!-- Modal para crear/editar producto -->
-        <div id="product-modal" class="modal" style="display:none;">
-            <div class="modal-content" style="max-width:600px;">
+        <div id="product-modal" class="modal-overlay" style="display:none;">
+            <div class="modal">
+                <div class="modal-content" style="max-width:600px;">
                 <div class="modal-header">
                     <h2 id="product-modal-title">Nuevo Producto</h2>
                     <button class="modal-close" onclick="closeProductModal()">&times;</button>
@@ -174,12 +175,14 @@
                     <button class="btn" onclick="closeProductModal()">Cancelar</button>
                     <button class="btn brand" onclick="saveProduct()">Guardar Producto</button>
                 </div>
+                </div>
             </div>
         </div>
 
         <!-- Modal para ver detalles del producto -->
-        <div id="product-details-modal" class="modal" style="display:none;">
-            <div class="modal-content" style="max-width:500px;">
+        <div id="product-details-modal" class="modal-overlay" style="display:none;">
+            <div class="modal">
+                <div class="modal-content" style="max-width:500px;">
                 <div class="modal-header">
                     <h2>Detalles del Producto</h2>
                     <button class="modal-close" onclick="closeProductDetailsModal()">&times;</button>
@@ -190,13 +193,14 @@
                 <div class="modal-footer">
                     <button class="btn" onclick="closeProductDetailsModal()">Cerrar</button>
                 </div>
+                </div>
             </div>
         </div>
     </main>
 
     <footer class="site-footer">
         <div class="container">
-            <small>© <span id="year"></span> H&B Importaciones - Panel Admin</small>
+            <small>© 2025 H&B Importaciones - Panel Admin</small>
         </div>
     </footer>
 

@@ -100,7 +100,10 @@
       filtered = filtered.filter(p => 
         p.name.toLowerCase().includes(currentQuery.toLowerCase()) ||
         (p.description && p.description.toLowerCase().includes(currentQuery.toLowerCase())) ||
-        (p.category && p.category.toLowerCase().includes(currentQuery.toLowerCase()))
+        (p.category && p.category.toLowerCase().includes(currentQuery.toLowerCase())) ||
+        (p.id && p.id.toLowerCase().includes(currentQuery.toLowerCase())) ||
+        (p.sku && p.sku.toLowerCase().includes(currentQuery.toLowerCase())) ||
+        (p.brand && p.brand.toLowerCase().includes(currentQuery.toLowerCase()))
       );
     }
     

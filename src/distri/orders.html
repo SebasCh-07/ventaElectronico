@@ -13,21 +13,21 @@
     <header class="site-header">
         <div class="topbar">
             <div class="container topbar-content">
-                <span>Panel de Administración</span>
+                <span>Panel de Distribuidor</span>
                 <div class="spacer"></div>
-                <span id="admin-welcome">Bienvenido, Admin</span>
+                <span id="distributor-welcome">Bienvenido, Distribuidor</span>
                 <div class="spacer"></div>
-                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+                <a href="store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
         </div>
         <div class="header-main">
             <div class="container">
                 <div class="header-content">
-                    <a class="brand" href="index.html">H&B<span class="web-badge">admin</span></a>
+                    <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
                     <nav class="nav">
-                        <a href="index.html" class="nav-link"><span data-icon="dashboard" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Dashboard</a>
-                        <a href="users.html" class="nav-link"><span data-icon="user" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Usuarios</a>
-                        <a href="products.html" class="nav-link"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Productos</a>
+                        <a href="index.html" class="nav-link"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Productos</a>
+                        <a href="add-product.html" class="nav-link"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Agregar Producto</a>
                         <a href="orders.html" class="nav-link active"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
                     </nav>
                     <div class="header-actions">
@@ -55,10 +55,19 @@
             <div class="card">
                 <div class="card-body">
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                        <span data-icon="truck" style="width:20px;height:20px;color:#3b82f6"></span>
+                        <span data-icon="refresh" style="width:20px;height:20px;color:#3b82f6"></span>
                         <h3 class="card-title">En Proceso</h3>
                     </div>
                     <div class="price" id="processing-orders-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="truck" style="width:20px;height:20px;color:#8b5cf6"></span>
+                        <h3 class="card-title">Enviados</h3>
+                    </div>
+                    <div class="price" id="shipped-orders-count">0</div>
                 </div>
             </div>
             <div class="card">
@@ -70,21 +79,11 @@
                     <div class="price" id="completed-orders-count">0</div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                        <span data-icon="dollar-sign" style="width:20px;height:20px;color:#059669"></span>
-                        <h3 class="card-title">Total Ventas</h3>
-                    </div>
-                    <div class="price" id="total-sales">0</div>
-                </div>
-            </div>
         </div>
 
         <!-- Filtros y búsqueda -->
         <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
             <div style="display:flex;gap:12px;align-items:center;">
-                <button class="btn brand" id="create-demo-order-btn"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Crear Pedido Demo</button>
                 <select id="status-filter" class="form-control" style="max-width:150px;">
                     <option value="">Todos los estados</option>
                     <option value="pending">Pendientes</option>
@@ -93,10 +92,16 @@
                     <option value="completed">Completados</option>
                     <option value="cancelled">Cancelados</option>
                 </select>
+                <select id="time-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todos los períodos</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Esta semana</option>
+                    <option value="month">Este mes</option>
+                </select>
             </div>
             <div class="search" style="max-width: 300px;">
                 <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
-                <input type="text" placeholder="Buscar pedidos..." id="order-search">
+                <input type="text" placeholder="Buscar por ID, cliente..." id="order-search">
             </div>
         </div>
 
@@ -126,7 +131,7 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© 2025 H&B Importaciones - Panel Admin</small>
+            <small>© 2025 H&B Importaciones - Panel Distribuidor</small>
         </div>
     </footer>
 
@@ -134,7 +139,7 @@
     <script src="../../js/utils/icons.js"></script>
     <script src="../../js/utils/ui.js"></script>
     <script src="../../js/utils/sticky-header.js"></script>
-    <script src="../../js/admin/orders.js"></script>
+    <script src="../../js/distri/orders.js"></script>
     <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

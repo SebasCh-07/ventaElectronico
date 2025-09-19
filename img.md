@@ -1,1 +1,2 @@
-![1758249784996](image/carrito/1758249784996.png) `<!-- Include this script tag or install `@tailwindplus/elements ` via npm: -->`
+
+![1758283930554](image/img/1758283930554.png)![1758285201816](image/img/1758285201816.png)

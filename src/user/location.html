@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubicación - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+                <div class="spacer"></div>
+                <span>Bienvenido a H&B Importaciones</span>
+                <div class="spacer"></div>
+                <a href="location.html" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="track-order.html" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <a href="../../index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="../../index.html">H&B<span class="web-badge">web</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos...">
+                    </div>
+                    <div class="header-icons">
+                        <button class="icon-btn" onclick="openWishlistModal()">
+                            <img src="../../image/corazon.png" alt="Lista de deseos" class="icon-img" style="width:16px;height:16px">
+                            <span class="badge" id="wishlist-count">0</span>
+                        </button>
+                        <button class="icon-btn" onclick="openCartModal()">
+                            <img src="../../image/carrito.png" alt="Carrito" class="icon-img" style="width:16px;height:16px">
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                        </button>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="location-page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="../../index.html">Inicio</a>
+                <span class="breadcrumb-separator">></span>
+                <span class="breadcrumb-current">Ubicación</span>
+            </nav>
+
+            <!-- Map Section -->
+            <div class="map-section">
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7945!2d-78.4678!3d-0.1807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sQuito%2C%20Ecuador!5e0!3m2!1ses!2sec!4v1234567890123!5m2!1ses!2sec"
+                        width="100%" 
+                        height="400" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="map-overlay">
+                        <div class="location-marker">
+                            <div class="marker-icon">
+                                <span data-icon="location" style="width:24px;height:24px"></span>
+                            </div>
+                            <div class="marker-label">H&B Importaciones</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <div class="contact-grid">
+                    <!-- Contact Form -->
+                    <div class="contact-form-section">
+                        <h2>Déjanos un mensaje</h2>
+                        <p>Estamos aquí para ayudarte y responder a tus consultas. Nuestro equipo te contactará pronto.</p>
+                        
+                        <form class="contact-form" onsubmit="handleContactForm(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="firstName" name="firstName" placeholder="Nombre *" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="lastName" name="lastName" placeholder="Apellido *" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="Tu dirección de correo electrónico *" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <textarea id="message" name="message" placeholder="Comentario o mensaje *" rows="5" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn brand contact-submit-btn">
+                                <span data-icon="send" style="width:18px;height:18px;margin-right:8px"></span>
+                                Enviar mensaje
+                            </button>
+                        </form>
+
+                        <!-- Share Section -->
+                        <div class="share-section">
+                            <h4>Comparte esto:</h4>
+                            <div class="share-buttons">
+                                <button class="share-btn" onclick="shareOnX()">
+                                    <span data-icon="x" style="width:20px;height:20px"></span>
+                                </button>
+                                <button class="share-btn" onclick="shareOnFacebook()">
+                                    <span data-icon="facebook" style="width:20px;height:20px"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="contact-info-section">
+                        <!-- Address -->
+                        <div class="info-block">
+                            <h3>Dirección</h3>
+                            <div class="info-content">
+                                <p><strong>H&B Importaciones</strong></p>
+                                <p>Av. Amazonas y República</p>
+                                <p>Quito - Ecuador</p>
+                                <br>
+                                <p><strong>Ventas:</strong> (+593) 099-484-6405</p>
+                                <p><strong>Garantías:</strong> (+593) 099-484-6405</p>
+                                <p><strong>Email:</strong> <a href="mailto:ventas@hbybimportaciones.com">ventas@hbybimportaciones.com</a></p>
+                            </div>
+                        </div>
+
+                        <!-- Hours -->
+                        <div class="info-block">
+                            <h3>Horario de Atención</h3>
+                            <div class="info-content">
+                                <p><strong>Lunes:</strong> 09:00 - 18:00</p>
+                                <p><strong>Martes:</strong> 09:00 - 18:00</p>
+                                <p><strong>Miércoles:</strong> 09:00 - 18:00</p>
+                                <p><strong>Jueves:</strong> 09:00 - 18:00</p>
+                                <p><strong>Viernes:</strong> 09:00 - 18:00</p>
+                                <p><strong>Sábado:</strong> 09:00 - 13:00</p>
+                                <p><strong>Domingo:</strong> Cerrado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Logo y contacto principal -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>H&B<span class="web-badge">web</span></h3>
+                        <p class="footer-tagline">Importaciones</p>
+                    </div>
+                    <div class="footer-contact">
+                        <p><span data-icon="headphones" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:8px"></span>¿Necesitas ayuda? ¡Contáctanos!</p>
+                        <p class="contact-phone"><strong>(+593) 099-484-6405</strong></p>
+                    </div>
+                    <div class="footer-address">
+                        <h4>Visítanos</h4>
+                        <p>Quito - Ecuador</p>
+                        <p>Av. Amazonas y República</p>
+                    </div>
+                </div>
+
+                <!-- Encuentra rápido -->
+                <div class="footer-section">
+                    <h4>Encuéntralo rápido</h4>
+                    <ul class="footer-links">
+                        <li><a href="store.html">Laptops & Computadores</a></li>
+                        <li><a href="store.html">Monitores</a></li>
+                        <li><a href="store.html">Componentes</a></li>
+                        <li><a href="store.html">Celulares & Tablets</a></li>
+                        <li><a href="store.html">TVs & Proyectores</a></li>
+                        <li><a href="store.html">Gaming</a></li>
+                    </ul>
+                </div>
+
+                <!-- Atención al cliente -->
+                <div class="footer-section">
+                    <h4>Atención al cliente</h4>
+                    <ul class="footer-links">
+                        <li><a href="../auth/login.html">Mi Cuenta</a></li>
+                        <li><a href="track-order.html">Rastrea tu orden</a></li>
+                        <li><a href="https://wa.me/593994846405?text=¡Hola! Me interesa conocer más sobre sus productos y servicios." target="_blank">Contáctanos</a></li>
+                        <li><a href="#" onclick="window.Helpers?.showToast('Próximamente disponible', 'info') || alert('Próximamente disponible')">Preguntas frecuentes</a></li>
+                        <li><a href="#" onclick="window.Helpers?.showToast('Próximamente disponible', 'info') || alert('Próximamente disponible')">Términos y condiciones</a></li>
+                        <li><a href="#" onclick="window.Helpers?.showToast('Próximamente disponible', 'info') || alert('Próximamente disponible')">Política de privacidad</a></li>
+                    </ul>
+                </div>
+
+                <!-- Redes sociales -->
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook"><span data-icon="facebook" style="width:24px;height:24px"></span></a>
+                        <a href="https://wa.me/593994846405?text=¡Hola! Me interesa conocer más sobre sus productos y servicios." class="social-link" title="WhatsApp" target="_blank"><span data-icon="whatsapp" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="Instagram"><span data-icon="instagram" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="TikTok"><span data-icon="tiktok" style="width:24px;height:24px"></span></a>
+                    </div>
+                    <div class="footer-newsletter">
+                        <h5>Newsletter</h5>
+                        <p>Recibe ofertas exclusivas</p>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Tu email" class="newsletter-input">
+                            <button class="newsletter-btn" onclick="handleNewsletterSubscription()">
+                                <span data-icon="arrow-right" style="width:16px;height:16px"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
+                <p class="footer-tagline">Tecnología que impulsa tu éxito</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/footer-template.js"></script>
+    <script src="../../js/auth-simple.js"></script>
+    <script src="../../js/cart.js"></script>
+
+    <script>
+        // Función para manejar el formulario de contacto
+        function handleContactForm(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const contactData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                message: formData.get('message'),
+                timestamp: new Date().toISOString()
+            };
+
+            // Simular envío del formulario
+            console.log('Datos del formulario:', contactData);
+            
+            // Mostrar mensaje de éxito
+            if (window.UI && window.UI.showToast) {
+                window.UI.showToast('¡Mensaje enviado exitosamente! Te contactaremos pronto.', 'success');
+            } else {
+                alert('¡Mensaje enviado exitosamente! Te contactaremos pronto.');
+            }
+
+            // Limpiar formulario
+            event.target.reset();
+        }
+
+        // Funciones para compartir
+        function shareOnX() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Visita H&B Importaciones - Tecnología que impulsa tu éxito');
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        }
+
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Actualizar año en el footer
+            const yearElement = document.getElementById('year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+
+            // Actualizar enlaces dinámicamente según el estado de login
+            const session = StorageAPI.getSession();
+            const storeLink = document.querySelector('a[href="../../index.html"]');
+            
+            if (session && (session.role === 'client' || session.role === 'distributor' || session.role === 'admin')) {
+                // Usuario logueado - ir a store.html
+                if (storeLink) {
+                    storeLink.href = 'store.html';
+                }
+            } else {
+                // Usuario no logueado - ir a index.html
+                if (storeLink) {
+                    storeLink.href = '../../index.html';
+                }
+            }
+
+            // Actualizar contadores del header
+            updateCartHeader();
+            updateWishlistHeader();
+
+            // Forzar aplicación de iconos
+            setTimeout(() => {
+                if (window.forceIcons) {
+                    window.forceIcons();
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

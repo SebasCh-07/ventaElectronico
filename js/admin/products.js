@@ -35,43 +35,46 @@
       const stockText = isOutOfStock ? 'Sin Stock' : isLowStock ? 'Stock Bajo' : 'En Stock';
       
       return `
-        <div style="display:grid;grid-template-columns:80px 1fr auto;gap:16px;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;background:white;">
-          <div style="width:80px;height:80px;background:#f3f4f6;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <div class="product-card">
+          <div class="product-id-badge">
+            ${product.id}
+          </div>
+          <div class="product-image">
             ${product.image ? 
-              `<img src="${product.image}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;">` :
-              `<span data-icon="package" style="width:32px;height:32px;color:#6b7280"></span>`
+              `<img src="${product.image}" alt="${product.name}" class="product-img">` :
+              `<span data-icon="package" class="product-icon"></span>`
             }
           </div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-              <div style="font-weight:600;color:#374151;">${product.name}</div>
-              ${product.featured ? '<span style="padding:2px 6px;border-radius:4px;font-size:10px;font-weight:500;background:#fef3c7;color:#92400e;">DESTACADO</span>' : ''}
+          <div class="product-content">
+            <div class="product-header">
+              <div class="product-name">${product.name}</div>
+              ${product.featured ? '<span class="featured-badge">DESTACADO</span>' : ''}
             </div>
-            <div style="color:#6b7280;font-size:14px;margin-bottom:8px;">${product.description || 'Sin descripción'}</div>
-            <div style="display:flex;gap:16px;font-size:12px;color:#6b7280;">
+            <div class="product-description">${product.description || 'Sin descripción'}</div>
+            <div class="product-details">
               <span><strong>SKU:</strong> ${product.sku}</span>
               <span><strong>Categoría:</strong> ${product.category}</span>
               <span><strong>Marca:</strong> ${product.brand || 'N/A'}</span>
             </div>
-            <div style="display:flex;gap:16px;margin-top:8px;font-size:12px;">
-              <span style="color:#374151;"><strong>Público:</strong> ${UI.formatPrice(product.pricePublico)}</span>
-              <span style="color:#374151;"><strong>Distribuidor:</strong> ${UI.formatPrice(product.priceDistribuidor)}</span>
-              <span style="padding:2px 6px;border-radius:4px;font-weight:500;background:${stockBg};color:${stockColor};">
+            <div class="product-pricing">
+              <span class="price-info"><strong>Público:</strong> ${UI.formatPrice(product.pricePublico)}</span>
+              <span class="price-info"><strong>Distribuidor:</strong> ${UI.formatPrice(product.priceDistribuidor)}</span>
+              <span class="stock-badge" style="background:${stockBg};color:${stockColor};">
                 ${stockText}: ${product.stock}
               </span>
             </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;align-items:end;">
-            <button class="btn" onclick="viewProduct('${product.id}')" style="padding:6px 12px;font-size:12px;width:100px;">
+          <div class="product-actions">
+            <button class="btn btn-action" onclick="viewProduct('${product.id}')">
               Ver Detalles
             </button>
-            <button class="btn" onclick="editProduct('${product.id}')" style="padding:6px 12px;font-size:12px;width:100px;">
+            <button class="btn btn-action" onclick="editProduct('${product.id}')">
               Editar
             </button>
-            <button class="btn" onclick="toggleFeatured('${product.id}')" style="padding:6px 12px;font-size:12px;width:100px;background:${product.featured ? '#8b5cf6' : '#6b7280'};border-color:${product.featured ? '#7c3aed' : '#4b5563'};color:white;">
+            <button class="btn btn-action btn-featured" onclick="toggleFeatured('${product.id}')" style="background:${product.featured ? '#8b5cf6' : '#6b7280'};border-color:${product.featured ? '#7c3aed' : '#4b5563'};color:white;">
               ${product.featured ? 'Quitar' : 'Destacar'}
             </button>
-            <button class="btn" onclick="deleteProduct('${product.id}')" style="padding:6px 12px;font-size:12px;width:100px;background:#ef4444;border-color:#dc2626;color:white;">
+            <button class="btn btn-action btn-danger" onclick="deleteProduct('${product.id}')">
               Eliminar
             </button>
           </div>
@@ -134,7 +137,8 @@
         product.description.toLowerCase().includes(searchTerm) ||
         product.sku.toLowerCase().includes(searchTerm) ||
         product.brand.toLowerCase().includes(searchTerm) ||
-        product.category.toLowerCase().includes(searchTerm);
+        product.category.toLowerCase().includes(searchTerm) ||
+        product.id.toLowerCase().includes(searchTerm);
       
       const matchesCategory = !categoryFilter || product.category === categoryFilter;
       
@@ -206,7 +210,7 @@
     editingProductId = null;
     document.getElementById('product-modal-title').textContent = 'Nuevo Producto';
     clearProductForm();
-    document.getElementById('product-modal').style.display = 'flex';
+    document.getElementById('product-modal').style.display = 'block';
   }
 
   /**
@@ -219,7 +223,7 @@
     editingProductId = productId;
     document.getElementById('product-modal-title').textContent = 'Editar Producto';
     fillProductForm(product);
-    document.getElementById('product-modal').style.display = 'flex';
+    document.getElementById('product-modal').style.display = 'block';
   }
 
   /**
@@ -304,7 +308,7 @@
       </div>
     `;
 
-    document.getElementById('product-details-modal').style.display = 'flex';
+    document.getElementById('product-details-modal').style.display = 'block';
   }
 
   /**
@@ -502,6 +506,21 @@
     document.getElementById('product-details-modal').addEventListener('click', (e) => {
       if (e.target.id === 'product-details-modal') {
         closeProductDetailsModal();
+      }
+    });
+
+    // Cerrar modales con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const productModal = document.getElementById('product-modal');
+        const detailsModal = document.getElementById('product-details-modal');
+        
+        if (productModal && productModal.style.display === 'block') {
+          closeProductModal();
+        }
+        if (detailsModal && detailsModal.style.display === 'block') {
+          closeProductDetailsModal();
+        }
       }
     });
 

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastrea tu orden - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+                <div class="spacer"></div>
+                <span>Bienvenido a H&B Importaciones</span>
+                <div class="spacer"></div>
+                <a href="location.html" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="track-order.html" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <a href="../../index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="../../index.html">H&B<span class="web-badge">web</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar productos...">
+                    </div>
+                    <div class="header-icons">
+                        <button class="icon-btn" onclick="openWishlistModal()">
+                            <img src="../../image/corazon.png" alt="Lista de deseos" class="icon-img" style="width:16px;height:16px">
+                            <span class="badge" id="wishlist-count">0</span>
+                        </button>
+                        <button class="icon-btn" onclick="openCartModal()">
+                            <img src="../../image/carrito.png" alt="Carrito" class="icon-img" style="width:16px;height:16px">
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                        </button>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="track-order-page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="../../index.html">Inicio</a>
+                <span class="breadcrumb-separator">></span>
+                <span class="breadcrumb-current">Rastrea tu orden</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="track-order-header">
+                <h1>Rastrea tu orden</h1>
+                <p>Para hacer seguimiento de tu pedido, por favor introduce el ID de tu pedido en el cuadro de abajo y pulsa el botón «Seguir». Esto se envió en tu recibo y en el correo electrónico de confirmación que deberías haber recibido.</p>
+            </div>
+
+            <!-- Track Order Form -->
+            <div class="track-order-form">
+                <div class="form-group">
+                    <label for="order-id">ID de pedido</label>
+                    <input type="text" id="order-id" placeholder="Ej: HB-2024-001234" required>
+                    <small>Se encuentra en tu correo electrónico de confirmación de pedido.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="billing-email">Correo electrónico de facturación</label>
+                    <input type="email" id="billing-email" placeholder="tu@email.com" required>
+                    <small>El correo electrónico que utilizaste durante el pago.</small>
+                </div>
+
+                <button class="btn brand track-btn" onclick="trackOrder()">
+                    <span data-icon="search" style="width:18px;height:18px;margin-right:8px"></span>
+                    Seguir
+                </button>
+            </div>
+
+            <!-- Order Status (hidden by default) -->
+            <div id="order-status" class="order-status" style="display: none;">
+                <div class="status-header">
+                    <h3>Estado de tu pedido</h3>
+                    <span class="order-id-display" id="order-id-display"></span>
+                </div>
+                
+                <div class="status-timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-icon">
+                            <span data-icon="package" style="width:16px;height:16px"></span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Pedido confirmado</h4>
+                            <p>Tu pedido ha sido recibido y confirmado</p>
+                            <span class="timeline-date">15 de enero, 2024 - 10:30 AM</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item completed">
+                        <div class="timeline-icon">
+                            <span data-icon="refresh" style="width:16px;height:16px"></span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Preparando pedido</h4>
+                            <p>Estamos preparando tu pedido para el envío</p>
+                            <span class="timeline-date">16 de enero, 2024 - 09:15 AM</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item active">
+                        <div class="timeline-icon">
+                            <span data-icon="truck" style="width:16px;height:16px"></span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Enviado</h4>
+                            <p>Tu pedido ha sido enviado y está en camino</p>
+                            <span class="timeline-date">17 de enero, 2024 - 02:45 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span data-icon="home" style="width:16px;height:16px"></span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Entregado</h4>
+                            <p>Tu pedido ha sido entregado exitosamente</p>
+                            <span class="timeline-date">Pendiente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Logo y contacto principal -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>H&B<span class="web-badge">web</span></h3>
+                        <p class="footer-tagline">Importaciones</p>
+                    </div>
+                    <div class="footer-contact">
+                        <p><span data-icon="headphones" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:8px"></span>¿Necesitas ayuda? ¡Contáctanos!</p>
+                        <p class="contact-phone"><strong>(+593) 099-484-6405</strong></p>
+                    </div>
+                    <div class="footer-address">
+                        <h4>Visítanos</h4>
+                        <p>Quito - Ecuador</p>
+                        <p>Av. Amazonas y República</p>
+                    </div>
+                </div>
+
+                <!-- Encuentra rápido -->
+                <div class="footer-section">
+                    <h4>Encuéntralo rápido</h4>
+                    <ul class="footer-links">
+                        <li><a href="store.html">Laptops & Computadores</a></li>
+                        <li><a href="store.html">Monitores</a></li>
+                        <li><a href="store.html">Componentes</a></li>
+                        <li><a href="store.html">Celulares & Tablets</a></li>
+                        <li><a href="store.html">TVs & Proyectores</a></li>
+                        <li><a href="store.html">Gaming</a></li>
+                    </ul>
+                </div>
+
+                <!-- Atención al cliente -->
+                <div class="footer-section">
+                    <h4>Atención al cliente</h4>
+                    <ul class="footer-links">
+                        <li><a href="../auth/login.html">Mi Cuenta</a></li>
+                        <li><a href="track-order.html">Rastrea tu orden</a></li>
+                        <li><a href="https://wa.me/593994846405?text=¡Hola! Me interesa conocer más sobre sus productos y servicios." target="_blank">Contáctanos</a></li>
+                        <li><a href="#" onclick="window.Helpers?.showToast('Próximamente disponible', 'info') || alert('Próximamente disponible')">Preguntas frecuentes</a></li>
+                        <li><a href="#" onclick="window.Helpers?.showToast('Próximamente disponible', 'info') || alert('Próximamente disponible')">Términos y condiciones</a></li>
+                        <li><a href="#" onclick="window.Helpers?.showToast('Próximamente disponible', 'info') || alert('Próximamente disponible')">Política de privacidad</a></li>
+                    </ul>
+                </div>
+
+                <!-- Redes sociales -->
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook"><span data-icon="facebook" style="width:24px;height:24px"></span></a>
+                        <a href="https://wa.me/593994846405?text=¡Hola! Me interesa conocer más sobre sus productos y servicios." class="social-link" title="WhatsApp" target="_blank"><span data-icon="whatsapp" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="Instagram"><span data-icon="instagram" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="TikTok"><span data-icon="tiktok" style="width:24px;height:24px"></span></a>
+                    </div>
+                    <div class="footer-newsletter">
+                        <h5>Newsletter</h5>
+                        <p>Recibe ofertas exclusivas</p>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Tu email" class="newsletter-input">
+                            <button class="newsletter-btn" onclick="handleNewsletterSubscription()">
+                                <span data-icon="arrow-right" style="width:16px;height:16px"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
+                <p class="footer-tagline">Tecnología que impulsa tu éxito</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/footer-template.js"></script>
+    <script src="../../js/auth-simple.js"></script>
+    <script src="../../js/cart.js"></script>
+
+    <script>
+        // Función para rastrear pedido
+        function trackOrder() {
+            const orderId = document.getElementById('order-id').value.trim();
+            const email = document.getElementById('billing-email').value.trim();
+
+            if (!orderId || !email) {
+                if (window.UI && window.UI.showToast) {
+                    window.UI.showToast('Por favor, completa todos los campos', 'error');
+                } else {
+                    alert('Por favor, completa todos los campos');
+                }
+                return;
+            }
+
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                if (window.UI && window.UI.showToast) {
+                    window.UI.showToast('Por favor, ingresa un email válido', 'error');
+                } else {
+                    alert('Por favor, ingresa un email válido');
+                }
+                return;
+            }
+
+            // Mostrar estado del pedido (simulado)
+            document.getElementById('order-id-display').textContent = `Pedido: ${orderId}`;
+            document.getElementById('order-status').style.display = 'block';
+            
+            // Scroll al resultado
+            document.getElementById('order-status').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+            if (window.UI && window.UI.showToast) {
+                window.UI.showToast('Pedido encontrado. Mostrando estado actualizado.', 'success');
+            }
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Actualizar año en el footer
+            const yearElement = document.getElementById('year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+
+            // Actualizar enlaces dinámicamente según el estado de login
+            const session = StorageAPI.getSession();
+            const storeLink = document.querySelector('a[href="../../index.html"]');
+            
+            if (session && (session.role === 'client' || session.role === 'distributor' || session.role === 'admin')) {
+                // Usuario logueado - ir a store.html
+                if (storeLink) {
+                    storeLink.href = 'store.html';
+                }
+            } else {
+                // Usuario no logueado - ir a index.html
+                if (storeLink) {
+                    storeLink.href = '../../index.html';
+                }
+            }
+
+            // Actualizar contadores del header
+            updateCartHeader();
+            updateWishlistHeader();
+
+            // Forzar aplicación de iconos
+            setTimeout(() => {
+                if (window.forceIcons) {
+                    window.forceIcons();
+                }
+            }, 500);
+
+            // Permitir envío del formulario con Enter
+            document.getElementById('order-id').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    trackOrder();
+                }
+            });
+
+            document.getElementById('billing-email').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    trackOrder();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

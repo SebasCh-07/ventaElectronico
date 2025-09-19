@@ -164,6 +164,10 @@
               <button class="btn brand" onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
                 ${p.stock <= 0 ? 'Sin Stock' : 'Agregar al carrito'}
               </button>
+              <button class="btn secondary" onclick="viewProduct('${p.id}')">
+                <span data-icon="eye" style="width:16px;height:16px;margin-right:6px"></span>
+                Ver
+              </button>
             </div>
           </div>
         </div>
@@ -297,7 +301,16 @@
   // Inicializar
   initCatalog();
 
+  /**
+   * Navega a la página de detalle del producto
+   * @param {string} productId - ID del producto
+   */
+  function viewProduct(productId) {
+    window.location.href = `product-detail.html?id=${productId}`;
+  }
+
   // Funciones globales
   window.addToCart = addToCart;
   window.filterProductsByQuery = filterProductsByQuery;
+  window.viewProduct = viewProduct;
 })();

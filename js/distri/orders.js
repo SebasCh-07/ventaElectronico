@@ -1,12 +1,13 @@
 /**
- * Sistema de gestión de pedidos para H&B Importaciones - Panel Admin
- * Permite ver, filtrar, buscar y gestionar pedidos de clientes
+ * Sistema de gestión de pedidos para Distribuidores - H&B Importaciones
+ * Permite ver, filtrar, buscar y gestionar pedidos relacionados con productos del distribuidor
  */
 (function(){
   'use strict';
 
   let allOrders = [];
   let filteredOrders = [];
+  let currentDistributorId = null;
 
   /**
    * Estados posibles de un pedido
@@ -37,6 +38,14 @@
       const orderDate = new Date(order.createdAt).toLocaleDateString('es-CO');
       const orderTime = new Date(order.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
       
+      // Filtrar solo productos de este distribuidor
+      const distributorItems = order.items.filter(item => {
+        const product = StorageAPI.getProductById(item.productId);
+        return product && product.owner === currentDistributorId;
+      });
+      
+      const distributorTotal = distributorItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+      
       return `
         <div class="order-item" style="display:flex;align-items:center;gap:16px;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;background:white;">
           <div style="width:48px;height:48px;background:${status.bg};border-radius:50%;display:flex;align-items:center;justify-content:center;color:${status.color};font-weight:600;font-size:14px;">
@@ -53,12 +62,12 @@
               Cliente: ${customer.name} (${customer.email})
             </div>
             <div style="color:#6b7280;font-size:12px;">
-              ${orderDate} a las ${orderTime} • ${order.items.length} producto${order.items.length > 1 ? 's' : ''}
+              ${orderDate} a las ${orderTime} • ${distributorItems.length} producto${distributorItems.length > 1 ? 's' : ''} de mis productos
             </div>
           </div>
           <div style="text-align:right;">
             <div style="font-weight:600;color:#374151;margin-bottom:4px;">
-              ${UI.formatPrice(order.total)}
+              ${UI.formatPrice(distributorTotal)}
             </div>
             <div style="display:flex;gap:8px;">
               <button class="btn" onclick="viewOrder('${order.id}')" style="padding:6px 12px;font-size:12px;">
@@ -91,27 +100,42 @@
    * Renderiza las estadísticas de pedidos
    */
   function renderStats() {
-    const pendingCount = allOrders.filter(o => o.status === 'pending').length;
-    const processingCount = allOrders.filter(o => o.status === 'processing').length;
-    const completedCount = allOrders.filter(o => o.status === 'completed').length;
-    const totalSales = allOrders
-      .filter(o => o.status === 'completed')
-      .reduce((sum, order) => sum + order.total, 0);
+    // Filtrar solo pedidos que contienen productos de este distribuidor
+    const distributorOrders = allOrders.filter(order => 
+      order.items.some(item => {
+        const product = StorageAPI.getProductById(item.productId);
+        return product && product.owner === currentDistributorId;
+      })
+    );
+
+    const pendingCount = distributorOrders.filter(o => o.status === 'pending').length;
+    const processingCount = distributorOrders.filter(o => o.status === 'processing').length;
+    const shippedCount = distributorOrders.filter(o => o.status === 'shipped').length;
+    const completedCount = distributorOrders.filter(o => o.status === 'completed').length;
 
     document.getElementById('pending-orders-count').textContent = pendingCount;
     document.getElementById('processing-orders-count').textContent = processingCount;
+    document.getElementById('shipped-orders-count').textContent = shippedCount;
     document.getElementById('completed-orders-count').textContent = completedCount;
-    document.getElementById('total-sales').textContent = UI.formatPrice(totalSales);
   }
 
   /**
-   * Filtra pedidos por búsqueda y estado
+   * Filtra pedidos por búsqueda, estado y tiempo
    */
   function filterOrders() {
     const searchTerm = document.getElementById('order-search').value.toLowerCase().trim();
     const statusFilter = document.getElementById('status-filter').value;
+    const timeFilter = document.getElementById('time-filter').value;
     
-    filteredOrders = allOrders.filter(order => {
+    // Filtrar solo pedidos que contienen productos de este distribuidor
+    const distributorOrders = allOrders.filter(order => 
+      order.items.some(item => {
+        const product = StorageAPI.getProductById(item.productId);
+        return product && product.owner === currentDistributorId;
+      })
+    );
+    
+    filteredOrders = distributorOrders.filter(order => {
       const customer = getCustomerInfo(order.customerId);
       const matchesSearch = !searchTerm || 
         order.id.toLowerCase().includes(searchTerm) ||
@@ -120,7 +144,27 @@
       
       const matchesStatus = !statusFilter || order.status === statusFilter;
       
-      return matchesSearch && matchesStatus;
+      let matchesTime = true;
+      if (timeFilter) {
+        const orderDate = new Date(order.createdAt);
+        const now = new Date();
+        
+        switch (timeFilter) {
+          case 'today':
+            matchesTime = orderDate.toDateString() === now.toDateString();
+            break;
+          case 'week':
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            matchesTime = orderDate >= weekAgo;
+            break;
+          case 'month':
+            const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
+            matchesTime = orderDate >= monthAgo;
+            break;
+        }
+      }
+      
+      return matchesSearch && matchesStatus && matchesTime;
     });
 
     renderOrders();
@@ -134,7 +178,7 @@
       new Date(b.createdAt) - new Date(a.createdAt)
     );
     filteredOrders = [...allOrders];
-    renderOrders();
+    filterOrders();
     renderStats();
   }
 
@@ -159,157 +203,18 @@
     const order = allOrders.find(o => o.id === orderId);
     if (!order) return;
 
-    const customer = getCustomerInfo(order.customerId);
-    const status = ORDER_STATUSES[order.status] || ORDER_STATUSES.pending;
-    const products = StorageAPI.getProducts();
-    
-    const modalBody = document.getElementById('order-modal-body');
-    modalBody.innerHTML = `
-      <div style="margin-bottom:20px;">
-        <h3 style="margin:0 0 12px 0;color:#374151;">Información del Pedido</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-          <div>
-            <label style="font-weight:600;color:#6b7280;font-size:12px;text-transform:uppercase;">ID del Pedido</label>
-            <div style="color:#374151;">#${order.id}</div>
-          </div>
-          <div>
-            <label style="font-weight:600;color:#6b7280;font-size:12px;text-transform:uppercase;">Estado</label>
-            <div>
-              <span style="padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;background:${status.bg};color:${status.color};">
-                ${status.label}
-              </span>
-            </div>
-          </div>
-          <div>
-            <label style="font-weight:600;color:#6b7280;font-size:12px;text-transform:uppercase;">Fecha</label>
-            <div style="color:#374151;">${new Date(order.createdAt).toLocaleDateString('es-CO')}</div>
-          </div>
-          <div>
-            <label style="font-weight:600;color:#6b7280;font-size:12px;text-transform:uppercase;">Hora</label>
-            <div style="color:#374151;">${new Date(order.createdAt).toLocaleTimeString('es-CO')}</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-bottom:20px;">
-        <h3 style="margin:0 0 12px 0;color:#374151;">Cliente</h3>
-        <div style="padding:12px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;">
-          <div style="font-weight:600;color:#374151;margin-bottom:4px;">${customer.name}</div>
-          <div style="color:#6b7280;font-size:14px;">${customer.email}</div>
-        </div>
-      </div>
-
-      <div style="margin-bottom:20px;">
-        <h3 style="margin:0 0 12px 0;color:#374151;">Productos (${order.items.length})</h3>
-        <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-          ${order.items.map(item => {
-            const product = products.find(p => p.id === item.productId);
-            const productName = product ? product.name : 'Producto no encontrado';
-            const subtotal = item.price * item.quantity;
-            
-            return `
-              <div style="padding:12px;border-bottom:1px solid #e5e7eb;background:white;">
-                <div style="display:flex;justify-content:space-between;align-items:start;">
-                  <div style="flex:1;">
-                    <div style="font-weight:600;color:#374151;margin-bottom:4px;">${productName}</div>
-                    <div style="color:#6b7280;font-size:14px;">
-                      ${item.quantity} × ${UI.formatPrice(item.price)}
-                    </div>
-                  </div>
-                  <div style="font-weight:600;color:#374151;">
-                    ${UI.formatPrice(subtotal)}
-                  </div>
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-
-      <div style="padding:16px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-weight:600;color:#374151;font-size:18px;">Total:</span>
-          <span style="font-weight:700;color:#374151;font-size:20px;">${UI.formatPrice(order.total)}</span>
-        </div>
-      </div>
-    `;
-
-    document.getElementById('order-modal').style.display = 'flex';
-  }
-
-  /**
-   * Cierra el modal de detalles
-   */
-  function closeOrderModal() {
-    document.getElementById('order-modal').style.display = 'none';
-  }
-
-  /**
-   * Crea un pedido de demostración
-   */
-  function createDemoOrder() {
-    const products = StorageAPI.getProducts();
-    const users = StorageAPI.getUsers();
-    const clients = users.filter(u => u.role === 'client' && u.active !== false);
-    
-    if (clients.length === 0) {
-      alert('No hay clientes registrados para crear un pedido demo');
-      return;
-    }
-
-    if (products.length === 0) {
-      alert('No hay productos disponibles para crear un pedido demo');
-      return;
-    }
-
-    // Seleccionar cliente aleatorio
-    const randomClient = clients[Math.floor(Math.random() * clients.length)];
-    
-    // Seleccionar productos aleatorios (1-3 productos)
-    const numProducts = Math.floor(Math.random() * 3) + 1;
-    const selectedProducts = [];
-    
-    for (let i = 0; i < numProducts; i++) {
-      const randomProduct = products[Math.floor(Math.random() * products.length)];
-      const quantity = Math.floor(Math.random() * 3) + 1;
-      const price = randomClient.role === 'distributor' ? 
-        (randomProduct.priceDistribuidor || randomProduct.pricePublico) : 
-        randomProduct.pricePublico;
-      
-      selectedProducts.push({
-        productId: randomProduct.id,
-        quantity: quantity,
-        price: price
-      });
-    }
-
-    const total = selectedProducts.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    const demoOrder = {
-      customerId: randomClient.id,
-      items: selectedProducts,
-      total: total,
-      status: 'pending',
-      notes: 'Pedido de demostración generado automáticamente'
-    };
-
-    StorageAPI.addOrder(demoOrder);
-    loadOrders();
-    filterOrders();
-    alert('Pedido de demostración creado exitosamente');
-  }
-
-  /**
-   * Muestra los detalles de un pedido en modal
-   */
-  function viewOrder(orderId) {
-    const order = allOrders.find(o => o.id === orderId);
-    if (!order) return;
-
     const status = ORDER_STATUSES[order.status] || ORDER_STATUSES.pending;
     const customer = getCustomerInfo(order.customerId);
     const orderDate = new Date(order.createdAt).toLocaleDateString('es-CO');
     const orderTime = new Date(order.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    
+    // Filtrar solo productos de este distribuidor
+    const distributorItems = order.items.filter(item => {
+      const product = StorageAPI.getProductById(item.productId);
+      return product && product.owner === currentDistributorId;
+    });
+    
+    const distributorTotal = distributorItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     
     const modalBody = document.getElementById('order-modal-body');
     modalBody.innerHTML = `
@@ -341,9 +246,9 @@
       </div>
 
       <div style="margin-bottom: 20px;">
-        <label style="font-weight: 600; color: #6b7280; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; display: block;">Productos</label>
+        <label style="font-weight: 600; color: #6b7280; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; display: block;">Mis Productos en este Pedido</label>
         <div style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-          ${order.items.map(item => {
+          ${distributorItems.map(item => {
             const product = StorageAPI.getProductById(item.productId);
             return `
               <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid #f3f4f6;">
@@ -368,8 +273,8 @@
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #f8fafc; border-radius: 8px; margin-bottom: 20px;">
-        <div style="font-weight: 600; color: #1e293b; font-size: 18px;">Total del Pedido</div>
-        <div style="font-weight: 700; color: #1e293b; font-size: 20px;">${UI.formatPrice(order.total)}</div>
+        <div style="font-weight: 600; color: #1e293b; font-size: 18px;">Total de Mis Productos</div>
+        <div style="font-weight: 700; color: #1e293b; font-size: 20px;">${UI.formatPrice(distributorTotal)}</div>
       </div>
 
       ${order.shippingAddress ? `
@@ -408,7 +313,7 @@
    */
   function updateWelcomeMessage() {
     const session = StorageAPI.getSession();
-    const welcomeEl = document.getElementById('admin-welcome');
+    const welcomeEl = document.getElementById('distributor-welcome');
     if (welcomeEl && session) {
       welcomeEl.textContent = `Bienvenido, ${session.name}`;
     }
@@ -421,12 +326,14 @@
 
   // Inicialización cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', () => {
-    // Verificar sesión de admin
+    // Verificar sesión de distribuidor
     const session = StorageAPI.getSession();
-    if (!session || session.role !== 'admin') {
+    if (!session || session.role !== 'distributor') {
       window.location.href = '../auth/login.html';
       return;
     }
+
+    currentDistributorId = session.id;
 
     // Cargar pedidos iniciales
     loadOrders();
@@ -442,7 +349,7 @@
     // Event listeners
     document.getElementById('order-search').addEventListener('input', filterOrders);
     document.getElementById('status-filter').addEventListener('change', filterOrders);
-    document.getElementById('create-demo-order-btn').addEventListener('click', createDemoOrder);
+    document.getElementById('time-filter').addEventListener('change', filterOrders);
 
     // Cerrar modal al hacer clic fuera
     document.getElementById('order-modal').addEventListener('click', (e) => {
