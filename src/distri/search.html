@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Búsqueda - H&B Importaciones</title>
+    <title>Buscar Productos - H&B Importaciones</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,35 +13,35 @@
     <header class="site-header">
         <div class="topbar">
             <div class="container topbar-content">
-                <span>Panel de Distribuidora</span>
+                <span>Panel de Distribuidor</span>
                 <div class="spacer"></div>
-                <span id="distri-welcome">Bienvenido, Distribuidora</span>
+                <span id="distributor-welcome">Bienvenido, Distribuidor</span>
                 <div class="spacer"></div>
-                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
-                <span id="logout-container"></span>
+                <a href="store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+                <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
         </div>
         <div class="header-main">
             <div class="container">
                 <div class="header-content">
-                    <a class="brand" href="store.html">H&B<span class="web-badge">distri</span></a>
-                    <div class="search">
-                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
-                        <input type="text" placeholder="Buscar productos..." id="search-input">
-                    </div>
-                    <div class="header-icons">
-                        <a href="#" class="icon-btn">
-                            <span class="icon" data-icon="compare" style="width:16px;height:16px"></span>
-                            <span class="badge">0</span>
-                        </a>
-                        <a href="#" class="icon-btn">
-                            <span class="icon" data-icon="heart" style="width:16px;height:16px"></span>
-                        </a>
-                        <a href="#" class="icon-btn" onclick="alert('Función de carrito no disponible para distribuidoras')">
-                            <span class="icon" data-icon="cart" style="width:16px;height:16px"></span>
+                    <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
+                    <nav class="nav">
+                        <a href="index.html" class="nav-link"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
+                        <a href="search.html" class="nav-link active"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
+                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
+                    </nav>
+                    <div class="header-actions">
+                        <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
+                            <img src="../../image/carrito/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
+                            <span class="badge" id="wishlist-count">0</span>
+                            <span class="icon-label">Favoritos</span>
+                        </button>
+                        <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
+                            <img src="../../image/carrito/carrito.png" alt="Carrito" style="width:16px;height:16px;">
                             <span class="badge" id="cart-count">0</span>
                             <span class="cart-total" id="cart-total">$0,00</span>
-                        </a>
+                            <span class="icon-label">Carrito</span>
+                        </button>
                         <span id="logout-container"></span>
                     </div>
                 </div>
@@ -50,28 +50,110 @@
     </header>
 
     <main class="container">
+        <!-- Breadcrumb -->
         <nav class="breadcrumb">
-            <a href="store.html">Inicio</a> > 
-            <a href="store.html">Tienda</a> > 
-            <span id="breadcrumb-search">Resultados de búsqueda</span>
+            <a href="index.html">Inicio</a>
+            <span>Buscar Productos</span>
         </nav>
-        
-        <div class="search-layout">
-            <aside class="search-sidebar">
-                <h3>Explorar categorías</h3>
-                <div id="categories" class="category-list"></div>
-            </aside>
+
+        <!-- Barra de búsqueda principal -->
+        <div class="search-page-header">
+            <h1>Buscar Productos</h1>
+            <div class="search-container-large">
+                <div class="search">
+                    <span class="search-icon" data-icon="search" style="width:24px;height:24px"></span>
+                    <input type="text" id="search-input" placeholder="Buscar por nombre, ID, SKU, marca..." autofocus>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="search-filters">
+            <select id="category-filter" class="form-control">
+                <option value="">Todas las categorías</option>
+            </select>
+            <select id="price-filter" class="form-control">
+                <option value="">Todos los precios</option>
+                <option value="0-50000">$0 - $50.000</option>
+                <option value="50000-100000">$50.000 - $100.000</option>
+                <option value="100000-200000">$100.000 - $200.000</option>
+                <option value="200000+">$200.000+</option>
+            </select>
+            <select id="stock-filter" class="form-control">
+                <option value="">Todos los productos</option>
+                <option value="in-stock">En Stock</option>
+                <option value="low-stock">Stock Bajo</option>
+                <option value="out-of-stock">Sin Stock</option>
+            </select>
+        </div>
+
+        <!-- Resultados -->
+        <div class="search-results">
+            <div class="results-header">
+                <h2 id="results-title">Resultados de búsqueda</h2>
+                <div class="results-count" id="results-count">0 productos encontrados</div>
+            </div>
             
-            <section class="search-results">
-                <div id="search-info" class="search-info"></div>
-                <div id="product-grid" class="grid"></div>
-            </section>
+            <div class="products-grid" id="search-results">
+                <!-- Los resultados se cargarán aquí -->
+            </div>
         </div>
     </main>
 
+    <!-- Modal del carrito -->
+    <div id="cart-modal" class="modal-overlay" style="display:none;">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Carrito de Compras</h2>
+                    <button class="modal-close" onclick="closeCartModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="cart-items">
+                        <!-- Los items del carrito se cargarán aquí -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
+                        <div style="font-weight:600;font-size:18px;">
+                            Total: <span id="cart-modal-total">$0,00</span>
+                        </div>
+                        <div style="display:flex;gap:12px;">
+                            <button class="btn" onclick="closeCartModal()">Seguir Comprando</button>
+                            <button class="btn brand" onclick="proceedToCheckout()">Proceder al Pago</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de wishlist -->
+    <div id="wishlist-modal" class="modal-overlay" style="display:none;">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Lista de Deseos</h2>
+                    <button class="modal-close" onclick="closeWishlistModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="wishlist-items">
+                        <!-- Los items de la wishlist se cargarán aquí -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="display:flex;gap:12px;justify-content:flex-end;">
+                        <button class="btn" onclick="addAllToCart()">Agregar Todo al Carrito</button>
+                        <button class="btn" onclick="closeWishlistModal()">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="site-footer">
         <div class="container">
-            <small>© <span id="year"></span> H&B Importaciones - Panel Distribuidora</small>
+            <small>© <span id="year"></span> H&B Importaciones - Panel Distribuidor</small>
         </div>
     </footer>
 
@@ -79,15 +161,7 @@
     <script src="../../js/utils/icons.js"></script>
     <script src="../../js/utils/ui.js"></script>
     <script src="../../js/utils/sticky-header.js"></script>
-    <script>
-        // Deshabilitar funcionalidad de carrito para distribuidora
-        document.addEventListener('DOMContentLoaded', () => {
-            window.addToCart = function(productId) {
-                alert('Las distribuidoras no pueden agregar productos al carrito. Esta función está disponible solo para clientes.');
-            };
-        });
-    </script>
-    <script src="../../js/search.js"></script>
+    <script src="../../js/distri/search.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>

@@ -25,11 +25,22 @@
                 <div class="header-content">
                     <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
                     <nav class="nav">
-                        <a href="index.html" class="nav-link active"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Productos</a>
-                        <a href="add-product.html" class="nav-link"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Agregar Producto</a>
-                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
+                        <a href="index.html" class="nav-link active"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
+                        <a href="search.html" class="nav-link"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
+                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
                     </nav>
                     <div class="header-actions">
+                        <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
+                            <img src="../../image/carrito/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
+                            <span class="badge" id="wishlist-count">0</span>
+                            <span class="icon-label">Favoritos</span>
+                        </button>
+                        <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
+                            <img src="../../image/carrito/carrito.png" alt="Carrito" style="width:16px;height:16px;">
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                            <span class="icon-label">Carrito</span>
+                        </button>
                         <span id="logout-container"></span>
                     </div>
                 </div>
@@ -37,54 +48,108 @@
         </div>
     </header>
 
-    <main class="container">
-        <h1 class="page-title">Mis Productos</h1>
-        
-        <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
-            <a href="add-product.html" class="btn brand"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Agregar Producto</a>
-            <div class="search" style="max-width: 300px;">
-                <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
-                <input type="text" placeholder="Buscar productos..." id="product-search">
+    <main class="store-layout">
+        <div class="container">
+        <h1 class="page-title">Catálogo de Productos - Distribuidor</h1>
+            <div class="store-content">
+                <aside class="store-sidebar">
+                    <h3>Categorías</h3>
+                    <div id="categories" class="category-list"></div>
+                </aside>
+                <section class="store-main">
+                    <div id="product-grid" class="grid"></div>
+                </section>
             </div>
         </div>
+    </main>
 
-        <section class="panel" style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-            <div id="products-list">
-                <div class="grid">
-                    <div class="card">
-                        <div class="card-media"></div>
-                        <div class="card-body">
-                            <div class="card-title">Pila Recargable AA 2500mAh</div>
-                            <div class="card-meta">
-                                <span class="price">$18.000</span>
-                                <span class="stock ok">Stock: 50</span>
-                            </div>
-                            <div style="font-size:12px;color:#059669;margin-bottom:8px;">Precio distribuidor</div>
-                            <div class="card-actions">
-                                <button class="btn secondary">Editar</button>
-                                <button class="btn danger">Eliminar</button>
-                            </div>
-                        </div>
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeCartModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="cart-modal-title">Carrito de Compras</h2>
+                        <button class="cart-close-btn" onclick="closeCartModal()">
+                            <span data-icon="x" style="width:24px;height:24px"></span>
+                        </button>
                     </div>
-                    <div class="card">
-                        <div class="card-media"></div>
-                        <div class="card-body">
-                            <div class="card-title">Cargador Universal USB-C 65W</div>
-                            <div class="card-meta">
-                                <span class="price">$65.000</span>
-                                <span class="stock ok">Stock: 25</span>
-                            </div>
-                            <div style="font-size:12px;color:#059669;margin-bottom:8px;">Precio distribuidor</div>
-                            <div class="card-actions">
-                                <button class="btn secondary">Editar</button>
-                                <button class="btn danger">Eliminar</button>
+                </div>
+
+                <div class="cart-items-section">
+                    <div id="cart-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-subtotal">
+                            <span>Subtotal</span>
+                            <span id="cart-modal-total">$0,00</span>
+                        </div>
+                        <p class="cart-shipping-note">Envío y taxes calculados en checkout.</p>
+                        <div class="cart-actions">
+                            <button class="btn brand cart-checkout-btn" onclick="proceedToCheckout()">
+                                Ir a pagar
+                            </button>
+                            <div class="cart-continue-shopping">
+                                <p>
+                                    o 
+                                    <button class="cart-continue-btn" onclick="closeCartModal()">
+                                        Continuar Comprando <span>&rarr;</span>
+                                    </button>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeWishlistModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="wishlist-modal-title">Lista de Deseos</h2>
+                        <button class="cart-close-btn" onclick="closeWishlistModal()">
+                            <span data-icon="x" style="width:24px;height:24px"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-items-section">
+                    <div id="wishlist-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-actions">
+                            <button class="btn brand cart-checkout-btn" onclick="addAllToCart()">
+                                <span data-icon="cart" style="width:18px;height:18px;margin-right:8px"></span>
+                                Agregar Todo al Carrito
+                            </button>
+                            <div class="cart-continue-shopping">
+                                <p>
+                                    o 
+                                    <button class="cart-continue-btn" onclick="closeWishlistModal()">
+                                        Continuar Comprando <span>&rarr;</span>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <div class="container">
@@ -92,40 +157,14 @@
         </div>
     </footer>
 
+    <script src="../../js/utils/data.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script src="../../js/distri/catalog.js"></script>
     <script>
-        // Verificar sesión
-        const sessionData = localStorage.getItem('hb_session');
-        if (!sessionData) {
-            window.location.href = '../auth/login.html';
-        } else {
-            try {
-                const session = JSON.parse(sessionData);
-                if (session.role !== 'distributor') {
-                    window.location.href = '../auth/login.html';
-                } else {
-                    document.getElementById('distri-welcome').textContent = `Bienvenido, ${session.name}`;
-                }
-            } catch (e) {
-                window.location.href = '../auth/login.html';
-            }
-        }
-
-        // Botón de logout
-        document.getElementById('logout-container').innerHTML = `
-            <button class="btn icon logout" onclick="logout()" title="Cerrar sesión">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 6H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M14 16l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M18 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        `;
-
-        function logout() {
-            localStorage.removeItem('hb_session');
-            window.location.href = '../auth/login.html';
-        }
-
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
