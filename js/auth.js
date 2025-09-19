@@ -29,18 +29,49 @@
    */
   function redirectByRole(user) {
     const currentPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get('redirect');
+    
     let redirectUrl = '../../index.html'; // Default
 
-    switch(user.role) {
-      case 'admin':
-        redirectUrl = '../admin/index.html';
-        break;
-      case 'distributor':
-        redirectUrl = '../distri/index.html';
-        break;
-      case 'client':
-        redirectUrl = '../user/index.html';
-        break;
+    // Si hay un parámetro de redirección específico
+    if (redirectParam) {
+      switch(redirectParam) {
+        case 'store':
+          if (user.role === 'client') {
+            redirectUrl = '../user/store.html';
+          } else if (user.role === 'admin') {
+            redirectUrl = '../admin/store.html';
+          } else if (user.role === 'distributor') {
+            redirectUrl = '../distri/store.html';
+          }
+          break;
+        case 'cart':
+          if (user.role === 'client') {
+            redirectUrl = '../user/cart.html';
+          }
+          break;
+        // Agregar más casos según necesidad
+        default:
+          // Si el parámetro no es reconocido, usar redirección por rol por defecto
+          break;
+      }
+    }
+
+    // Si no se ha definido una redirección específica, usar la lógica por rol
+    if (redirectUrl === '../../index.html') {
+      switch(user.role) {
+        case 'admin':
+          redirectUrl = '../admin/index.html';
+          break;
+        case 'distributor':
+          redirectUrl = '../distri/index.html';
+          break;
+        case 'client':
+          // Los clientes siempre van a store.html por defecto
+          redirectUrl = '../user/store.html';
+          break;
+      }
     }
 
     // Ajustar ruta según ubicación actual
@@ -78,8 +109,8 @@
     if (!email || !password) {
       if (window.UI && window.UI.showToast) {
         window.UI.showToast('Por favor completa todos los campos', 'warning');
-      } else {
-        alert('Por favor completa todos los campos');
+      } else if (window.Helpers && window.Helpers.showToast) {
+        window.Helpers.showToast('Por favor completa todos los campos', 'warning');
       }
       return;
     }
@@ -87,8 +118,8 @@
     if (!window.Helpers || !window.Helpers.isValidEmail(email)) {
       if (window.UI && window.UI.showToast) {
         window.UI.showToast('Por favor ingresa un email válido', 'warning');
-      } else {
-        alert('Por favor ingresa un email válido');
+      } else if (window.Helpers && window.Helpers.showToast) {
+        window.Helpers.showToast('Por favor ingresa un email válido', 'warning');
       }
       return;
     }
@@ -109,8 +140,8 @@
       if (!user) {
         if (window.UI && window.UI.showToast) {
           window.UI.showToast('Credenciales inválidas o usuario inactivo', 'error');
-        } else {
-          alert('Credenciales inválidas o usuario inactivo');
+        } else if (window.Helpers && window.Helpers.showToast) {
+          window.Helpers.showToast('Credenciales inválidas o usuario inactivo', 'error');
         }
         return;
       }
@@ -242,8 +273,8 @@
       if (!userData.name || !userData.email || !userData.password) {
         if (window.UI && window.UI.showToast) {
           window.UI.showToast('Por favor completa todos los campos obligatorios', 'warning');
-        } else {
-          alert('Por favor completa todos los campos obligatorios');
+        } else if (window.Helpers && window.Helpers.showToast) {
+          window.Helpers.showToast('Por favor completa todos los campos obligatorios', 'warning');
         }
         return;
       }
@@ -251,8 +282,8 @@
       if (window.Helpers && !window.Helpers.isValidEmail(userData.email)) {
         if (window.UI && window.UI.showToast) {
           window.UI.showToast('Por favor ingresa un email válido', 'warning');
-        } else {
-          alert('Por favor ingresa un email válido');
+        } else if (window.Helpers && window.Helpers.showToast) {
+          window.Helpers.showToast('Por favor ingresa un email válido', 'warning');
         }
         return;
       }
@@ -260,8 +291,8 @@
       if (window.Helpers && !window.Helpers.isValidPassword(userData.password)) {
         if (window.UI && window.UI.showToast) {
           window.UI.showToast('La contraseña debe tener al menos 6 caracteres', 'warning');
-        } else {
-          alert('La contraseña debe tener al menos 6 caracteres');
+        } else if (window.Helpers && window.Helpers.showToast) {
+          window.Helpers.showToast('La contraseña debe tener al menos 6 caracteres', 'warning');
         }
         return;
       }
@@ -271,8 +302,8 @@
       if (existingUser) {
         if (window.UI && window.UI.showToast) {
           window.UI.showToast('Este email ya está registrado', 'warning');
-        } else {
-          alert('Este email ya está registrado');
+        } else if (window.Helpers && window.Helpers.showToast) {
+          window.Helpers.showToast('Este email ya está registrado', 'warning');
         }
         return;
       }

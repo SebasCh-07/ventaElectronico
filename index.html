@@ -29,21 +29,24 @@
                     <a class="brand" href="index.html">H&B<span class="web-badge">web</span></a>
                     <div class="search">
                         <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
-                        <input type="text" placeholder="Buscar productos...">
+                        <input type="text" id="global-search" placeholder="Buscar productos...">
                     </div>
                     <div class="header-icons">
-                        <a href="#" class="icon-btn">
+                        <a href="#" class="icon-btn" title="Comparar productos">
                             <span class="icon" data-icon="compare" style="width:16px;height:16px"></span>
                             <span class="badge">0</span>
+                            <span class="icon-label">Comparar</span>
                         </a>
-                        <a href="#" class="icon-btn">
+                        <a href="#" class="icon-btn" title="Lista de deseos">
                             <span class="icon" data-icon="heart" style="width:16px;height:16px"></span>
+                            <span class="icon-label">Favoritos</span>
                         </a>
-                        <a href="src/user/cart.html" class="icon-btn">
+                        <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
                             <span class="icon" data-icon="cart" style="width:16px;height:16px"></span>
                             <span class="badge" id="cart-count">0</span>
                             <span class="cart-total" id="cart-total">$0,00</span>
-                        </a>
+                            <span class="icon-label">Carrito</span>
+                        </button>
                         <span id="logout-container"></span>
                     </div>
                 </div>
@@ -55,62 +58,42 @@
         <!-- Hero Slider -->
         <section class="hero-slider">
             <div class="slider-container">
-                <div class="slide active">
+                <div class="slide active" style="background-image: url('image/pc.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                     <div class="slide-content">
                         <div class="slide-text">
                             <h1>DESKTOPS DE ALTO RENDIMIENTO</h1>
                             <p>Máxima potencia en un solo equipo</p>
-                            <a href="src/user/store.html" class="btn brand">Explorar Productos</a>
-                        </div>
-                        <div class="slide-image">
-                            <div class="hardware-showcase">
-                                <div class="gpu-card">RTX 4080 SUPER</div>
-                                <div class="pc-tower">
-                                    <div class="internal-components">
-                                        <div class="fan blue-glow"></div>
-                                        <div class="gpu-internal">FORCE RTX</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <button onclick="redirectToLogin()" class="btn brand">Explorar Productos</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="slide">
+                <div class="slide" style="background-image: url('image/cpu.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                     <div class="slide-content">
                         <div class="slide-text">
                             <h1>NUESTRA MISIÓN</h1>
                             <p>Proporcionar tecnología de vanguardia y soluciones informáticas de alta calidad para impulsar el éxito de nuestros clientes</p>
-                            <a href="src/user/store.html" class="btn brand">Conocer Más</a>
-                        </div>
-                        <div class="slide-image">
-                            <div class="mission-icon">🎯</div>
+                            <button onclick="redirectToLogin()" class="btn brand">Conocer Más</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="slide">
+                <div class="slide" style="background-image: url('image/rtx.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                     <div class="slide-content">
                         <div class="slide-text">
                             <h1>NUESTRA VISIÓN</h1>
                             <p>Ser la empresa líder en importación y distribución de tecnología, reconocida por nuestra excelencia y compromiso con la innovación</p>
-                            <a href="src/user/store.html" class="btn brand">Nuestros Valores</a>
-                        </div>
-                        <div class="slide-image">
-                            <div class="vision-icon">👁️</div>
+                            <button onclick="redirectToLogin()" class="btn brand">Nuestros Valores</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="slide">
+                <div class="slide" style="background-image: url('image/perifericos.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                     <div class="slide-content">
                         <div class="slide-text">
                             <h1>COMPROMISO DE CALIDAD</h1>
                             <p>Garantizamos productos originales, soporte técnico especializado y entrega confiable en todo el territorio nacional</p>
-                            <a href="src/user/store.html" class="btn brand">Ver Garantías</a>
-                        </div>
-                        <div class="slide-image">
-                            <div class="quality-icon">⭐</div>
+                            <button onclick="redirectToLogin()" class="btn brand">Ver Garantías</button>
                         </div>
                     </div>
                 </div>
@@ -153,7 +136,7 @@
                                     <span class="stock">Stock: 8</span>
                                 </div>
                                 <div class="card-actions">
-                                    <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                                    <button onclick="redirectToLogin()" class="btn brand">Ver detalle</button>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +149,7 @@
                                     <span class="stock">Stock: 12</span>
                                 </div>
                                 <div class="card-actions">
-                                    <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                                    <button onclick="redirectToLogin()" class="btn brand">Ver detalle</button>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +162,7 @@
                                     <span class="stock">Stock: 5</span>
                                 </div>
                                 <div class="card-actions">
-                                    <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                                    <button onclick="redirectToLogin()" class="btn brand">Ver detalle</button>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +198,7 @@
                             <span class="stock">Stock: 3</span>
                         </div>
                         <div class="card-actions">
-                            <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                            <button onclick="redirectToLogin()" class="btn brand">Ver detalle</button>
                         </div>
                     </div>
                 </div>
@@ -233,7 +216,7 @@
                             <span class="stock">Stock: 5</span>
                         </div>
                         <div class="card-actions">
-                            <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                            <button onclick="redirectToLogin()" class="btn brand">Ver detalle</button>
                         </div>
                     </div>
                 </div>
@@ -251,15 +234,15 @@
                             <span class="stock">Stock: 2</span>
                         </div>
                         <div class="card-actions">
-                            <a href="src/user/store.html" class="btn brand">Ver detalle</a>
+                            <button onclick="redirectToLogin()" class="btn brand">Ver detalle</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Botón ver más -->
-            <div style="text-align:center;margin-top:32px">
-                <a href="src/user/store.html" class="btn brand" style="padding:12px 32px;font-size:16px">Ver todos los productos</a>
+            <div style="text-align:center;margin-top:48px;margin-bottom:64px">
+                <button id="view-all-products-btn" class="btn brand" style="padding:12px 32px;font-size:16px">Ver todos los productos</button>
             </div>
         </section>
         
@@ -267,9 +250,125 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© <span id="year"></span> H&B Importaciones</small>
+            <div class="footer-content">
+                <!-- Logo y contacto principal -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>H&B<span class="web-badge">web</span></h3>
+                        <p class="footer-tagline">Importaciones</p>
+                    </div>
+                    <div class="footer-contact">
+                        <p><span data-icon="headphones" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:8px"></span>¿Necesitas ayuda? ¡Contáctanos!</p>
+                        <p class="contact-phone"><strong>(+593) 099-484-6405</strong></p>
+                    </div>
+                    <div class="footer-address">
+                        <h4>Visítanos</h4>
+                        <p>Quito - Ecuador</p>
+                        <p>Av. Amazonas y República</p>
+                    </div>
+                </div>
+
+                <!-- Encuentra rápido -->
+                <div class="footer-section">
+                    <h4>Encuéntralo rápido</h4>
+                    <ul class="footer-links">
+                        <li><a href="src/user/store.html">Laptops & Computadores</a></li>
+                        <li><a href="src/user/store.html">Monitores</a></li>
+                        <li><a href="src/user/store.html">Componentes</a></li>
+                        <li><a href="src/user/store.html">Celulares & Tablets</a></li>
+                        <li><a href="src/user/store.html">TVs & Proyectores</a></li>
+                        <li><a href="src/user/store.html">Gaming</a></li>
+                    </ul>
+                </div>
+
+                <!-- Atención al cliente -->
+                <div class="footer-section">
+                    <h4>Atención al cliente</h4>
+                    <ul class="footer-links">
+                        <li><a href="src/auth/login.html">Mi Cuenta</a></li>
+                        <li><a href="#" onclick="alert('Próximamente disponible')">Rastrea tu orden</a></li>
+                        <li><a href="#" onclick="alert('Próximamente disponible')">Contáctanos</a></li>
+                        <li><a href="#" onclick="alert('Próximamente disponible')">Preguntas frecuentes</a></li>
+                        <li><a href="#" onclick="alert('Próximamente disponible')">Términos y condiciones</a></li>
+                        <li><a href="#" onclick="alert('Próximamente disponible')">Política de privacidad</a></li>
+                    </ul>
+                </div>
+
+                <!-- Redes sociales -->
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook"><span data-icon="facebook" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="WhatsApp"><span data-icon="whatsapp" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="Instagram"><span data-icon="instagram" style="width:24px;height:24px"></span></a>
+                        <a href="#" class="social-link" title="TikTok"><span data-icon="tiktok" style="width:24px;height:24px"></span></a>
+                    </div>
+                    <div class="footer-newsletter">
+                        <h5>Newsletter</h5>
+                        <p>Recibe ofertas exclusivas</p>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Tu email" class="newsletter-input">
+                            <button class="newsletter-btn" onclick="alert('¡Gracias por suscribirte!')">
+                                <span data-icon="arrow-right" style="width:16px;height:16px"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
+                <p class="footer-tagline">Tecnología que impulsa tu éxito</p>
+            </div>
         </div>
     </footer>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeCartModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="cart-modal-title">Carrito de Compras</h2>
+                        <button class="cart-close-btn" onclick="closeCartModal()">
+                            <span data-icon="x" style="width:24px;height:24px"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-items-section">
+                    <div id="cart-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-subtotal">
+                            <span>Subtotal</span>
+                            <span id="cart-modal-total">$0,00</span>
+                        </div>
+                        <p class="cart-shipping-note">Envío y taxes calculados en checkout.</p>
+                        <div class="cart-actions">
+                            <button class="btn brand cart-checkout-btn" onclick="proceedToCheckout()">
+                                Ir a pagar
+                            </button>
+                            <div class="cart-continue-shopping">
+                                <p>
+                                    o 
+                                    <button class="cart-continue-btn" onclick="closeCartModal()">
+                                        Continuar Comprando <span>&rarr;</span>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="js/utils/data.js"></script>
     <script src="js/utils/storage.js"></script>
@@ -317,9 +416,245 @@
                 window.UI.initUI();
             }
             
-            // Actualizar contador del carrito
-            if (window.UI && window.UI.updateCartHeader) {
-                window.UI.updateCartHeader();
+            // En la página principal, mantener carrito siempre en 0
+            resetCartDisplay();
+
+            // Funcionalidad de búsqueda global
+            const globalSearch = document.getElementById('global-search');
+            if (globalSearch) {
+                // Búsqueda al presionar Enter
+                globalSearch.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const query = this.value.trim();
+                        if (query) {
+                            // Redirigir a la página de búsqueda con el término
+                            window.location.href = `src/user/search.html?q=${encodeURIComponent(query)}`;
+                        }
+                    }
+                });
+
+                // Búsqueda al hacer clic en el icono
+                const searchIcon = document.querySelector('.search-icon');
+                if (searchIcon) {
+                    searchIcon.addEventListener('click', function() {
+                        const query = globalSearch.value.trim();
+                        if (query) {
+                            window.location.href = `src/user/search.html?q=${encodeURIComponent(query)}`;
+                        }
+                    });
+                    searchIcon.style.cursor = 'pointer';
+                }
+            }
+
+            // ===== FUNCIONALIDAD DEL CARRITO MODAL =====
+            function openCartModal() {
+                const modal = document.getElementById('cart-modal');
+                if (modal) {
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+                    loadCartItems();
+                }
+            }
+
+            function closeCartModal() {
+                const modal = document.getElementById('cart-modal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = ''; // Restaurar scroll del body
+                }
+            }
+
+        function loadCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const totalElement = document.getElementById('cart-modal-total');
+            
+            if (!container || !totalElement) return;
+
+            // Obtener items del carrito usando StorageAPI
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            const products = window.StorageAPI ? window.StorageAPI.getProducts() : [];
+                
+                if (cart.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">
+                                <span data-icon="cart" style="width:48px;height:48px;opacity:0.3"></span>
+                            </div>
+                            <h3>Tu carrito está vacío</h3>
+                            <p>Agrega algunos productos increíbles a tu carrito</p>
+                            <button class="btn secondary" onclick="closeCartModal()">
+                                Explorar Productos
+                            </button>
+                        </div>
+                    `;
+                    totalElement.textContent = '$0,00';
+                    return;
+                }
+
+            // Expandir carrito con información de productos
+            const expandedCart = cart.map(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (!product) return null;
+                
+                return {
+                    id: item.productId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    name: product.name,
+                    price: product.pricePublico || product.price || 0,
+                    category: product.category,
+                    image: product.image
+                };
+            }).filter(item => item !== null);
+
+            // Renderizar items del carrito
+            let total = 0;
+            container.innerHTML = expandedCart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                return `
+                    <div class="cart-item" data-id="${item.productId}">
+                        <div class="cart-item-image">
+                            <img src="${item.image || 'https://via.placeholder.com/100x100?text=Producto'}" 
+                                 alt="${item.name}" />
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-info">
+                                <h3>${item.name}</h3>
+                                <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+                            </div>
+                            <p class="cart-item-category">${item.category || 'General'}</p>
+                            <div class="cart-item-actions">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="updateCartQuantity('${item.productId}', ${item.quantity - 1})">-</button>
+                                    <span class="quantity">Qty ${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateCartQuantity('${item.productId}', ${item.quantity + 1})">+</button>
+                                </div>
+                                <button class="remove-btn" onclick="removeFromCart('${item.productId}')">
+                                    Remover
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cart-item-total">
+                            $${itemTotal.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+                totalElement.textContent = `$${total.toFixed(2)}`;
+            }
+
+        function updateCartQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+
+            if (window.StorageAPI) {
+                window.StorageAPI.updateCartQuantity(productId, newQuantity);
+                loadCartItems(); // Recargar items
+                
+                // En la página principal, mantener carrito en 0
+                resetCartDisplay();
+            }
+        }
+
+        function removeFromCart(productId) {
+            if (window.StorageAPI) {
+                window.StorageAPI.removeFromCart(productId);
+                loadCartItems(); // Recargar items
+                
+                // En la página principal, mantener carrito en 0
+                resetCartDisplay();
+
+                // Mostrar notificación
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Producto removido del carrito', 'success');
+                }
+            }
+        }
+
+        function proceedToCheckout() {
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            if (cart.length === 0) {
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Tu carrito está vacío', 'warning');
+                } else {
+                    alert('Tu carrito está vacío');
+                }
+                return;
+            }
+
+            // Redirigir a la página de checkout
+            window.location.href = 'src/user/cart.html';
+        }
+
+            // Cerrar modal con Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeCartModal();
+                }
+            });
+
+            // Función para redirigir al login desde botones "Ver detalle"
+            function redirectToLogin() {
+                window.location.href = 'src/auth/login.html?redirect=store';
+            }
+
+        // Hacer la función global para que funcione con onclick
+        window.redirectToLogin = redirectToLogin;
+
+        // Función para mantener el carrito en 0 en la página principal
+        function resetCartDisplay() {
+            const cartCountEl = document.getElementById('cart-count');
+            const cartTotalEl = document.getElementById('cart-total');
+            
+            if (cartCountEl) {
+                cartCountEl.textContent = '0';
+            }
+            if (cartTotalEl) {
+                cartTotalEl.textContent = '$0,00';
+            }
+        }
+
+            // Manejar el botón "Ver todos los productos"
+            const viewAllBtn = document.getElementById('view-all-products-btn');
+            if (viewAllBtn) {
+                viewAllBtn.addEventListener('click', function() {
+                    // Verificar si el usuario ya está logueado
+                    const session = localStorage.getItem('hb_session');
+                    
+                    if (session) {
+                        try {
+                            const sessionData = JSON.parse(session);
+                            // Si está logueado como cliente, ir directamente a store
+                            if (sessionData.role === 'client') {
+                                window.location.href = 'src/user/store.html';
+                                return;
+                            }
+                            // Si está logueado con otro rol, ir a su página correspondiente
+                            switch(sessionData.role) {
+                                case 'admin':
+                                    window.location.href = 'src/admin/index.html';
+                                    break;
+                                case 'distributor':
+                                    window.location.href = 'src/distri/index.html';
+                                    break;
+                                default:
+                                    // Redirigir al login con parámetro de redirección
+                                    window.location.href = 'src/auth/login.html?redirect=store';
+                            }
+                        } catch (e) {
+                            // Session inválida, redirigir al login
+                            window.location.href = 'src/auth/login.html?redirect=store';
+                        }
+                    } else {
+                        // No está logueado, redirigir al login con parámetro
+                        window.location.href = 'src/auth/login.html?redirect=store';
+                    }
+                });
             }
         });
     </script>

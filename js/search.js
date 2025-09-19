@@ -149,22 +149,46 @@
     searchInput.value = currentQuery;
     
     let searchTimeout;
+    
+    // Búsqueda en tiempo real
     searchInput.addEventListener('input', (e) => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         currentQuery = e.target.value.toLowerCase().trim();
         performSearch();
-        
-        // Actualizar URL sin recargar la página
-        const url = new URL(window.location);
-        if(currentQuery){
-          url.searchParams.set('q', currentQuery);
-        } else {
-          url.searchParams.delete('q');
-        }
-        window.history.replaceState({}, '', url);
+        updateURL();
       }, 300);
     });
+
+    // Búsqueda al presionar Enter
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        currentQuery = this.value.toLowerCase().trim();
+        performSearch();
+        updateURL();
+      }
+    });
+
+    // Búsqueda al hacer clic en el icono
+    const searchIcon = document.querySelector('.search-icon');
+    if (searchIcon) {
+      searchIcon.addEventListener('click', function() {
+        currentQuery = searchInput.value.toLowerCase().trim();
+        performSearch();
+        updateURL();
+      });
+      searchIcon.style.cursor = 'pointer';
+    }
+  }
+
+  function updateURL() {
+    const url = new URL(window.location);
+    if(currentQuery){
+      url.searchParams.set('q', currentQuery);
+    } else {
+      url.searchParams.delete('q');
+    }
+    window.history.replaceState({}, '', url);
   }
 
   // Hacer funciones globales
@@ -180,6 +204,15 @@
   }
 
   document.addEventListener('DOMContentLoaded', ()=>{
+    // Obtener query de la URL
+    currentQuery = getQueryFromURL();
+    
+    // Actualizar input de búsqueda con la query
+    const searchInput = document.getElementById('search-input');
+    if(searchInput && currentQuery){
+      searchInput.value = currentQuery;
+    }
+    
     setupSearch();
     performSearch();
     updateCartHeader();

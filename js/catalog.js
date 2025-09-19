@@ -223,6 +223,51 @@
   }
 
   /**
+   * Filtra productos por query de búsqueda (función global)
+   */
+  function filterProductsByQuery(query) {
+    const products = StorageAPI.getProducts();
+    
+    if (!query || query === '') {
+      renderProducts(products);
+      renderCategories(getCategories(products));
+      // Restaurar título original
+      const title = document.querySelector('.page-title');
+      if (title) {
+        title.textContent = 'Catálogo de Productos';
+      }
+      return;
+    }
+    
+    const queryLower = query.toLowerCase();
+    const filtered = products.filter(p => 
+      p.name.toLowerCase().includes(queryLower) ||
+      (p.description && p.description.toLowerCase().includes(queryLower)) ||
+      (p.brand && p.brand.toLowerCase().includes(queryLower)) ||
+      (p.sku && p.sku.toLowerCase().includes(queryLower)) ||
+      p.category.toLowerCase().includes(queryLower)
+    );
+    
+    renderProducts(filtered);
+    renderCategories(getCategories(filtered));
+    
+    // Mostrar información de resultados
+    showSearchResults(query, filtered.length);
+  }
+
+  /**
+   * Muestra información de los resultados de búsqueda
+   */
+  function showSearchResults(query, count) {
+    const title = document.querySelector('.page-title');
+    if (title) {
+      title.textContent = count > 0 
+        ? `Resultados para "${query}" (${count} productos)`
+        : `Sin resultados para "${query}"`;
+    }
+  }
+
+  /**
    * Inicializa el catálogo
    */
   function initCatalog(){
@@ -252,6 +297,7 @@
   // Inicializar
   initCatalog();
 
-  // Función global para agregar al carrito
+  // Funciones globales
   window.addToCart = addToCart;
+  window.filterProductsByQuery = filterProductsByQuery;
 })();

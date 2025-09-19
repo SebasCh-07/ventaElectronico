@@ -41,17 +41,121 @@
     <main class="container">
         <h1 class="page-title">Gestión de Usuarios</h1>
         
+        <!-- Estadísticas de usuarios -->
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="users" style="width:20px;height:20px;color:#3b82f6"></span>
+                        <h3 class="card-title">Total Usuarios</h3>
+                    </div>
+                    <div class="price" id="total-users-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="user-check" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">Activos</h3>
+                    </div>
+                    <div class="price" id="active-users-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="user" style="width:20px;height:20px;color:#6b7280"></span>
+                        <h3 class="card-title">Clientes</h3>
+                    </div>
+                    <div class="price" id="clients-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="truck" style="width:20px;height:20px;color:#f59e0b"></span>
+                        <h3 class="card-title">Distribuidores</h3>
+                    </div>
+                    <div class="price" id="distributors-count">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
         <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
-            <button class="btn brand" id="add-user-btn"><span data-icon="user-plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Nuevo Usuario</button>
+            <div style="display:flex;gap:12px;align-items:center;">
+                <button class="btn brand" id="add-user-btn"><span data-icon="user-plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Nuevo Usuario</button>
+                <select id="role-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todos los roles</option>
+                    <option value="admin">Administradores</option>
+                    <option value="distributor">Distribuidores</option>
+                    <option value="client">Clientes</option>
+                </select>
+                <select id="status-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todos los estados</option>
+                    <option value="active">Activos</option>
+                    <option value="inactive">Inactivos</option>
+                </select>
+            </div>
             <div class="search" style="max-width: 300px;">
                 <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
                 <input type="text" placeholder="Buscar usuarios..." id="user-search">
             </div>
         </div>
 
+        <!-- Lista de usuarios -->
         <section class="panel">
             <div id="users-list"></div>
         </section>
+
+        <!-- Modal para crear/editar usuario -->
+        <div id="user-modal" class="modal" style="display:none;">
+            <div class="modal-content" style="max-width:500px;">
+                <div class="modal-header">
+                    <h2 id="user-modal-title">Nuevo Usuario</h2>
+                    <button class="modal-close" onclick="closeUserModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="user-form">
+                        <div style="margin-bottom:16px;">
+                            <label for="user-name" style="display:block;font-weight:600;margin-bottom:6px;">Nombre completo</label>
+                            <input type="text" id="user-name" class="form-control" required>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="user-email" style="display:block;font-weight:600;margin-bottom:6px;">Correo electrónico</label>
+                            <input type="email" id="user-email" class="form-control" required>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="user-password" style="display:block;font-weight:600;margin-bottom:6px;">Contraseña</label>
+                            <input type="password" id="user-password" class="form-control" required>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="user-role" style="display:block;font-weight:600;margin-bottom:6px;">Rol</label>
+                            <select id="user-role" class="form-control" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="admin">Administrador</option>
+                                <option value="distributor">Distribuidor</option>
+                                <option value="client">Cliente</option>
+                            </select>
+                        </div>
+                        <div id="whatsapp-field" style="margin-bottom:16px;display:none;">
+                            <label for="user-whatsapp" style="display:block;font-weight:600;margin-bottom:6px;">WhatsApp</label>
+                            <input type="text" id="user-whatsapp" class="form-control" placeholder="+57 300 111 2233">
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:flex;align-items:center;gap:8px;">
+                                <input type="checkbox" id="user-active" checked>
+                                <span>Usuario activo</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeUserModal()">Cancelar</button>
+                    <button class="btn brand" onclick="saveUser()">Guardar Usuario</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="site-footer">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Carrito - H&B Importaciones</title>
+    <title>Checkout - H&B Importaciones</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +29,7 @@
                     <a class="brand" href="../../index.html">H&B<span class="web-badge">web</span></a>
                     <div class="search">
                         <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
-                        <input type="text" placeholder="Buscar productos...">
+                        <input type="text" id="cart-search" placeholder="Buscar productos...">
                     </div>
                     <div class="header-icons">
                         <a href="#" class="icon-btn">
@@ -51,35 +51,176 @@
         </div>
     </header>
 
-    <main class="container">
-        <h1 class="page-title">Mi Carrito</h1>
-        
-        <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
-            <a href="store.html" class="btn secondary">← Continuar Comprando</a>
-            <div>
-                <button class="btn secondary" id="save-cart">Guardar Carrito</button>
-                <button class="btn secondary" id="load-cart">Cargar Carrito</button>
-                <button class="btn danger" id="clear-cart">Vaciar Carrito</button>
+    <main class="checkout-container">
+        <div class="container">
+            <!-- Back Button -->
+            <div class="checkout-header">
+                <button class="btn secondary back-btn" onclick="goBack()">
+                    <span>←</span>
+                    <span>Seguir Comprando</span>
+                </button>
+                <h1>Finalizar Compra</h1>
             </div>
-        </div>
 
-        <div class="card">
-            <div class="card-body">
-                <div id="cart-list">
-                    <div style="text-align:center;padding:40px;color:#6b7280;">
-                        <div style="font-size:48px;margin-bottom:16px;">🛒</div>
-                        <h3 style="margin:0 0 8px 0;color:#374151;">Tu carrito está vacío</h3>
-                        <p style="margin:0;">Agrega algunos productos para comenzar tu compra</p>
-                        <a href="store.html" class="btn brand" style="margin-top:16px;display:inline-block;">
-                            Ver Productos
-                        </a>
+            <!-- Progress Bar -->
+            <div class="checkout-progress">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <span>Información</span>
+                </div>
+                <div class="progress-line active"></div>
+                <div class="progress-step active">
+                    <div class="step-number">2</div>
+                    <span>Pago</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <span>Confirmación</span>
+                </div>
+            </div>
+
+            <div class="checkout-layout">
+                <!-- Left Column - Forms -->
+                <div class="checkout-forms">
+                    <!-- Contact Information -->
+                    <div class="checkout-section">
+                        <div class="section-header">
+                            <h2>Información de Contacto</h2>
+                        </div>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label>Email *</label>
+                                <input type="email" id="customer-email" placeholder="tu@email.com" required>
+                            </div>
+                            <div class="field">
+                                <label>Teléfono *</label>
+                                <input type="tel" id="customer-phone" placeholder="+593 99 999 9999" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Information -->
+                    <div class="checkout-section">
+                        <div class="section-header">
+                            <h2>Información de Envío</h2>
+                        </div>
+                        <div class="form-grid">
+                            <div class="field full-width">
+                                <label>Nombre Completo *</label>
+                                <input type="text" id="shipping-name" placeholder="Juan Pérez" required>
+                            </div>
+                            <div class="field">
+                                <label>Provincia *</label>
+                                <select id="shipping-province" required>
+                                    <option value="">Seleccionar provincia</option>
+                                    <option value="pichincha">Pichincha</option>
+                                    <option value="guayas">Guayas</option>
+                                    <option value="azuay">Azuay</option>
+                                    <option value="manabi">Manabí</option>
+                                    <option value="tungurahua">Tungurahua</option>
+                                    <option value="el-oro">El Oro</option>
+                                    <option value="otros">Otros</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Ciudad *</label>
+                                <input type="text" id="shipping-city" placeholder="Quito" required>
+                            </div>
+                            <div class="field full-width">
+                                <label>Dirección *</label>
+                                <input type="text" id="shipping-address" placeholder="Av. Amazonas y República, Edificio XYZ" required>
+                            </div>
+                            <div class="field">
+                                <label>Código Postal</label>
+                                <input type="text" id="shipping-postal" placeholder="170150">
+                            </div>
+                            <div class="field">
+                                <label>Referencia</label>
+                                <input type="text" id="shipping-reference" placeholder="Cerca del banco">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="checkout-section">
+                        <div class="section-header">
+                            <h2>Método de Pago</h2>
+                        </div>
+                        <div class="payment-methods">
+                            <div class="payment-option">
+                                <input type="radio" id="card" name="payment" value="card" checked>
+                                <label for="card">
+                                    <div class="payment-icon">💳</div>
+                                    <div class="payment-info">
+                                        <h4>Tarjeta de Crédito/Débito</h4>
+                                        <p>Pago seguro con tu tarjeta</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Details Form -->
+                        <div class="card-details-form">
+                            <div class="form-grid">
+                                <div class="field full-width">
+                                    <label>Número de Tarjeta *</label>
+                                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                </div>
+                                <div class="field">
+                                    <label>Fecha de Vencimiento *</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" required>
+                                </div>
+                                <div class="field">
+                                    <label>CVV *</label>
+                                    <input type="text" id="card-cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                                <div class="field full-width">
+                                    <label>Nombre en la Tarjeta *</label>
+                                    <input type="text" id="card-name" placeholder="Nombre como aparece en la tarjeta" required>
+                                </div>
+                            </div>
+                            <div class="security-note">
+                                <span class="security-icon">🔒</span>
+                                <span>Tus datos están protegidos con encriptación SSL de 256 bits</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Order Summary -->
+                <div class="order-summary">
+                    <div class="summary-card">
+                        <h3>Resumen del Pedido</h3>
+                        
+                        <div id="checkout-items" class="checkout-items">
+                            <!-- Items will be loaded here -->
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="checkout-subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Envío</span>
+                            <span id="checkout-shipping">Gratis</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span id="checkout-total">$0.00</span>
+                        </div>
+
+                        <button class="btn brand checkout-btn" onclick="processOrder()">
+                            Completar Pedido
+                        </button>
+
+                        <div class="security-info">
+                            <span data-icon="shield" style="width:16px;height:16px"></span>
+                            <span>Información segura y protegida</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="actions" style="justify-content:center; margin-top: 24px;">
-            <button class="btn brand" id="confirm-order" disabled>Confirmar Pedido por WhatsApp</button>
         </div>
     </main>
 
@@ -95,7 +236,6 @@
     <script src="../../js/utils/icons.js"></script>
     <script src="../../js/utils/ui.js"></script>
     <script src="../../js/utils/sticky-header.js"></script>
-    <script src="../../js/cart.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
         
@@ -123,6 +263,382 @@
             localStorage.removeItem('hb_session');
             window.location.href = '../auth/login.html';
         }
+
+        // ===== CHECKOUT FUNCTIONALITY =====
+        function loadCheckoutItems() {
+            const container = document.getElementById('checkout-items');
+            const subtotalEl = document.getElementById('checkout-subtotal');
+            const totalEl = document.getElementById('checkout-total');
+            
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            const products = window.StorageAPI ? window.StorageAPI.getProducts() : [];
+            
+            if (cart.length === 0) {
+                window.location.href = 'store.html';
+                return;
+            }
+
+            // Expandir carrito con información de productos
+            const expandedCart = cart.map(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (!product) return null;
+                
+                return {
+                    id: item.productId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    name: product.name,
+                    price: product.pricePublico || product.price || 0,
+                    category: product.category,
+                    image: product.image
+                };
+            }).filter(item => item !== null);
+
+            let subtotal = 0;
+            container.innerHTML = expandedCart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                return `
+                    <div class="checkout-item" data-product-id="${item.productId}">
+                        <div class="item-image">
+                            <img src="${item.image || 'https://via.placeholder.com/60x60?text=Producto'}" alt="${item.name}">
+                            <span class="item-quantity">${item.quantity}</span>
+                        </div>
+                        <div class="item-details">
+                            <h4>${item.name}</h4>
+                            <p>${item.category || 'General'}</p>
+                        </div>
+                        <div class="item-price">
+                            $${itemTotal.toFixed(2)}
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-remove" onclick="removeFromCheckout('${item.productId}')" title="Eliminar producto">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+            totalEl.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        function processOrder() {
+            // Validar formulario
+            const email = document.getElementById('customer-email').value;
+            const phone = document.getElementById('customer-phone').value;
+            const name = document.getElementById('shipping-name').value;
+            const province = document.getElementById('shipping-province').value;
+            const city = document.getElementById('shipping-city').value;
+            const address = document.getElementById('shipping-address').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+
+            if (!email || !phone || !name || !province || !city || !address) {
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Por favor completa todos los campos obligatorios', 'warning');
+                } else {
+                    alert('Por favor completa todos los campos obligatorios');
+                }
+                return;
+            }
+
+            // Validar datos de tarjeta
+            const cardValidation = validateCardData();
+            if (!cardValidation.valid) {
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast(cardValidation.message, 'error');
+                } else {
+                    alert(cardValidation.message);
+                }
+                return;
+            }
+
+            // Crear objeto del pedido
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            const products = window.StorageAPI ? window.StorageAPI.getProducts() : [];
+            
+            // Expandir carrito con información de productos
+            const expandedCart = cart.map(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (!product) return null;
+                
+                return {
+                    id: item.productId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    name: product.name,
+                    price: product.pricePublico || product.price || 0,
+                    category: product.category,
+                    image: product.image
+                };
+            }).filter(item => item !== null);
+            
+            const total = expandedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Obtener datos de tarjeta
+            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+            const cardName = document.getElementById('card-name').value;
+            
+            const order = {
+                id: 'ORD-' + Date.now(),
+                date: new Date().toISOString(),
+                customer: { email, phone, name },
+                shipping: { 
+                    province, 
+                    city, 
+                    address, 
+                    postal: document.getElementById('shipping-postal').value,
+                    reference: document.getElementById('shipping-reference').value
+                },
+                payment: {
+                    method: payment,
+                    card: {
+                        number: '****-****-****-' + cardNumber.slice(-4), // Solo últimos 4 dígitos por seguridad
+                        expiry: cardExpiry,
+                        name: cardName,
+                        // NO guardamos CVV por seguridad
+                    }
+                },
+                items: expandedCart,
+                total: total,
+                status: 'pending'
+            };
+
+            // Guardar pedido usando StorageAPI
+            if (window.StorageAPI) {
+                const orders = window.StorageAPI.getOrders();
+                orders.push(order);
+                window.StorageAPI.setOrders(orders);
+                
+                // Limpiar carrito
+                window.StorageAPI.clearCart();
+            }
+
+            // Mostrar confirmación
+            if (window.Helpers && window.Helpers.showToast) {
+                window.Helpers.showToast('¡Pago procesado exitosamente! Tu pedido ha sido confirmado.', 'success');
+            }
+
+            // Generar mensaje para WhatsApp
+            const whatsappMessage = generateWhatsAppMessage(order);
+            
+            setTimeout(() => {
+                if (confirm('¿Deseas enviar los detalles del pedido por WhatsApp?')) {
+                    window.open(`https://wa.me/593994846405?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+                }
+                window.location.href = 'store.html';
+            }, 2000);
+        }
+
+        function generateWhatsAppMessage(order) {
+            let message = `🛒 *NUEVO PEDIDO - H&B Importaciones*\n\n`;
+            message += `📋 *Pedido:* ${order.id}\n`;
+            message += `📅 *Fecha:* ${new Date(order.date).toLocaleDateString()}\n\n`;
+            
+            message += `👤 *Cliente:*\n`;
+            message += `• Nombre: ${order.customer.name}\n`;
+            message += `• Email: ${order.customer.email}\n`;
+            message += `• Teléfono: ${order.customer.phone}\n\n`;
+            
+            message += `📍 *Dirección de Envío:*\n`;
+            message += `• ${order.shipping.address}\n`;
+            message += `• ${order.shipping.city}, ${order.shipping.province}\n`;
+            if (order.shipping.reference) {
+                message += `• Referencia: ${order.shipping.reference}\n`;
+            }
+            message += `\n`;
+            
+            message += `🛍️ *Productos:*\n`;
+            order.items.forEach(item => {
+                message += `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+            
+            message += `\n💰 *Total: $${order.total.toFixed(2)}*\n`;
+            message += `💳 *Método de pago:* ${getPaymentMethodName(order.payment)}\n`;
+            if (order.payment.card) {
+                message += `💳 *Tarjeta:* ${order.payment.card.number} (${order.payment.card.name})\n`;
+            }
+            message += `\n`;
+            message += `¡Gracias por tu compra! 🎉`;
+            
+            return message;
+        }
+
+        function getPaymentMethodName(payment) {
+            const method = typeof payment === 'string' ? payment : payment.method;
+            const methods = {
+                'card': 'Tarjeta de Crédito/Débito',
+                'transfer': 'Transferencia Bancaria',
+                'cash': 'Pago Contra Entrega',
+                'whatsapp': 'WhatsApp Business'
+            };
+            return methods[method] || method;
+        }
+
+        // Funcionalidad de búsqueda desde el carrito
+        function setupCartSearch() {
+            const cartSearch = document.getElementById('cart-search');
+            if (!cartSearch) return;
+
+            cartSearch.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query) {
+                        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+
+            const searchIcon = document.querySelector('.search-icon');
+            if (searchIcon) {
+                searchIcon.addEventListener('click', function() {
+                    const query = cartSearch.value.trim();
+                    if (query) {
+                        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                    }
+                });
+                searchIcon.style.cursor = 'pointer';
+            }
+        }
+
+        // Función para volver a la tienda
+        function goBack() {
+            window.history.back() || (window.location.href = 'store.html');
+        }
+
+        // Función para eliminar producto del checkout
+        function removeFromCheckout(productId) {
+            if (confirm('¿Deseas eliminar este producto del carrito?')) {
+                if (window.StorageAPI) {
+                    window.StorageAPI.removeFromCart(productId);
+                    
+                    // Mostrar notificación
+                    if (window.Helpers && window.Helpers.showToast) {
+                        window.Helpers.showToast('Producto eliminado del carrito', 'success');
+                    }
+                    
+                    // Recargar items del checkout
+                    loadCheckoutItems();
+                    
+                    // Verificar si el carrito está vacío
+                    const cart = window.StorageAPI.getCart();
+                    if (cart.length === 0) {
+                        setTimeout(() => {
+                            window.location.href = 'store.html';
+                        }, 1000);
+                    }
+                }
+            }
+        }
+
+        // Funciones de validación de tarjeta
+        function setupCardValidation() {
+            const cardNumberInput = document.getElementById('card-number');
+            const cardExpiryInput = document.getElementById('card-expiry');
+            const cardCvvInput = document.getElementById('card-cvv');
+            const cardNameInput = document.getElementById('card-name');
+
+            if (cardNumberInput) {
+                cardNumberInput.addEventListener('input', formatCardNumber);
+                cardNumberInput.addEventListener('keypress', onlyNumbers);
+            }
+
+            if (cardExpiryInput) {
+                cardExpiryInput.addEventListener('input', formatCardExpiry);
+                cardExpiryInput.addEventListener('keypress', onlyNumbers);
+            }
+
+            if (cardCvvInput) {
+                cardCvvInput.addEventListener('input', formatCardCvv);
+                cardCvvInput.addEventListener('keypress', onlyNumbers);
+            }
+
+            if (cardNameInput) {
+                cardNameInput.addEventListener('input', formatCardName);
+            }
+        }
+
+        function formatCardNumber(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+            let formattedInputValue = value.match(/.{1,4}/g)?.join(' ') || '';
+            e.target.value = formattedInputValue;
+        }
+
+        function formatCardExpiry(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        }
+
+        function formatCardCvv(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        }
+
+        function formatCardName(e) {
+            e.target.value = e.target.value.toUpperCase();
+        }
+
+        function onlyNumbers(e) {
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9]/.test(char)) {
+                e.preventDefault();
+            }
+        }
+
+        function validateCardData() {
+            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+            const cardName = document.getElementById('card-name').value;
+
+            // Validar número de tarjeta (16 dígitos)
+            if (cardNumber.length !== 16) {
+                return { valid: false, message: 'El número de tarjeta debe tener 16 dígitos' };
+            }
+
+            // Validar fecha de vencimiento
+            if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+                return { valid: false, message: 'Formato de fecha inválido (MM/AA)' };
+            }
+
+            const [month, year] = cardExpiry.split('/');
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear() % 100;
+            const currentMonth = currentDate.getMonth() + 1;
+
+            if (parseInt(month) < 1 || parseInt(month) > 12) {
+                return { valid: false, message: 'Mes inválido' };
+            }
+
+            if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
+                return { valid: false, message: 'La tarjeta está vencida' };
+            }
+
+            // Validar CVV (3 o 4 dígitos)
+            if (cardCvv.length < 3 || cardCvv.length > 4) {
+                return { valid: false, message: 'CVV debe tener 3 o 4 dígitos' };
+            }
+
+            // Validar nombre
+            if (cardName.length < 2) {
+                return { valid: false, message: 'Nombre en la tarjeta es requerido' };
+            }
+
+            return { valid: true };
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCartSearch();
+            loadCheckoutItems();
+            setupCardValidation();
+        });
     </script>
 </body>
 </html>

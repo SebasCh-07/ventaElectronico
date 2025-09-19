@@ -51,7 +51,7 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container" style="margin-bottom: 80px;">
         <h1 class="page-title">Crear cuenta</h1>
         <section class="panel" style="max-width:520px;margin:12px auto 0;">
             <form id="register-form" class="form">
@@ -88,15 +88,109 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© <span id="year"></span> H&B Importaciones</small>
+            <div class="footer-content">
+                <!-- Logo y contacto principal -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>H&B<span class="web-badge">web</span></h3>
+                        <p class="footer-tagline">Importaciones</p>
+                    </div>
+                    <div class="footer-contact">
+                        <p><span data-icon="headphones" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:8px"></span>¿Necesitas ayuda? ¡Contáctanos!</p>
+                        <p class="contact-phone"><strong>(+593) 099-484-6405</strong></p>
+                    </div>
+                    <div class="footer-address">
+                        <h4>Visítanos</h4>
+                        <p>Quito - Ecuador</p>
+                        <p>Av. Amazonas y República</p>
+                    </div>
+                </div>
+
+                <!-- Encuentra rápido -->
+                <div class="footer-section">
+                    <h4>Encuéntralo rápido</h4>
+                    <ul class="footer-links">
+                        <li><a href="../user/store.html">Laptops & Computadores</a></li>
+                        <li><a href="../user/store.html">Monitores</a></li>
+                        <li><a href="../user/store.html">Componentes</a></li>
+                        <li><a href="../user/store.html">Celulares & Tablets</a></li>
+                        <li><a href="../user/store.html">TVs & Proyectores</a></li>
+                        <li><a href="../user/store.html">Gaming</a></li>
+                    </ul>
+                </div>
+
+                <!-- Atención al cliente -->
+                <div class="footer-section">
+                    <h4>Atención al Cliente</h4>
+                    <ul class="footer-links">
+                        <li><a href="#contact">Centro de Ayuda</a></li>
+                        <li><a href="#shipping">Información de Envío</a></li>
+                        <li><a href="#returns">Política de Devoluciones</a></li>
+                        <li><a href="#warranty">Garantías</a></li>
+                        <li><a href="#terms">Términos y Condiciones</a></li>
+                        <li><a href="#privacy">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter y redes -->
+                <div class="footer-section">
+                    <h4>Mantente Conectado</h4>
+                    <p class="newsletter-text">Suscríbete para recibir las últimas ofertas y novedades</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="tu@email.com" class="newsletter-input">
+                        <button type="submit" class="newsletter-btn">
+                            <span data-icon="arrow-right" style="width:16px;height:16px"></span>
+                        </button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <span data-icon="facebook" style="width:18px;height:18px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <span data-icon="instagram" style="width:18px;height:18px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="WhatsApp">
+                            <span data-icon="phone" style="width:18px;height:18px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="Email">
+                            <span data-icon="mail" style="width:18px;height:18px"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer bottom -->
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <p>© <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
+                    <p class="footer-location">Quito, Ecuador</p>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
     <script src="../../js/utils/icons.js"></script>
     <script src="../../js/utils/ui.js"></script>
     <script src="../../js/utils/sticky-header.js"></script>
     <script src="../../js/register.js"></script>
-    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Agregar parámetro de redirección a los enlaces de login
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectParam = urlParams.get('redirect');
+            
+            if (redirectParam) {
+                // Actualizar todos los enlaces a login.html
+                const loginLinks = document.querySelectorAll('a[href="login.html"]');
+                loginLinks.forEach(link => {
+                    link.href = `login.html?redirect=${redirectParam}`;
+                });
+            }
+        });
+    </script>
 </body>
 </html>

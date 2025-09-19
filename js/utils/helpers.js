@@ -261,6 +261,21 @@
   }
 
   /**
+   * Remueve un toast específico con animación
+   * @param {HTMLElement} toast - Elemento toast a remover
+   */
+  function removeToast(toast) {
+    if (!toast || !toast.parentNode) return;
+    
+    toast.style.animation = 'slideOut 0.3s ease-in';
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
+  }
+
+  /**
    * Muestra una notificación toast
    * @param {string} message - Mensaje a mostrar
    * @param {string} type - Tipo de notificación (success, error, warning, info)
@@ -279,24 +294,97 @@
         z-index: 10000;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+        pointer-events: none;
       `;
+      
+      // Hacer responsive para móviles
+      const mediaQuery = window.matchMedia('(max-width: 768px)');
+      function handleMobileChange(e) {
+        if (e.matches) {
+          container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+          `;
+        } else {
+          container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+          `;
+        }
+      }
+      mediaQuery.addListener(handleMobileChange);
+      handleMobileChange(mediaQuery);
       document.body.appendChild(container);
     }
 
     // Crear toast
     const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    
+    // Icono según el tipo
+    const icons = {
+      success: '✓',
+      error: '✕',
+      warning: '⚠',
+      info: 'ℹ'
+    };
+    
+    toast.innerHTML = `
+      <div class="toast-icon">${icons[type] || icons.info}</div>
+      <div class="toast-message">${message}</div>
+    `;
+    
     toast.style.cssText = `
       background: ${getToastColor(type)};
       color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      max-width: 300px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      max-width: 400px;
+      min-width: 300px;
       word-wrap: break-word;
-      animation: slideIn 0.3s ease-out;
+      animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: transform 0.2s ease;
     `;
-    toast.textContent = message;
+    
+    // Agregar interactividad
+    toast.addEventListener('mouseenter', () => {
+      toast.style.transform = 'scale(1.02)';
+    });
+    
+    toast.addEventListener('mouseleave', () => {
+      toast.style.transform = 'scale(1)';
+    });
+    
+    // Cerrar al hacer clic
+    toast.addEventListener('click', () => {
+      removeToast(toast);
+    });
 
     // Agregar estilos de animación si no existen
     if (!document.getElementById('toast-styles')) {
@@ -304,12 +392,50 @@
       style.id = 'toast-styles';
       style.textContent = `
         @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
+          from { 
+            transform: translateX(100%) scale(0.8); 
+            opacity: 0; 
+          }
+          to { 
+            transform: translateX(0) scale(1); 
+            opacity: 1; 
+          }
         }
         @keyframes slideOut {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(100%); opacity: 0; }
+          from { 
+            transform: translateX(0) scale(1); 
+            opacity: 1; 
+          }
+          to { 
+            transform: translateX(100%) scale(0.8); 
+            opacity: 0; 
+          }
+        }
+        .toast-icon {
+          font-size: 18px;
+          font-weight: bold;
+          flex-shrink: 0;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+        }
+        .toast-message {
+          flex: 1;
+          line-height: 1.4;
+        }
+        .toast::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: rgba(255, 255, 255, 0.3);
         }
       `;
       document.head.appendChild(style);
@@ -319,12 +445,7 @@
 
     // Remover después del tiempo especificado
     setTimeout(() => {
-      toast.style.animation = 'slideOut 0.3s ease-in';
-      setTimeout(() => {
-        if (toast.parentNode) {
-          toast.parentNode.removeChild(toast);
-        }
-      }, 300);
+      removeToast(toast);
     }, duration);
   }
 
@@ -335,10 +456,10 @@
    */
   function getToastColor(type) {
     const colors = {
-      success: '#10b981',
-      error: '#ef4444',
-      warning: '#f59e0b',
-      info: '#3b82f6'
+      success: 'linear-gradient(135deg, #10b981, #059669)',
+      error: 'linear-gradient(135deg, #ef4444, #dc2626)',
+      warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
+      info: 'linear-gradient(135deg, #3b82f6, #2563eb)'
     };
     return colors[type] || colors.info;
   }

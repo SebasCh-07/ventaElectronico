@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Administración</span>
+                <div class="spacer"></div>
+                <span id="admin-welcome">Bienvenido, Admin</span>
+                <div class="spacer"></div>
+                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">admin</span></a>
+                    <nav class="nav">
+                        <a href="index.html" class="nav-link"><span data-icon="dashboard" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Dashboard</a>
+                        <a href="users.html" class="nav-link"><span data-icon="user" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Usuarios</a>
+                        <a href="products.html" class="nav-link"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Productos</a>
+                        <a href="orders.html" class="nav-link active"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
+                    </nav>
+                    <div class="header-actions">
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Gestión de Pedidos</h1>
+        
+        <!-- Estadísticas de pedidos -->
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="clock" style="width:20px;height:20px;color:#f59e0b"></span>
+                        <h3 class="card-title">Pendientes</h3>
+                    </div>
+                    <div class="price" id="pending-orders-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="truck" style="width:20px;height:20px;color:#3b82f6"></span>
+                        <h3 class="card-title">En Proceso</h3>
+                    </div>
+                    <div class="price" id="processing-orders-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="check-circle" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">Completados</h3>
+                    </div>
+                    <div class="price" id="completed-orders-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="dollar-sign" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">Total Ventas</h3>
+                    </div>
+                    <div class="price" id="total-sales">$0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
+            <div style="display:flex;gap:12px;align-items:center;">
+                <button class="btn brand" id="create-demo-order-btn"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Crear Pedido Demo</button>
+                <select id="status-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todos los estados</option>
+                    <option value="pending">Pendientes</option>
+                    <option value="processing">En Proceso</option>
+                    <option value="shipped">Enviados</option>
+                    <option value="completed">Completados</option>
+                    <option value="cancelled">Cancelados</option>
+                </select>
+            </div>
+            <div class="search" style="max-width: 300px;">
+                <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                <input type="text" placeholder="Buscar pedidos..." id="order-search">
+            </div>
+        </div>
+
+        <!-- Lista de pedidos -->
+        <section class="panel">
+            <div id="orders-list"></div>
+        </section>
+
+        <!-- Modal para ver detalles del pedido -->
+        <div id="order-modal" class="modal" style="display:none;">
+            <div class="modal-content" style="max-width:600px;">
+                <div class="modal-header">
+                    <h2>Detalles del Pedido</h2>
+                    <button class="modal-close" onclick="closeOrderModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="order-modal-body">
+                    <!-- Contenido del pedido se carga aquí -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeOrderModal()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones - Panel Admin</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script src="../../js/admin/orders.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

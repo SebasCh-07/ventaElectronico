@@ -29,18 +29,48 @@
    */
   function redirectByRole(user) {
     const currentPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get('redirect');
+    
     let redirectUrl = '../../index.html'; // Default
 
-    switch(user.role) {
-      case 'admin':
-        redirectUrl = '../admin/index.html';
-        break;
-      case 'distributor':
-        redirectUrl = '../distri/index.html';
-        break;
-      case 'client':
-        redirectUrl = '../user/index.html';
-        break;
+    // Si hay un parámetro de redirección específico
+    if (redirectParam) {
+      switch(redirectParam) {
+        case 'store':
+          if (user.role === 'client') {
+            redirectUrl = '../user/store.html';
+          } else if (user.role === 'admin') {
+            redirectUrl = '../admin/store.html';
+          } else if (user.role === 'distributor') {
+            redirectUrl = '../distri/store.html';
+          }
+          break;
+        case 'cart':
+          if (user.role === 'client') {
+            redirectUrl = '../user/cart.html';
+          }
+          break;
+        default:
+          // Si el parámetro no es reconocido, usar redirección por rol por defecto
+          break;
+      }
+    }
+
+    // Si no se ha definido una redirección específica, usar la lógica por rol
+    if (redirectUrl === '../../index.html') {
+      switch(user.role) {
+        case 'admin':
+          redirectUrl = '../admin/index.html';
+          break;
+        case 'distributor':
+          redirectUrl = '../distri/index.html';
+          break;
+        case 'client':
+          // Los clientes siempre van a store.html por defecto
+          redirectUrl = '../user/store.html';
+          break;
+      }
     }
 
     // Ajustar ruta según ubicación actual
@@ -54,7 +84,9 @@
     }
 
     // Mostrar mensaje de bienvenida
-    alert(`¡Bienvenido, ${user.name}! Redirigiendo...`);
+    if (window.Helpers && window.Helpers.showToast) {
+      window.Helpers.showToast(`¡Bienvenido, ${user.name}! Redirigiendo...`, 'success', 2000);
+    }
 
     // Redirigir después de un breve delay
     setTimeout(() => {
@@ -73,7 +105,9 @@
 
     // Validaciones básicas
     if (!email || !password) {
-      alert('Por favor completa todos los campos');
+      if (window.Helpers && window.Helpers.showToast) {
+        window.Helpers.showToast('Por favor completa todos los campos', 'warning');
+      }
       return;
     }
 
@@ -81,7 +115,9 @@
     const user = validateCredentials(email, password);
     
     if (!user) {
-      alert('Credenciales inválidas. Usa los botones de demo para autocompletar.');
+      if (window.Helpers && window.Helpers.showToast) {
+        window.Helpers.showToast('Credenciales inválidas. Usa los botones de demo para autocompletar.', 'error');
+      }
       return;
     }
 
@@ -126,7 +162,9 @@
         if (passwordInput) passwordInput.value = user.password;
 
         // Mostrar información del usuario demo
-        alert(`Datos de ${user.name} cargados`);
+        if (window.Helpers && window.Helpers.showToast) {
+          window.Helpers.showToast(`Datos de ${user.name} cargados`, 'info', 2000);
+        }
 
         // Enfocar en el botón de login
         const submitBtn = form.querySelector('button[type="submit"]');

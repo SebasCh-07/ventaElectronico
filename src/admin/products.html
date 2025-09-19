@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Panel de Administración</span>
+                <div class="spacer"></div>
+                <span id="admin-welcome">Bienvenido, Admin</span>
+                <div class="spacer"></div>
+                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">admin</span></a>
+                    <nav class="nav">
+                        <a href="index.html" class="nav-link"><span data-icon="dashboard" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Dashboard</a>
+                        <a href="users.html" class="nav-link"><span data-icon="user" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Usuarios</a>
+                        <a href="products.html" class="nav-link active"><span data-icon="package" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Productos</a>
+                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Pedidos</a>
+                    </nav>
+                    <div class="header-actions">
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Gestión de Productos</h1>
+        
+        <!-- Estadísticas de productos -->
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="package" style="width:20px;height:20px;color:#3b82f6"></span>
+                        <h3 class="card-title">Total Productos</h3>
+                    </div>
+                    <div class="price" id="total-products-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="check-circle" style="width:20px;height:20px;color:#059669"></span>
+                        <h3 class="card-title">En Stock</h3>
+                    </div>
+                    <div class="price" id="in-stock-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="alert-triangle" style="width:20px;height:20px;color:#f59e0b"></span>
+                        <h3 class="card-title">Stock Bajo</h3>
+                    </div>
+                    <div class="price" id="low-stock-count">0</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span data-icon="star" style="width:20px;height:20px;color:#8b5cf6"></span>
+                        <h3 class="card-title">Destacados</h3>
+                    </div>
+                    <div class="price" id="featured-count">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
+            <div style="display:flex;gap:12px;align-items:center;">
+                <button class="btn brand" id="add-product-btn"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Nuevo Producto</button>
+                <select id="category-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todas las categorías</option>
+                </select>
+                <select id="stock-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todos los stocks</option>
+                    <option value="in-stock">En Stock</option>
+                    <option value="low-stock">Stock Bajo</option>
+                    <option value="out-of-stock">Sin Stock</option>
+                </select>
+                <select id="featured-filter" class="form-control" style="max-width:150px;">
+                    <option value="">Todos los productos</option>
+                    <option value="featured">Destacados</option>
+                    <option value="not-featured">No Destacados</option>
+                </select>
+            </div>
+            <div class="search" style="max-width: 300px;">
+                <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                <input type="text" placeholder="Buscar productos..." id="product-search">
+            </div>
+        </div>
+
+        <!-- Lista de productos -->
+        <section class="panel">
+            <div id="products-list"></div>
+        </section>
+
+        <!-- Modal para crear/editar producto -->
+        <div id="product-modal" class="modal" style="display:none;">
+            <div class="modal-content" style="max-width:600px;">
+                <div class="modal-header">
+                    <h2 id="product-modal-title">Nuevo Producto</h2>
+                    <button class="modal-close" onclick="closeProductModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="product-form">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                            <div>
+                                <label for="product-name" style="display:block;font-weight:600;margin-bottom:6px;">Nombre del producto</label>
+                                <input type="text" id="product-name" class="form-control" required>
+                            </div>
+                            <div>
+                                <label for="product-sku" style="display:block;font-weight:600;margin-bottom:6px;">SKU</label>
+                                <input type="text" id="product-sku" class="form-control" required>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="product-description" style="display:block;font-weight:600;margin-bottom:6px;">Descripción</label>
+                            <textarea id="product-description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                            <div>
+                                <label for="product-category" style="display:block;font-weight:600;margin-bottom:6px;">Categoría</label>
+                                <select id="product-category" class="form-control" required></select>
+                            </div>
+                            <div>
+                                <label for="product-brand" style="display:block;font-weight:600;margin-bottom:6px;">Marca</label>
+                                <input type="text" id="product-brand" class="form-control">
+                            </div>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+                            <div>
+                                <label for="product-price-public" style="display:block;font-weight:600;margin-bottom:6px;">Precio Público</label>
+                                <input type="number" id="product-price-public" class="form-control" required min="0" step="1000">
+                            </div>
+                            <div>
+                                <label for="product-price-distributor" style="display:block;font-weight:600;margin-bottom:6px;">Precio Distribuidor</label>
+                                <input type="number" id="product-price-distributor" class="form-control" required min="0" step="1000">
+                            </div>
+                            <div>
+                                <label for="product-stock" style="display:block;font-weight:600;margin-bottom:6px;">Stock</label>
+                                <input type="number" id="product-stock" class="form-control" required min="0">
+                            </div>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="product-image" style="display:block;font-weight:600;margin-bottom:6px;">URL de imagen (opcional)</label>
+                            <input type="url" id="product-image" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+                        </div>
+                        <div style="display:flex;gap:16px;margin-bottom:16px;">
+                            <label style="display:flex;align-items:center;gap:8px;">
+                                <input type="checkbox" id="product-featured">
+                                <span>Producto destacado</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeProductModal()">Cancelar</button>
+                    <button class="btn brand" onclick="saveProduct()">Guardar Producto</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para ver detalles del producto -->
+        <div id="product-details-modal" class="modal" style="display:none;">
+            <div class="modal-content" style="max-width:500px;">
+                <div class="modal-header">
+                    <h2>Detalles del Producto</h2>
+                    <button class="modal-close" onclick="closeProductDetailsModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="product-details-body">
+                    <!-- Contenido del producto se carga aquí -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeProductDetailsModal()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> H&B Importaciones - Panel Admin</small>
+        </div>
+    </footer>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/utils/ui.js"></script>
+    <script src="../../js/utils/sticky-header.js"></script>
+    <script src="../../js/admin/products.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
