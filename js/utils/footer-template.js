@@ -105,3 +105,4 @@ if (typeof window !== 'undefined') {
   window.createFooterHTML = createFooterHTML;
   window.handleNewsletterSubscription = handleNewsletterSubscription;
 }
+

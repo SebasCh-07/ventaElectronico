@@ -8,6 +8,7 @@
     session: 'hb_session',
     products: 'hb_products',
     cart: 'hb_cart',
+    wishlist: 'hb_wishlist',
     categories: 'hb_categories',
     orders: 'hb_orders',
     quotes: 'hb_quotes',
@@ -323,6 +324,45 @@
     return cart.reduce((total, item) => total + item.quantity, 0);
   }
 
+  // === WISHLIST ===
+  function getWishlist(){ 
+    return readJson(STORAGE_KEYS.wishlist, []); 
+  }
+  
+  function setWishlist(list){ 
+    writeJson(STORAGE_KEYS.wishlist, list); 
+  }
+
+  function addToWishlist(productId){
+    const wishlist = getWishlist();
+    if(!wishlist.includes(productId)){
+      wishlist.push(productId);
+      setWishlist(wishlist);
+    }
+    return wishlist;
+  }
+
+  function removeFromWishlist(productId){
+    const wishlist = getWishlist();
+    const filtered = wishlist.filter(id => id !== productId);
+    setWishlist(filtered);
+    return filtered;
+  }
+
+  function isInWishlist(productId){
+    const wishlist = getWishlist();
+    return wishlist.includes(productId);
+  }
+
+  function clearWishlist(){
+    setWishlist([]);
+  }
+
+  function getWishlistCount(){
+    const wishlist = getWishlist();
+    return wishlist.length;
+  }
+
   // === PEDIDOS ===
   function getOrders(){ 
     return readJson(STORAGE_KEYS.orders, []); 
@@ -479,6 +519,10 @@
     // Carrito
     getCart, setCart, addToCart, removeFromCart, updateCartQuantity,
     clearCart, getCartTotal, getCartItemCount,
+    
+    // Wishlist
+    getWishlist, setWishlist, addToWishlist, removeFromWishlist,
+    isInWishlist, clearWishlist, getWishlistCount,
     
     // Pedidos
     getOrders, setOrders, addOrder, updateOrderStatus,

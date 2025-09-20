@@ -313,7 +313,7 @@
    */
   function updateWelcomeMessage() {
     const session = StorageAPI.getSession();
-    const welcomeEl = document.getElementById('distributor-welcome');
+    const welcomeEl = document.getElementById('distri-welcome');
     if (welcomeEl && session) {
       welcomeEl.textContent = `Bienvenido, ${session.name}`;
     }

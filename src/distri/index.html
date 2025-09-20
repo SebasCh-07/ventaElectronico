@@ -31,12 +31,12 @@
                     </nav>
                     <div class="header-actions">
                         <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
-                            <img src="../../image/carrito/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
+                            <img src="../../image/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
                             <span class="badge" id="wishlist-count">0</span>
                             <span class="icon-label">Favoritos</span>
                         </button>
                         <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
-                            <img src="../../image/carrito/carrito.png" alt="Carrito" style="width:16px;height:16px;">
+                            <img src="../../image/carrito.png" alt="Carrito" style="width:16px;height:16px;">
                             <span class="badge" id="cart-count">0</span>
                             <span class="cart-total" id="cart-total">$0,00</span>
                             <span class="icon-label">Carrito</span>
@@ -118,7 +118,7 @@
                     <div class="cart-title-section">
                         <h2 id="wishlist-modal-title">Lista de Deseos</h2>
                         <button class="cart-close-btn" onclick="closeWishlistModal()">
-                            <span data-icon="x" style="width:24px;height:24px"></span>
+                            ×
                         </button>
                     </div>
                 </div>
@@ -153,7 +153,63 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© <span id="year"></span> H&B Importaciones - Panel Distribuidora</small>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>H&B Importaciones</h3>
+                    <p>Especialistas en tecnología y componentes electrónicos de alta calidad para el mercado ecuatoriano.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <span data-icon="facebook" style="width:20px;height:20px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <span data-icon="instagram" style="width:20px;height:20px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="WhatsApp">
+                            <span data-icon="message-circle" style="width:20px;height:20px"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Panel de Distribuidor</h4>
+                    <ul>
+                        <li><a href="index.html">Catálogo de Productos</a></li>
+                        <li><a href="search.html">Buscar Productos</a></li>
+                        <li><a href="orders.html">Mis Pedidos</a></li>
+                        <li><a href="../user/store.html">Ir a Tienda</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Herramientas</h4>
+                    <ul>
+                        <li><a href="#" onclick="alert('Calculadora de precios próximamente')">Calculadora de Precios</a></li>
+                        <li><a href="#" onclick="alert('Catálogo PDF próximamente')">Catálogo PDF</a></li>
+                        <li><a href="#" onclick="alert('Soporte técnico próximamente')">Soporte Técnico</a></li>
+                        <li><a href="#" onclick="alert('Capacitaciones próximamente')">Capacitaciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Soporte Técnico</h4>
+                    <div class="contact-info">
+                        <p><strong>Email:</strong> soporte@hbyimportaciones.com</p>
+                        <p><strong>Teléfono:</strong> +593 2 234-5678</p>
+                        <p><strong>WhatsApp:</strong> +593 99 123-4567</p>
+                        <p><strong>Horario:</strong> Lun-Vie 8:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
+                    <div class="footer-links">
+                        <a href="#" onclick="alert('Términos y Condiciones próximamente')">Términos y Condiciones</a>
+                        <a href="#" onclick="alert('Política de Privacidad próximamente')">Política de Privacidad</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -166,6 +222,358 @@
     <script src="../../js/distri/catalog.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Verificar sesión y actualizar UI
+        function checkSession() {
+            const sessionData = localStorage.getItem('hb_session');
+            if (sessionData) {
+                try {
+                    const session = JSON.parse(sessionData);
+                    if (session.role === 'distributor') {
+                        document.getElementById('distri-welcome').textContent = `Bienvenido, ${session.name}`;
+                        document.getElementById('logout-container').innerHTML = `
+                            <button class="btn icon logout" onclick="logout()" title="Cerrar sesión">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 6H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 16l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M18 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        `;
+                        return true;
+                    } else {
+                        window.location.href = '../auth/login.html';
+                        return false;
+                    }
+                } catch (e) {
+                    window.location.href = '../auth/login.html';
+                    return false;
+                }
+            } else {
+                window.location.href = '../auth/login.html';
+                return false;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('hb_session');
+            window.location.href = '../auth/login.html';
+        }
+        
+        // ===== FUNCIONALIDAD DEL CARRITO MODAL =====
+        function openCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                loadCartItems();
+            }
+        }
+
+        function closeCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function loadCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const totalElement = document.getElementById('cart-modal-total');
+            
+            if (!container || !totalElement) return;
+
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            const products = window.StorageAPI ? window.StorageAPI.getProducts() : [];
+                
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <span data-icon="cart" style="width:48px;height:48px;opacity:0.3"></span>
+                        </div>
+                        <h3>Tu carrito está vacío</h3>
+                        <p>Agrega algunos productos increíbles a tu carrito</p>
+                        <button class="btn secondary" onclick="closeCartModal()">
+                            Explorar Productos
+                        </button>
+                    </div>
+                `;
+                totalElement.textContent = '$0,00';
+                return;
+            }
+
+            // Expandir carrito con información de productos
+            const expandedCart = cart.map(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (!product) return null;
+                
+                return {
+                    id: item.productId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    name: product.name,
+                    price: product.priceDistribuidor || product.price || 0,
+                    category: product.category,
+                    image: product.image
+                };
+            }).filter(item => item !== null);
+
+            // Renderizar items del carrito
+            let total = 0;
+            container.innerHTML = expandedCart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                return `
+                    <div class="cart-item" data-id="${item.productId}">
+                        <div class="cart-item-image">
+                            <img src="${item.image || 'https://via.placeholder.com/100x100?text=Producto'}" 
+                                 alt="${item.name}" />
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-info">
+                                <h3>${item.name}</h3>
+                                <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+                            </div>
+                            <p class="cart-item-category">${item.category || 'General'}</p>
+                            <div class="cart-item-actions">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="updateCartQuantity('${item.productId}', ${item.quantity - 1})">-</button>
+                                    <span class="quantity">Qty ${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateCartQuantity('${item.productId}', ${item.quantity + 1})">+</button>
+                                </div>
+                                <button class="remove-btn" onclick="removeFromCart('${item.productId}')">
+                                    Remover
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cart-item-total">
+                            $${itemTotal.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalElement.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function updateCartQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+
+            if (window.StorageAPI) {
+                window.StorageAPI.updateCartQuantity(productId, newQuantity);
+                loadCartItems();
+                updateCartDisplay();
+            }
+        }
+
+        function removeFromCart(productId) {
+            if (window.StorageAPI) {
+                window.StorageAPI.removeFromCart(productId);
+                loadCartItems();
+                updateCartDisplay();
+
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Producto removido del carrito', 'success');
+                }
+            }
+        }
+
+        function proceedToCheckout() {
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            if (cart.length === 0) {
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Tu carrito está vacío', 'warning');
+                }
+                return;
+            }
+
+            window.location.href = '../user/cart.html';
+        }
+
+        function updateCartDisplay() {
+            const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
+            const products = window.StorageAPI ? window.StorageAPI.getProducts() : [];
+            
+            let total = 0;
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (product) {
+                    total += (product.priceDistribuidor || product.price || 0) * item.quantity;
+                }
+            });
+
+            const cartCountEl = document.getElementById('cart-count');
+            const cartTotalEl = document.getElementById('cart-total');
+            
+            if (cartCountEl) {
+                cartCountEl.textContent = cart.length;
+            }
+            if (cartTotalEl) {
+                cartTotalEl.textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        // ===== FUNCIONALIDAD DEL WISHLIST MODAL =====
+        function openWishlistModal() {
+            const modal = document.getElementById('wishlist-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                loadWishlistItems();
+            }
+        }
+
+        function closeWishlistModal() {
+            const modal = document.getElementById('wishlist-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function loadWishlistItems() {
+            const container = document.getElementById('wishlist-items-container');
+            
+            if (!container) return;
+
+            const wishlist = window.StorageAPI ? window.StorageAPI.getWishlist() : [];
+            const products = window.StorageAPI ? window.StorageAPI.getProducts() : [];
+                
+            if (wishlist.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <span data-icon="heart" style="width:48px;height:48px;opacity:0.3"></span>
+                        </div>
+                        <h3>Tu lista de deseos está vacía</h3>
+                        <p>Agrega productos que te gusten a tu lista de deseos</p>
+                        <button class="btn secondary" onclick="closeWishlistModal()">
+                            Explorar Productos
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Expandir wishlist con información de productos
+            const expandedWishlist = wishlist.map(productId => {
+                const product = products.find(p => p.id === productId);
+                if (!product) return null;
+                
+                return {
+                    id: product.id,
+                    name: product.name,
+                    price: product.priceDistribuidor || product.price || 0,
+                    category: product.category,
+                    image: product.image
+                };
+            }).filter(item => item !== null);
+
+            // Renderizar items del wishlist
+            container.innerHTML = expandedWishlist.map(item => {
+                return `
+                    <div class="cart-item" data-id="${item.id}">
+                        <div class="cart-item-image">
+                            <img src="${item.image || 'https://via.placeholder.com/100x100?text=Producto'}" 
+                                 alt="${item.name}" />
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-info">
+                                <h3>${item.name}</h3>
+                                <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+                            </div>
+                            <p class="cart-item-category">${item.category || 'General'}</p>
+                            <div class="cart-item-actions">
+                                <button class="btn brand" onclick="addToCartFromWishlist('${item.id}')">
+                                    <span data-icon="cart" style="width:16px;height:16px;margin-right:6px"></span>
+                                    Agregar al Carrito
+                                </button>
+                                <button class="remove-btn" onclick="removeFromWishlist('${item.id}')">
+                                    <span data-icon="trash-2" style="width:16px;height:16px"></span>
+                                    Quitar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToCartFromWishlist(productId) {
+            if (window.StorageAPI) {
+                window.StorageAPI.addToCart(productId, 1);
+                updateCartDisplay();
+                
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Producto agregado al carrito', 'success');
+                }
+            }
+        }
+
+        function removeFromWishlist(productId) {
+            if (window.StorageAPI) {
+                window.StorageAPI.removeFromWishlist(productId);
+                loadWishlistItems();
+                updateWishlistDisplay();
+
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Producto removido de favoritos', 'success');
+                }
+            }
+        }
+
+        function addAllToCart() {
+            const wishlist = window.StorageAPI ? window.StorageAPI.getWishlist() : [];
+            if (wishlist.length === 0) {
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('Tu lista de deseos está vacía', 'warning');
+                }
+                return;
+            }
+
+            wishlist.forEach(productId => {
+                if (window.StorageAPI) {
+                    window.StorageAPI.addToCart(productId, 1);
+                }
+            });
+
+            updateCartDisplay();
+            
+            if (window.Helpers && window.Helpers.showToast) {
+                window.Helpers.showToast('Todos los productos agregados al carrito', 'success');
+            }
+        }
+
+        function updateWishlistDisplay() {
+            const wishlist = window.StorageAPI ? window.StorageAPI.getWishlist() : [];
+            const wishlistCountEl = document.getElementById('wishlist-count');
+            
+            if (wishlistCountEl) {
+                wishlistCountEl.textContent = wishlist.length;
+            }
+        }
+
+        // Cerrar modales con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCartModal();
+                closeWishlistModal();
+            }
+        });
+
+        // Inicializar displays al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkSession()) {
+                updateCartDisplay();
+                updateWishlistDisplay();
+            }
+        });
     </script>
 </body>
 </html>
