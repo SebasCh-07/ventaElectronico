@@ -12,7 +12,8 @@
     categories: 'hb_categories',
     orders: 'hb_orders',
     quotes: 'hb_quotes',
-    settings: 'hb_settings'
+    settings: 'hb_settings',
+    asesores: 'hb_asesores'
   };
 
   /**
@@ -54,6 +55,10 @@
       writeJson(STORAGE_KEYS.users, HBDATA.users);
       writeJson(STORAGE_KEYS.products, HBDATA.products);
       writeJson(STORAGE_KEYS.categories, HBDATA.categories);
+      
+      // Extraer asesores de los usuarios (solo los que tienen type: 'asesor')
+      const asesores = HBDATA.users.filter(user => user.type === 'asesor');
+      writeJson(STORAGE_KEYS.asesores, asesores);
     } else {
       // Fallback con datos básicos
     if(!readJson(STORAGE_KEYS.users)){
@@ -453,6 +458,43 @@
     };
   }
 
+  // === ASESORES ===
+  function getAsesores(){
+    return readJson(STORAGE_KEYS.asesores, []);
+  }
+
+  function setAsesores(asesores){
+    writeJson(STORAGE_KEYS.asesores, asesores);
+  }
+
+  function getAsesorById(id){
+    const asesores = getAsesores();
+    return asesores.find(asesor => asesor.id === id) || null;
+  }
+
+  function updateAsesor(id, asesorData){
+    const asesores = getAsesores();
+    const index = asesores.findIndex(asesor => asesor.id === id);
+    if(index !== -1){
+      asesores[index] = { ...asesores[index], ...asesorData };
+      setAsesores(asesores);
+      return true;
+    }
+    return false;
+  }
+
+  function addAsesor(asesorData){
+    const asesores = getAsesores();
+    const newAsesor = {
+      ...asesorData,
+      id: asesorData.id || 'ase' + Date.now(),
+      createdAt: new Date().toISOString()
+    };
+    asesores.push(newAsesor);
+    setAsesores(asesores);
+    return newAsesor;
+  }
+
   // === UTILIDADES ===
   function clearAllData(){
     Object.values(STORAGE_KEYS).forEach(key => {
@@ -506,6 +548,9 @@
     
     // Usuarios
     getUsers, setUsers, getUserById, updateUser, addUser,
+    
+    // Asesores
+    getAsesores, setAsesores, getAsesorById, updateAsesor, addAsesor,
     
     // Productos
     getProducts, setProducts, getProductById, getProductsByOwner,

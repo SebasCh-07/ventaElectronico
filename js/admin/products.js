@@ -148,13 +148,12 @@
   }
 
   /**
-   * Filtra productos por búsqueda, categoría, stock y destacados
+   * Filtra productos por búsqueda, categoría y stock
    */
   function filterProducts() {
     const searchTerm = document.getElementById('product-search').value.toLowerCase().trim();
     const categoryFilter = document.getElementById('category-filter').value;
     const stockFilter = document.getElementById('stock-filter').value;
-    const featuredFilter = document.getElementById('featured-filter').value;
     
     filteredProducts = allProducts.filter(product => {
       const matchesSearch = !searchTerm || 
@@ -180,11 +179,7 @@
         }
       }
       
-      const matchesFeatured = !featuredFilter || 
-        (featuredFilter === 'featured' && product.featured) ||
-        (featuredFilter === 'not-featured' && !product.featured);
-      
-      return matchesSearch && matchesCategory && matchesStock && matchesFeatured;
+      return matchesSearch && matchesCategory && matchesStock;
     });
 
     renderProducts();
@@ -194,6 +189,9 @@
    * Carga y actualiza la lista de productos
    */
   function loadProducts() {
+    // Asegurar que los datos se carguen desde HBDATA
+    StorageAPI.reloadFromHBDATA();
+    
     allProducts = StorageAPI.getProducts().sort((a, b) => 
       new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
     );
@@ -459,8 +457,9 @@
     document.getElementById('product-search').addEventListener('input', filterProducts);
     document.getElementById('category-filter').addEventListener('change', filterProducts);
     document.getElementById('stock-filter').addEventListener('change', filterProducts);
-    document.getElementById('featured-filter').addEventListener('change', filterProducts);
     document.getElementById('add-product-btn').addEventListener('click', () => openProductModal());
+    document.getElementById('import-products-btn').addEventListener('click', () => openImportModal());
+    document.getElementById('add-category-btn').addEventListener('click', () => openCategoryModal());
 
     // Cerrar modales al hacer clic fuera
     document.getElementById('product-modal').addEventListener('click', (e) => {
@@ -475,14 +474,391 @@
       }
     });
 
+    document.getElementById('category-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'category-modal') {
+        closeCategoryModal();
+      }
+    });
+
     // Cerrar modales con tecla Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeProductModal();
         closeProductDetailsModal();
+        closeCategoryModal();
       }
     });
   });
+
+  // === FUNCIONES DE CATEGORÍAS ===
+  
+  /**
+   * Abre el modal para agregar/editar categoría
+   */
+  function openCategoryModal(categoryId = null) {
+    const modal = document.getElementById('category-modal');
+    const title = document.getElementById('category-modal-title');
+    const form = document.getElementById('category-form');
+    
+    if (categoryId) {
+      // Editar categoría existente
+      const category = StorageAPI.getCategoryById(categoryId);
+      if (category) {
+        title.textContent = 'Editar Categoría';
+        document.getElementById('category-name').value = category.name || '';
+        document.getElementById('category-icon').value = category.icon || '';
+        document.getElementById('category-description').value = category.description || '';
+      }
+    } else {
+      // Nueva categoría
+      title.textContent = 'Nueva Categoría';
+      form.reset();
+    }
+    
+    modal.style.display = 'block';
+  }
+
+  /**
+   * Cierra el modal de categorías
+   */
+  function closeCategoryModal() {
+    const modal = document.getElementById('category-modal');
+    const form = document.getElementById('category-form');
+    
+    modal.style.display = 'none';
+    form.reset();
+  }
+
+  /**
+   * Guarda una nueva categoría o actualiza una existente
+   */
+  function saveCategory() {
+    const name = document.getElementById('category-name').value.trim();
+    const icon = document.getElementById('category-icon').value;
+    const description = document.getElementById('category-description').value.trim();
+    
+    if (!name) {
+      alert('Por favor ingresa el nombre de la categoría');
+      return;
+    }
+    
+    if (!icon) {
+      alert('Por favor selecciona un icono para la categoría');
+      return;
+    }
+    
+    // Verificar si la categoría ya existe
+    const existingCategories = StorageAPI.getCategories();
+    const categoryExists = existingCategories.some(cat => 
+      cat.name.toLowerCase() === name.toLowerCase()
+    );
+    
+    if (categoryExists) {
+      alert('Ya existe una categoría con ese nombre');
+      return;
+    }
+    
+    const categoryData = {
+      id: 'cat' + Date.now(),
+      name: name,
+      icon: icon,
+      description: description || ''
+    };
+    
+    try {
+      // Agregar la nueva categoría
+      const categories = StorageAPI.getCategories();
+      categories.push(categoryData);
+      StorageAPI.setCategories(categories);
+      
+      // Actualizar los selects de categorías
+      loadCategories();
+      
+      // Cerrar el modal
+      closeCategoryModal();
+      
+      alert('✅ Categoría agregada exitosamente!');
+      
+    } catch (error) {
+      console.error('Error al guardar la categoría:', error);
+      alert('Error al guardar la categoría');
+    }
+  }
+
+  // === FUNCIONES DE IMPORTACIÓN MASIVA ===
+  
+  /**
+   * Abre el modal de importación masiva
+   */
+  function openImportModal() {
+    const modal = document.getElementById('import-modal');
+    const categorySelect = document.getElementById('import-category');
+    
+    // Cargar categorías
+    loadCategoriesForImport();
+    
+    modal.style.display = 'block';
+  }
+
+  /**
+   * Cierra el modal de importación masiva
+   */
+  function closeImportModal() {
+    const modal = document.getElementById('import-modal');
+    const fileInput = document.getElementById('excel-file');
+    const previewSection = document.getElementById('preview-section');
+    const previewBtn = document.getElementById('preview-btn');
+    const importBtn = document.getElementById('import-btn');
+    
+    modal.style.display = 'none';
+    fileInput.value = '';
+    previewSection.style.display = 'none';
+    previewBtn.style.display = 'none';
+    importBtn.style.display = 'none';
+    document.getElementById('preview-content').innerHTML = '';
+    document.getElementById('total-products-count').textContent = '0';
+  }
+
+  /**
+   * Carga las categorías en el select de importación
+   */
+  function loadCategoriesForImport() {
+    const categorySelect = document.getElementById('import-category');
+    const categories = StorageAPI.getCategories();
+    
+    categorySelect.innerHTML = '<option value="">Seleccionar categoría</option>';
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category.name;
+      option.textContent = category.name;
+      categorySelect.appendChild(option);
+    });
+  }
+
+  /**
+   * Muestra la vista previa de los productos del Excel
+   */
+  function previewProducts() {
+    const fileInput = document.getElementById('excel-file');
+    const categorySelect = document.getElementById('import-category');
+    
+    if (!fileInput.files[0]) {
+      alert('Por favor selecciona un archivo Excel');
+      return;
+    }
+    
+    if (!categorySelect.value) {
+      alert('Por favor selecciona una categoría');
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        
+        if (jsonData.length === 0) {
+          alert('El archivo Excel está vacío');
+          return;
+        }
+        
+        // Validar y procesar los datos
+        const processedProducts = processExcelData(jsonData, categorySelect.value);
+        
+        if (processedProducts.length === 0) {
+          alert('No se encontraron productos válidos en el archivo Excel');
+          return;
+        }
+        
+        // Mostrar vista previa
+        showProductsPreview(processedProducts);
+        
+        // Mostrar botones
+        document.getElementById('preview-btn').style.display = 'none';
+        document.getElementById('import-btn').style.display = 'inline-block';
+        
+      } catch (error) {
+        console.error('Error al leer el archivo Excel:', error);
+        alert('Error al leer el archivo Excel. Asegúrate de que tenga el formato correcto.');
+      }
+    };
+    
+    reader.readAsArrayBuffer(file);
+  }
+
+  /**
+   * Procesa los datos del Excel y los convierte en productos
+   */
+  function processExcelData(excelData, category) {
+    const products = [];
+    const requiredFields = ['nombre', 'descripcion', 'precio_publico', 'precio_distribuidor', 'stock', 'sku', 'marca'];
+    
+    excelData.forEach((row, index) => {
+      // Verificar que tenga los campos requeridos
+      const hasRequiredFields = requiredFields.every(field => 
+        row[field] !== undefined && row[field] !== null && row[field] !== ''
+      );
+      
+      if (!hasRequiredFields) {
+        console.warn(`Fila ${index + 2} omitida: faltan campos requeridos`);
+        return;
+      }
+      
+      // Crear el producto
+      const product = {
+        id: 'p' + Date.now() + '_' + index,
+        owner: 'd1', // Por defecto al distribuidor principal
+        name: String(row.nombre).trim(),
+        description: String(row.descripcion).trim(),
+        pricePublico: parseFloat(row.precio_publico) || 0,
+        priceDistribuidor: parseFloat(row.precio_distribuidor) || 0,
+        category: category,
+        stock: parseInt(row.stock) || 0,
+        image: '',
+        sku: String(row.sku).trim(),
+        brand: String(row.marca).trim(),
+        featured: row.destacado === 'TRUE' || row.destacado === true || row.destacado === 1,
+        sales: 0,
+        createdAt: new Date().toISOString()
+      };
+      
+      products.push(product);
+    });
+    
+    return products;
+  }
+
+  /**
+   * Muestra la vista previa de los productos
+   */
+  function showProductsPreview(products) {
+    const previewContent = document.getElementById('preview-content');
+    const totalCount = document.getElementById('total-products-count');
+    
+    totalCount.textContent = products.length;
+    
+    const previewHTML = products.map((product, index) => `
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:12px;margin-bottom:8px;background:#f9fafb;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;">
+          <div>
+            <strong>${product.name}</strong>
+            <span style="color:#6b7280;font-size:12px;margin-left:8px;">#${index + 1}</span>
+          </div>
+          <span style="background:#3b82f6;color:white;padding:2px 8px;border-radius:4px;font-size:12px;">
+            ${product.category}
+          </span>
+        </div>
+        <div style="font-size:14px;color:#6b7280;margin-bottom:8px;">
+          ${product.description}
+        </div>
+        <div style="display:flex;gap:16px;font-size:14px;">
+          <span><strong>SKU:</strong> ${product.sku}</span>
+          <span><strong>Marca:</strong> ${product.brand}</span>
+          <span><strong>Stock:</strong> ${product.stock}</span>
+          <span><strong>Precio:</strong> $${product.pricePublico.toLocaleString()} COP</span>
+          ${product.featured ? '<span style="color:#8b5cf6;"><strong>⭐ Destacado</strong></span>' : ''}
+        </div>
+      </div>
+    `).join('');
+    
+    previewContent.innerHTML = previewHTML;
+    document.getElementById('preview-section').style.display = 'block';
+  }
+
+  /**
+   * Importa los productos a la plataforma
+   */
+  function importProducts() {
+    const fileInput = document.getElementById('excel-file');
+    const categorySelect = document.getElementById('import-category');
+    
+    if (!fileInput.files[0] || !categorySelect.value) {
+      alert('Por favor completa todos los campos');
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        
+        const processedProducts = processExcelData(jsonData, categorySelect.value);
+        
+        if (processedProducts.length === 0) {
+          alert('No se encontraron productos válidos para importar');
+          return;
+        }
+        
+        // Importar productos uno por uno
+        let importedCount = 0;
+        let errorCount = 0;
+        
+        processedProducts.forEach(product => {
+          try {
+            StorageAPI.addProduct(product);
+            importedCount++;
+          } catch (error) {
+            console.error('Error al importar producto:', product.name, error);
+            errorCount++;
+          }
+        });
+        
+        // Mostrar resultado
+        if (importedCount > 0) {
+          alert(`✅ Importación completada!\n\n📊 Resultados:\n• Productos importados: ${importedCount}\n• Errores: ${errorCount}\n\nLos productos han sido agregados a la plataforma.`);
+          
+          // Recargar la lista de productos
+          loadProducts();
+          closeImportModal();
+        } else {
+          alert('❌ No se pudo importar ningún producto. Verifica el formato del archivo Excel.');
+        }
+        
+      } catch (error) {
+        console.error('Error durante la importación:', error);
+        alert('Error durante la importación. Verifica el formato del archivo Excel.');
+      }
+    };
+    
+    reader.readAsArrayBuffer(file);
+  }
+
+  /**
+   * Maneja la selección de archivo Excel
+   */
+  function handleFileSelection() {
+    const fileInput = document.getElementById('excel-file');
+    const previewBtn = document.getElementById('preview-btn');
+    
+    if (fileInput.files[0]) {
+      previewBtn.style.display = 'inline-block';
+    } else {
+      previewBtn.style.display = 'none';
+    }
+  }
+
+  // Hacer las funciones disponibles globalmente
+  window.openImportModal = openImportModal;
+  window.closeImportModal = closeImportModal;
+  window.previewProducts = previewProducts;
+  window.importProducts = importProducts;
+  window.handleFileSelection = handleFileSelection;
+  window.openCategoryModal = openCategoryModal;
+  window.closeCategoryModal = closeCategoryModal;
+  window.saveCategory = saveCategory;
+
 })();
 
 

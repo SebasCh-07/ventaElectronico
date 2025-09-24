@@ -16,8 +16,6 @@
                 <span>Panel de Administración</span>
                 <div class="spacer"></div>
                 <span id="admin-welcome">Bienvenido, Admin</span>
-                <div class="spacer"></div>
-                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
             </div>
         </div>
         <div class="header-main">
@@ -85,6 +83,7 @@
         <div class="actions" style="justify-content:space-between; margin-bottom: 16px;">
             <div style="display:flex;gap:12px;align-items:center;">
                 <button class="btn brand" id="add-product-btn"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Nuevo Producto</button>
+                <button class="btn secondary" id="import-products-btn"><span data-icon="upload" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Importar Masivamente</button>
                 <select id="category-filter" class="form-control" style="max-width:150px;">
                     <option value="">Todas las categorías</option>
                 </select>
@@ -94,11 +93,7 @@
                     <option value="low-stock">Stock Bajo</option>
                     <option value="out-of-stock">Sin Stock</option>
                 </select>
-                <select id="featured-filter" class="form-control" style="max-width:150px;">
-                    <option value="">Todos los productos</option>
-                    <option value="featured">Destacados</option>
-                    <option value="not-featured">No Destacados</option>
-                </select>
+                <button class="btn secondary" id="add-category-btn"><span data-icon="plus" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Agregar Categoría</button>
             </div>
             <div class="search" style="max-width: 300px;">
                 <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
@@ -200,10 +195,134 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© 2025 H&B Importaciones - Panel Admin</small>
+            <small>© <span id="year">2025</span> H&B Importaciones - Panel Admin</small>
         </div>
     </footer>
 
+    <!-- Modal para agregar categoría -->
+    <div id="category-modal" class="modal-overlay" style="display:none;">
+        <div class="modal">
+            <div class="modal-content" style="max-width:500px;">
+                <div class="modal-header">
+                    <h2 id="category-modal-title">Nueva Categoría</h2>
+                    <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="category-form">
+                        <div style="margin-bottom:16px;">
+                            <label for="category-name" style="display:block;font-weight:600;margin-bottom:6px;">Nombre de la categoría</label>
+                            <input type="text" id="category-name" class="form-control" placeholder="Ej: Smartphones, Laptops, Audio..." required>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="category-icon" style="display:block;font-weight:600;margin-bottom:6px;">Icono</label>
+                            <select id="category-icon" class="form-control" required>
+                                <option value="">Seleccionar icono</option>
+                                <option value="📱">📱 Smartphones</option>
+                                <option value="💻">💻 Laptops</option>
+                                <option value="🎧">🎧 Audio</option>
+                                <option value="🔋">🔋 Pilas</option>
+                                <option value="🔌">🔌 Cargadores</option>
+                                <option value="🖥️">🖥️ Monitores</option>
+                                <option value="🎮">🎮 Gaming</option>
+                                <option value="📺">📺 TVs</option>
+                                <option value="📷">📷 Cámaras</option>
+                                <option value="🔧">🔧 Componentes PC</option>
+                                <option value="⌚">⌚ Accesorios</option>
+                                <option value="🎵">🎵 Música</option>
+                                <option value="📚">📚 Software</option>
+                                <option value="🔒">🔒 Seguridad</option>
+                                <option value="🌐">🌐 Redes</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label for="category-description" style="display:block;font-weight:600;margin-bottom:6px;">Descripción</label>
+                            <textarea id="category-description" class="form-control" rows="3" placeholder="Descripción breve de la categoría..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeCategoryModal()">Cancelar</button>
+                    <button class="btn brand" onclick="saveCategory()">Guardar Categoría</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para importación masiva de productos -->
+    <div id="import-modal" class="modal-overlay" style="display:none;">
+        <div class="modal">
+            <div class="modal-content" style="max-width:600px;">
+                <div class="modal-header">
+                    <h2>Importar Productos Masivamente</h2>
+                    <button class="modal-close" onclick="closeImportModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-bottom:20px;">
+                        <h3>Instrucciones:</h3>
+                        <ol style="margin-left:20px;line-height:1.6;">
+                            <li>Selecciona la categoría para los productos</li>
+                            <li>Sube tu archivo Excel (.xlsx) con la estructura correcta</li>
+                            <li>Revisa la vista previa de los productos</li>
+                            <li>Confirma la importación</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="margin-bottom:16px;">
+                        <label for="import-category" style="display:block;font-weight:600;margin-bottom:6px;">Categoría de Productos</label>
+                        <select id="import-category" class="form-control" required>
+                            <option value="">Seleccionar categoría</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom:16px;">
+                        <label for="excel-file" style="display:block;font-weight:600;margin-bottom:6px;">Archivo Excel</label>
+                        <input type="file" id="excel-file" class="form-control" accept=".xlsx,.xls" required onchange="handleFileSelection()">
+                        <small style="color:#6b7280;margin-top:4px;display:block;">
+                            Formatos soportados: .xlsx, .xls
+                        </small>
+                    </div>
+                    
+                    <div id="preview-section" style="display:none;margin-top:20px;">
+                        <h3>Vista Previa de Productos</h3>
+                        <div id="preview-content" style="max-height:300px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;padding:12px;">
+                            <!-- Los productos se mostrarán aquí -->
+                        </div>
+                        <div style="margin-top:12px;">
+                            <strong>Total productos a importar: <span id="total-products-count">0</span></strong>
+                        </div>
+                    </div>
+                    
+                    <div style="background:#f3f4f6;padding:16px;border-radius:8px;margin-top:16px;">
+                        <h4 style="margin-bottom:8px;">📋 Estructura del Excel:</h4>
+                        <p style="margin-bottom:8px;">El archivo Excel debe tener las siguientes columnas:</p>
+                        <ul style="margin-left:20px;font-family:monospace;font-size:14px;">
+                            <li><strong>nombre</strong> - Nombre del producto</li>
+                            <li><strong>descripcion</strong> - Descripción del producto</li>
+                            <li><strong>precio_publico</strong> - Precio público (número)</li>
+                            <li><strong>precio_distribuidor</strong> - Precio distribuidor (número)</li>
+                            <li><strong>stock</strong> - Cantidad en stock (número)</li>
+                            <li><strong>sku</strong> - Código SKU único</li>
+                            <li><strong>marca</strong> - Marca del producto</li>
+                            <li><strong>destacado</strong> - TRUE/FALSE (opcional)</li>
+                        </ul>
+                        <p style="margin-top:8px;font-size:14px;color:#6b7280;">
+                            💡 <strong>Tip:</strong> La primera fila debe contener los nombres de las columnas.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeImportModal()">Cancelar</button>
+                    <button class="btn secondary" id="preview-btn" onclick="previewProducts()" style="display:none;">Vista Previa</button>
+                    <button class="btn brand" id="import-btn" onclick="importProducts()" style="display:none;">Importar Productos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SheetJS para leer archivos Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <script src="../../js/utils/data.js"></script>
     <script src="../../js/utils/storage.js"></script>
     <script src="../../js/utils/icons.js"></script>
     <script src="../../js/utils/ui.js"></script>
