@@ -13,22 +13,24 @@
     <header class="site-header">
         <div class="topbar">
             <div class="container topbar-content">
-                <span>Panel de Distribuidora</span>
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
                 <div class="spacer"></div>
-                <span id="distri-welcome">Bienvenido, Distribuidora</span>
+                <span id="distri-welcome">Bienvenido a H&B Importaciones</span>
                 <div class="spacer"></div>
-                <a href="../user/store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
+                <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
+                <a href="../user/store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
             </div>
         </div>
         <div class="header-main">
             <div class="container">
                 <div class="header-content">
                     <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
-                    <nav class="nav">
-                        <a href="index.html" class="nav-link"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
-                        <a href="search.html" class="nav-link"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
-                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
-                    </nav>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar por nombre, ID, SKU, marca...">
+                    </div>
                     <div class="header-actions">
                         <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
                             <img src="../../image/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
@@ -47,6 +49,17 @@
             </div>
         </div>
     </header>
+
+    <!-- Navegación por pestañas -->
+    <nav class="distributor-tabs">
+        <div class="container">
+            <div class="tabs-nav">
+                <a href="index.html" class="tab-link"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
+                <a href="search.html" class="tab-link"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
+                <a href="orders.html" class="tab-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
+            </div>
+        </div>
+    </nav>
 
     <main class="product-detail-page">
         <div class="container">

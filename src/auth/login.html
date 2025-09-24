@@ -232,6 +232,7 @@
                 <div class="spacer"></div>
                 <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
                 <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
                 <a href="../../index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
                 <a href="login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
@@ -291,6 +292,28 @@
                         <button class="btn brand" type="submit">Acceso</button>
                     </div>
                 </form>
+                
+                <!-- Mensajes de entrega -->
+                <div class="delivery-info" style="margin-top: 2rem; padding: 1.25rem; background: #ffffff; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                    <h3 style="margin: 0 0 1.25rem 0; color: #374151; font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        <span data-icon="truck" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;color:#6b7280;"></span>
+                        Información de Entrega
+                    </h3>
+                    <div class="delivery-messages" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div class="delivery-message" style="padding: 1rem; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6;">
+                            <span style="color: #374151; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #3b82f6; font-size: 1.1rem;">📍</span>
+                                Realizamos entregas en Quito y a provincia
+                            </span>
+                        </div>
+                        <div class="delivery-message" style="padding: 1rem; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6;">
+                            <span style="color: #374151; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #f59e0b; font-size: 1.1rem;">⏱️</span>
+                                El tiempo de entrega depende del transporte de carga pesada
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </section>
             
             <section class="auth-section">
@@ -646,6 +669,129 @@
                 }, 2000);
             });
         })();
+        // ===== FUNCIONALIDAD DEL MODAL DE ASESORES =====
+        function openAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function contactAdvisor(email, name) {
+            const subject = encodeURIComponent('Consulta desde H&B Importaciones');
+            const body = encodeURIComponent(`Hola ${name},\n\nMe gustaría recibir asesoría sobre productos disponibles.\n\nGracias.`);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.open(mailtoLink);
+            alert(`Redirigiendo a ${name}`);
+        }
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAdvisorsModal();
+            }
+        });
     </script>
+
+    <!-- Advisors Modal -->
+    <div id="advisors-modal" class="advisors-modal">
+        <div class="advisors-backdrop" onclick="closeAdvisorsModal()"></div>
+        <div class="advisors-panel">
+            <div class="advisors-content">
+                <div class="advisors-header">
+                    <div class="advisors-title-section">
+                        <h2>Nuestros Asesores</h2>
+                        <p>Elige con quién te gustaría contactar para recibir asesoría personalizada</p>
+                        <button class="advisors-close-btn" onclick="closeAdvisorsModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="advisors-grid">
+                    <!-- Asesor 1 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=MR" alt="María Rodríguez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>María Rodríguez</h3>
+                            <p class="advisor-role">Especialista en Laptops</p>
+                            <p class="advisor-description">Experta en equipos portátiles y soluciones empresariales</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('maria.rodriguez@hbimportaciones.com', 'María Rodríguez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 2 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=CL" alt="Carlos López" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Carlos López</h3>
+                            <p class="advisor-role">Especialista en Gaming</p>
+                            <p class="advisor-description">Conoce todo sobre equipos gaming y componentes de alta gama</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('carlos.lopez@hbimportaciones.com', 'Carlos López')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 3 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=AM" alt="Ana Martínez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Ana Martínez</h3>
+                            <p class="advisor-role">Especialista en Componentes</p>
+                            <p class="advisor-description">Experta en CPUs, GPUs y componentes de computadoras</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status busy">● Ocupada</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('ana.martinez@hbimportaciones.com', 'Ana Martínez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 4 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=DG" alt="Diego García" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Diego García</h3>
+                            <p class="advisor-role">Especialista en Monitores</p>
+                            <p class="advisor-description">Conoce las mejores opciones en monitores y displays</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('diego.garcia@hbimportaciones.com', 'Diego García')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

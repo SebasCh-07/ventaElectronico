@@ -5312,6 +5312,77 @@ a:hover {
   margin: 0;
 }
 
+/* Bank Logos Section */
+.bank-logos-section {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+}
+
+.bank-logos-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 var(--space-4) 0;
+  text-align: center;
+}
+
+.bank-logos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.bank-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition);
+  text-align: center;
+}
+
+.bank-logo:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.bank-logo img {
+  width: 60px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.bank-logo span {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.payment-info {
+  text-align: center;
+  padding: var(--space-3);
+  background: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.payment-info p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
 .order-summary {
   position: sticky;
   top: 100px;
@@ -5472,6 +5543,35 @@ a:hover {
   font-weight: 600;
 }
 
+/* Delivery Info */
+.delivery-info {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--primary);
+}
+
+.delivery-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.delivery-item:last-child {
+  margin-bottom: 0;
+}
+
+.delivery-icon {
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+
 .security-info {
   display: flex;
   align-items: center;
@@ -5604,9 +5704,40 @@ a:hover {
     order: 1;
   }
 
+  .bank-logos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .bank-logo {
+    padding: var(--space-2);
+  }
+
+  .bank-logo img {
+    width: 50px;
+    height: 35px;
+  }
+
+  .bank-logo span {
+    font-size: 11px;
+  }
+
   .back-btn {
     order: 2;
     font-size: 13px;
+  }
+
+  .delivery-info {
+    padding: var(--space-3);
+  }
+
+  .delivery-item {
+    font-size: 13px;
+    gap: var(--space-2);
+  }
+
+  .delivery-icon {
+    font-size: 14px;
   }
 }
 
@@ -5802,3 +5933,443 @@ input:focus::placeholder,
 select:focus::placeholder {
   opacity: 0.5;
 }
+
+/* ===== ESTILOS PARA MODAL DE ASESORES ===== */
+
+/* Modal de asesores */
+.advisors-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.advisors-modal.active {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+}
+
+.advisors-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.advisors-panel {
+  position: relative;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-xl);
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.advisors-modal.active .advisors-panel {
+  transform: scale(1);
+}
+
+.advisors-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.advisors-header {
+  padding: 24px 32px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  position: relative;
+}
+
+.advisors-title-section h2 {
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.advisors-title-section p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.advisors-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.advisors-close-btn:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+/* Grid de asesores */
+.advisors-grid {
+  padding: 24px 32px 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Tarjeta de asesor */
+.advisor-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.advisor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+.advisor-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.advisor-card:hover::before {
+  opacity: 1;
+}
+
+.advisor-avatar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.advisor-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.advisor-card:hover .advisor-avatar img {
+  border-color: var(--primary);
+}
+
+.advisor-info h3 {
+  margin: 0 0 4px 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.advisor-role {
+  margin: 0 0 8px 0;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.advisor-description {
+  margin: 0 0 16px 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.advisor-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.advisor-status {
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.advisor-status.online {
+  color: var(--success);
+}
+
+.advisor-status.busy {
+  color: var(--warning);
+}
+
+.advisor-status.offline {
+  color: var(--text-muted);
+}
+
+.advisor-contact-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.advisor-contact-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.advisor-contact-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .advisors-panel {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .advisors-header {
+    padding: 20px 20px 16px;
+  }
+  
+  .advisors-grid {
+    padding: 20px;
+    grid-template-columns: 1fr;
+  }
+  
+  .advisor-card {
+    padding: 16px;
+  }
+  
+  .advisor-contact {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .advisor-contact-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ===== ESTILOS PARA PANEL DE NAVEGACIÓN DISTRIBUIDOR ===== */
+
+/* Panel de navegación principal */
+.distributor-tabs {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin-bottom: 24px;
+}
+
+/* Contenedor de las pestañas */
+.tabs-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Enlaces de pestañas */
+.tab-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--gray-50);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* Hover state para pestañas */
+.tab-link:hover {
+  background: var(--primary-light);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+/* Estado activo de pestañas */
+.tab-link.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Iconos en las pestañas */
+.tab-link span[data-icon] {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.tab-link:hover span[data-icon],
+.tab-link.active span[data-icon] {
+  opacity: 1;
+}
+
+/* Efecto de pulso para pestaña activa */
+.tab-link.active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--primary), var(--primary-light));
+  border-radius: 14px;
+  z-index: -1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .tabs-nav {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  
+  .tab-link {
+    width: 100%;
+    min-width: auto;
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+  
+  .distributor-tabs {
+    position: relative;
+    margin-bottom: 16px;
+  }
+}
+
+/* Responsive para tablets */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .tabs-nav {
+    gap: 6px;
+    padding: 14px 0;
+  }
+  
+  .tab-link {
+    padding: 10px 20px;
+    font-size: 13px;
+    min-width: 100px;
+  }
+}
+
+/* Efectos adicionales para mejor UX */
+.tab-link:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+/* Indicador visual de la pestaña activa */
+.tab-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--primary-dark);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--white);
+}
+
+/* Animación de entrada para las pestañas */
+.tab-link {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animation para múltiples pestañas */
+.tab-link:nth-child(1) { animation-delay: 0.1s; }
+.tab-link:nth-child(2) { animation-delay: 0.2s; }
+.tab-link:nth-child(3) { animation-delay: 0.3s; }

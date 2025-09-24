@@ -19,6 +19,7 @@
                 <div class="spacer"></div>
                 <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
                 <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
                 <a href="store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
                 <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
@@ -140,45 +141,30 @@
 
                     <!-- Payment Method -->
                     <div class="checkout-section">
-                        <div class="section-header">
-                            <h2>Método de Pago</h2>
-                        </div>
-                        <div class="payment-methods">
-                            <div class="payment-option">
-                                <input type="radio" id="card" name="payment" value="card" checked>
-                                <label for="card">
-                                    <div class="payment-icon">💳</div>
-                                    <div class="payment-info">
-                                        <h4>Tarjeta de Crédito/Débito</h4>
-                                        <p>Pago seguro con tu tarjeta</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
                         
-                        <!-- Card Details Form -->
-                        <div class="card-details-form">
-                            <div class="form-grid">
-                                <div class="field full-width">
-                                    <label>Número de Tarjeta *</label>
-                                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        <!-- Bank Logos -->
+                        <div class="bank-logos-section">
+                            <h3>Bancos con los que trabajamos</h3>
+                            <div class="bank-logos-grid">
+                                <div class="bank-logo">
+                                    <img src="../../image/Banco-Pichincha.png" alt="Banco Pichincha">
+                                    <span>Banco Pichincha</span>
                                 </div>
-                                <div class="field">
-                                    <label>Fecha de Vencimiento *</label>
-                                    <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" required>
+                                <div class="bank-logo">
+                                    <img src="../../image/bancoGuayaquil.png" alt="Banco de Guayaquil">
+                                    <span>Banco de Guayaquil</span>
                                 </div>
-                                <div class="field">
-                                    <label>CVV *</label>
-                                    <input type="text" id="card-cvv" placeholder="123" maxlength="4" required>
+                                <div class="bank-logo">
+                                    <img src="../../image/BancoInternacional.png" alt="Banco Internacional">
+                                    <span>Banco Internacional</span>
                                 </div>
-                                <div class="field full-width">
-                                    <label>Nombre en la Tarjeta *</label>
-                                    <input type="text" id="card-name" placeholder="Nombre como aparece en la tarjeta" required>
+                                <div class="bank-logo">
+                                    <img src="../../image/bancoPacífico.png" alt="Banco del Pacífico">
+                                    <span>Banco del Pacífico</span>
                                 </div>
                             </div>
-                            <div class="security-note">
-                                <span class="security-icon">🔒</span>
-                                <span>Tus datos están protegidos con encriptación SSL de 256 bits</span>
+                            <div class="payment-info">
+                                <p>Para completar tu pago, contáctanos por WhatsApp para coordinar la transferencia bancaria.</p>
                             </div>
                         </div>
                     </div>
@@ -209,6 +195,17 @@
                         <button class="btn brand checkout-btn" onclick="processOrder()">
                             Completar Pedido
                         </button>
+
+                        <div class="delivery-info">
+                            <div class="delivery-item">
+                                <span class="delivery-icon">🚚</span>
+                                <span>Realizamos entregas en Quito y a provincia</span>
+                            </div>
+                            <div class="delivery-item">
+                                <span class="delivery-icon">⏱️</span>
+                                <span>El tiempo de entrega depende del transporte de carga pesada</span>
+                            </div>
+                        </div>
 
                         <div class="security-info">
                             <span data-icon="shield" style="width:16px;height:16px"></span>
@@ -340,16 +337,7 @@
                 return;
             }
 
-            // Validar datos de tarjeta
-            const cardValidation = validateCardData();
-            if (!cardValidation.valid) {
-                if (window.Helpers && window.Helpers.showToast) {
-                    window.Helpers.showToast(cardValidation.message, 'error');
-                } else {
-                    alert(cardValidation.message);
-                }
-                return;
-            }
+            // No se requieren validaciones de tarjeta ya que se coordina por WhatsApp
 
             // Crear objeto del pedido
             const cart = window.StorageAPI ? window.StorageAPI.getCart() : [];
@@ -373,12 +361,6 @@
             
             const total = expandedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             
-            // Obtener datos de tarjeta
-            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
-            const cardExpiry = document.getElementById('card-expiry').value;
-            const cardCvv = document.getElementById('card-cvv').value;
-            const cardName = document.getElementById('card-name').value;
-            
             const order = {
                 id: 'ORD-' + Date.now(),
                 date: new Date().toISOString(),
@@ -391,13 +373,8 @@
                     reference: document.getElementById('shipping-reference').value
                 },
                 payment: {
-                    method: payment,
-                    card: {
-                        number: '****-****-****-' + cardNumber.slice(-4), // Solo últimos 4 dígitos por seguridad
-                        expiry: cardExpiry,
-                        name: cardName,
-                        // NO guardamos CVV por seguridad
-                    }
+                    method: 'transferencia_bancaria',
+                    status: 'pendiente_coordinacion'
                 },
                 items: expandedCart,
                 total: total,
@@ -454,12 +431,10 @@
             });
             
             message += `\n💰 *Total: $${order.total.toFixed(2)}*\n`;
-            message += `💳 *Método de pago:* ${getPaymentMethodName(order.payment)}\n`;
-            if (order.payment.card) {
-                message += `💳 *Tarjeta:* ${order.payment.card.number} (${order.payment.card.name})\n`;
-            }
+            message += `💳 *Método de pago:* Transferencia Bancaria\n`;
+            message += `🏦 *Bancos disponibles:* Pichincha, Guayaquil, Internacional, Pacífico\n`;
             message += `\n`;
-            message += `¡Gracias por tu compra! 🎉`;
+            message += `¡Gracias por tu pedido! Te contactaremos para coordinar el pago. 🎉`;
             
             return message;
         }
@@ -531,110 +506,137 @@
             }
         }
 
-        // Funciones de validación de tarjeta
-        function setupCardValidation() {
-            const cardNumberInput = document.getElementById('card-number');
-            const cardExpiryInput = document.getElementById('card-expiry');
-            const cardCvvInput = document.getElementById('card-cvv');
-            const cardNameInput = document.getElementById('card-name');
+        // Funciones de validación de tarjeta eliminadas - ya no se requieren
 
-            if (cardNumberInput) {
-                cardNumberInput.addEventListener('input', formatCardNumber);
-                cardNumberInput.addEventListener('keypress', onlyNumbers);
-            }
-
-            if (cardExpiryInput) {
-                cardExpiryInput.addEventListener('input', formatCardExpiry);
-                cardExpiryInput.addEventListener('keypress', onlyNumbers);
-            }
-
-            if (cardCvvInput) {
-                cardCvvInput.addEventListener('input', formatCardCvv);
-                cardCvvInput.addEventListener('keypress', onlyNumbers);
-            }
-
-            if (cardNameInput) {
-                cardNameInput.addEventListener('input', formatCardName);
+        // ===== FUNCIONALIDAD DEL MODAL DE ASESORES =====
+        function openAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
         }
 
-        function formatCardNumber(e) {
-            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-            let formattedInputValue = value.match(/.{1,4}/g)?.join(' ') || '';
-            e.target.value = formattedInputValue;
-        }
-
-        function formatCardExpiry(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4);
-            }
-            e.target.value = value;
-        }
-
-        function formatCardCvv(e) {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        }
-
-        function formatCardName(e) {
-            e.target.value = e.target.value.toUpperCase();
-        }
-
-        function onlyNumbers(e) {
-            const char = String.fromCharCode(e.which);
-            if (!/[0-9]/.test(char)) {
-                e.preventDefault();
+        function closeAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
         }
 
-        function validateCardData() {
-            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
-            const cardExpiry = document.getElementById('card-expiry').value;
-            const cardCvv = document.getElementById('card-cvv').value;
-            const cardName = document.getElementById('card-name').value;
-
-            // Validar número de tarjeta (16 dígitos)
-            if (cardNumber.length !== 16) {
-                return { valid: false, message: 'El número de tarjeta debe tener 16 dígitos' };
-            }
-
-            // Validar fecha de vencimiento
-            if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-                return { valid: false, message: 'Formato de fecha inválido (MM/AA)' };
-            }
-
-            const [month, year] = cardExpiry.split('/');
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
-
-            if (parseInt(month) < 1 || parseInt(month) > 12) {
-                return { valid: false, message: 'Mes inválido' };
-            }
-
-            if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
-                return { valid: false, message: 'La tarjeta está vencida' };
-            }
-
-            // Validar CVV (3 o 4 dígitos)
-            if (cardCvv.length < 3 || cardCvv.length > 4) {
-                return { valid: false, message: 'CVV debe tener 3 o 4 dígitos' };
-            }
-
-            // Validar nombre
-            if (cardName.length < 2) {
-                return { valid: false, message: 'Nombre en la tarjeta es requerido' };
-            }
-
-            return { valid: true };
+        function contactAdvisor(email, name) {
+            const subject = encodeURIComponent('Consulta desde H&B Importaciones');
+            const body = encodeURIComponent(`Hola ${name},\n\nMe gustaría recibir asesoría sobre productos disponibles.\n\nGracias.`);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.open(mailtoLink);
+            alert(`Redirigiendo a ${name}`);
         }
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAdvisorsModal();
+            }
+        });
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             setupCartSearch();
             loadCheckoutItems();
-            setupCardValidation();
         });
     </script>
+
+    <!-- Advisors Modal -->
+    <div id="advisors-modal" class="advisors-modal">
+        <div class="advisors-backdrop" onclick="closeAdvisorsModal()"></div>
+        <div class="advisors-panel">
+            <div class="advisors-content">
+                <div class="advisors-header">
+                    <div class="advisors-title-section">
+                        <h2>Nuestros Asesores</h2>
+                        <p>Elige con quién te gustaría contactar para recibir asesoría personalizada</p>
+                        <button class="advisors-close-btn" onclick="closeAdvisorsModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="advisors-grid">
+                    <!-- Asesor 1 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=MR" alt="María Rodríguez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>María Rodríguez</h3>
+                            <p class="advisor-role">Especialista en Laptops</p>
+                            <p class="advisor-description">Experta en equipos portátiles y soluciones empresariales</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('maria.rodriguez@hbimportaciones.com', 'María Rodríguez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 2 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=CL" alt="Carlos López" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Carlos López</h3>
+                            <p class="advisor-role">Especialista en Gaming</p>
+                            <p class="advisor-description">Conoce todo sobre equipos gaming y componentes de alta gama</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('carlos.lopez@hbimportaciones.com', 'Carlos López')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 3 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=AM" alt="Ana Martínez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Ana Martínez</h3>
+                            <p class="advisor-role">Especialista en Componentes</p>
+                            <p class="advisor-description">Experta en CPUs, GPUs y componentes de computadoras</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status busy">● Ocupada</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('ana.martinez@hbimportaciones.com', 'Ana Martínez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 4 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=DG" alt="Diego García" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Diego García</h3>
+                            <p class="advisor-role">Especialista en Monitores</p>
+                            <p class="advisor-description">Conoce las mejores opciones en monitores y displays</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('diego.garcia@hbimportaciones.com', 'Diego García')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
