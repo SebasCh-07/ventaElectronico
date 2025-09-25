@@ -77,7 +77,7 @@ function setupEventListeners() {
     // Agregar trabajador
     const addWorkerBtn = document.getElementById('add-worker-btn');
     if (addWorkerBtn) {
-        addWorkerBtn.addEventListener('click', () => openUserModal('worker'));
+        addWorkerBtn.addEventListener('click', () => openWorkerModal());
     }
 }
 
@@ -86,7 +86,13 @@ function loadWorkers() {
     if (!workersList) return;
     
     const users = StorageAPI.getUsers();
-    const workers = users.filter(user => user.role === 'admin' || user.role === 'distributor');
+    const asesores = StorageAPI.getAsesores();
+    
+    // Obtener solo administradores de usuarios
+    const admins = users.filter(user => user.role === 'admin');
+    
+    // Combinar administradores y asesores
+    const workers = [...admins, ...asesores];
     
     if (workers.length === 0) {
         workersList.innerHTML = `
@@ -98,7 +104,7 @@ function loadWorkers() {
         return;
     }
     
-    workersList.innerHTML = workers.map(worker => createUserCard(worker, 'worker')).join('');
+    workersList.innerHTML = workers.map(worker => createWorkerCard(worker, 'worker')).join('');
 }
 
 function loadRecentClients() {
@@ -106,7 +112,7 @@ function loadRecentClients() {
     if (!recentClientsList) return;
     
     const users = StorageAPI.getUsers();
-    const clients = users.filter(user => user.role === 'client')
+    const clients = users.filter(user => user.role === 'client' || user.role === 'distributor')
                          .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
                          .slice(0, 10);
     
@@ -120,7 +126,7 @@ function loadRecentClients() {
         return;
     }
     
-    recentClientsList.innerHTML = clients.map(client => createUserCard(client, 'client')).join('');
+    recentClientsList.innerHTML = clients.map(client => createClientCard(client, 'client')).join('');
 }
 
 function handleClientSearch(event) {
@@ -133,7 +139,7 @@ function handleClientSearch(event) {
     
     const users = StorageAPI.getUsers();
     const clients = users.filter(user => 
-        user.role === 'client' && (
+        (user.role === 'client' || user.role === 'distributor') && (
             user.name.toLowerCase().includes(query) ||
             user.email.toLowerCase().includes(query) ||
             (user.whatsapp && user.whatsapp.toLowerCase().includes(query))
@@ -156,7 +162,7 @@ function displaySearchResults(clients) {
             </div>
         `;
     } else {
-        searchClientsList.innerHTML = clients.map(client => createUserCard(client, 'client')).join('');
+        searchClientsList.innerHTML = clients.map(client => createClientCard(client, 'client')).join('');
     }
     
     // Mostrar resultados de búsqueda y ocultar últimos clientes
@@ -174,19 +180,19 @@ function clearClientSearch() {
     recentClientsCard.style.display = 'block';
 }
 
-function createUserCard(user, type) {
-    const avatar = user.name ? user.name.charAt(0).toUpperCase() : 'U';
-    const roleText = getRoleText(user.role);
-    const statusClass = user.active ? 'active' : 'inactive';
-    const statusText = user.active ? 'Activo' : 'Inactivo';
-    const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-ES') : 'N/A';
+function createWorkerCard(worker, type) {
+    const avatar = worker.name ? worker.name.charAt(0).toUpperCase() : 'W';
+    const roleText = worker.type === 'asesor' ? getAsesorRoleText(worker) : getRoleText(worker.role);
+    const statusClass = worker.active ? 'active' : 'inactive';
+    const statusText = worker.active ? 'Activo' : 'Inactivo';
+    const createdAt = worker.createdAt ? new Date(worker.createdAt).toLocaleDateString('es-ES') : 'N/A';
     
     return `
         <div class="user-card">
             <div class="user-header">
                 <div class="user-avatar">${avatar}</div>
                 <div class="user-info">
-                    <h4>${user.name || 'Sin nombre'}</h4>
+                    <h4>${worker.name || 'Sin nombre'}</h4>
                     <p>${roleText}</p>
                 </div>
                 <div class="user-status ${statusClass}">
@@ -198,28 +204,40 @@ function createUserCard(user, type) {
             <div class="user-details">
                 <div class="user-detail">
                     <strong>Email:</strong>
-                    <span>${user.email}</span>
+                    <span>${worker.email}</span>
                 </div>
-                ${user.whatsapp ? `
+                ${worker.whatsapp ? `
                 <div class="user-detail">
                     <strong>WhatsApp:</strong>
-                    <span>${user.whatsapp}</span>
+                    <span>${worker.whatsapp}</span>
+                </div>
+                ` : ''}
+                ${worker.type === 'asesor' && worker.department ? `
+                <div class="user-detail">
+                    <strong>Departamento:</strong>
+                    <span>${worker.department}</span>
+                </div>
+                ` : ''}
+                ${worker.type === 'asesor' && worker.position ? `
+                <div class="user-detail">
+                    <strong>Cargo:</strong>
+                    <span>${worker.position}</span>
                 </div>
                 ` : ''}
                 <div class="user-detail">
-                    <strong>Registrado:</strong>
-                    <span>${createdAt}</span>
+                    <strong>${worker.type === 'asesor' ? 'Ingreso:' : 'Registrado:'}</strong>
+                    <span>${worker.hireDate ? new Date(worker.hireDate).toLocaleDateString('es-ES') : createdAt}</span>
                 </div>
             </div>
             
             <div class="user-actions">
-                <button class="btn secondary" onclick="editUser('${user.id}')">
+                <button class="btn secondary" onclick="${worker.type === 'asesor' ? 'editAsesor' : 'editUser'}('${worker.id}')">
                     <span data-icon="edit" style="width:14px;height:14px;margin-right:4px"></span>
                     Editar
                 </button>
-                <button class="btn ${user.active ? 'danger' : 'success'}" onclick="toggleUserStatus('${user.id}')">
-                    <span data-icon="${user.active ? 'user-x' : 'user-check'}" style="width:14px;height:14px;margin-right:4px"></span>
-                    ${user.active ? 'Desactivar' : 'Activar'}
+                <button class="btn ${worker.active ? 'danger' : 'success'}" onclick="${worker.type === 'asesor' ? 'toggleAsesorStatus' : 'toggleUserStatus'}('${worker.id}')">
+                    <span data-icon="${worker.active ? 'user-x' : 'user-check'}" style="width:14px;height:14px;margin-right:4px"></span>
+                    ${worker.active ? 'Desactivar' : 'Activar'}
                 </button>
             </div>
         </div>
@@ -229,10 +247,73 @@ function createUserCard(user, type) {
 function getRoleText(role) {
     const roles = {
         'admin': 'Administrador',
+        'accesor': 'Accesor',
         'distributor': 'Distribuidor',
         'client': 'Cliente'
     };
     return roles[role] || 'Usuario';
+}
+
+function getAsesorRoleText(asesor) {
+    return `${asesor.position || 'Asesor'} - ${asesor.department || 'Sin departamento'}`;
+}
+
+function createClientCard(client, type) {
+    const avatar = client.name ? client.name.charAt(0).toUpperCase() : 'C';
+    const roleText = getRoleText(client.role);
+    const statusClass = client.active ? 'active' : 'inactive';
+    const statusText = client.active ? 'Activo' : 'Inactivo';
+    const createdAt = client.createdAt ? new Date(client.createdAt).toLocaleDateString('es-ES') : 'N/A';
+    
+    return `
+        <div class="user-card">
+            <div class="user-header">
+                <div class="user-avatar">${avatar}</div>
+                <div class="user-info">
+                    <h4>${client.name || 'Sin nombre'}</h4>
+                    <p>${roleText}</p>
+                </div>
+                <div class="user-status ${statusClass}">
+                    <span data-icon="circle" style="width:8px;height:8px"></span>
+                    ${statusText}
+                </div>
+            </div>
+            
+            <div class="user-details">
+                <div class="user-detail">
+                    <strong>Email:</strong>
+                    <span>${client.email}</span>
+                </div>
+                ${client.whatsapp ? `
+                <div class="user-detail">
+                    <strong>WhatsApp:</strong>
+                    <span>${client.whatsapp}</span>
+                </div>
+                ` : ''}
+                ${client.phone ? `
+                <div class="user-detail">
+                    <strong>Teléfono:</strong>
+                    <span>${client.phone}</span>
+                </div>
+                ` : ''}
+                <div class="user-detail">
+                    <strong>Registrado:</strong>
+                    <span>${createdAt}</span>
+                </div>
+            </div>
+            
+            <div class="user-actions">
+                <button class="btn secondary" onclick="editClient('${client.id}')">
+                    <span data-icon="edit" style="width:14px;height:14px;margin-right:4px"></span>
+                    Editar
+                </button>
+                <button class="btn ${client.active ? 'danger' : 'success'}" onclick="toggleClientStatus('${client.id}')">
+                    <span data-icon="${client.active ? 'user-x' : 'user-check'}" style="width:14px;height:14px;margin-right:4px"></span>
+                    ${client.active ? 'Desactivar' : 'Activar'}
+                </button>
+            </div>
+        </div>
+    `;
 }
 
 function openUserModal(type, userId = null) {
@@ -254,24 +335,34 @@ function openUserModal(type, userId = null) {
         title.textContent = type === 'worker' ? 'Nuevo Trabajador' : 'Nuevo Usuario';
         form.reset();
         document.getElementById('user-password').required = true;
-        document.getElementById('user-role').value = type === 'worker' ? 'distributor' : 'client';
+        document.getElementById('user-role').value = type === 'worker' ? 'accesor' : 'client';
     }
     
-    // Mostrar/ocultar campo WhatsApp según el rol
+    // Mostrar/ocultar campos según el rol
     const roleSelect = document.getElementById('user-role');
     const whatsappField = document.getElementById('whatsapp-field');
+    const asesorFields = document.getElementById('asesor-fields');
     
-    function toggleWhatsappField() {
+    function toggleFieldsByRole() {
         const role = roleSelect.value;
-        if (role === 'client' || role === 'distributor') {
+        
+        // Campo WhatsApp
+        if (role === 'client' || role === 'distributor' || role === 'accesor') {
             whatsappField.style.display = 'block';
         } else {
             whatsappField.style.display = 'none';
         }
+        
+        // Campos de asesor
+        if (role === 'accesor') {
+            asesorFields.style.display = 'block';
+        } else {
+            asesorFields.style.display = 'none';
+        }
     }
     
-    roleSelect.addEventListener('change', toggleWhatsappField);
-    toggleWhatsappField();
+    roleSelect.addEventListener('change', toggleFieldsByRole);
+    toggleFieldsByRole();
     
     modal.style.display = 'block';
 }
@@ -354,6 +445,134 @@ function toggleUserStatus(userId) {
         
         alert(`Usuario ${newStatus ? 'activado' : 'desactivado'} exitosamente`);
     }
+}
+
+function editClient(clientId) {
+    openUserModal('client', clientId);
+}
+
+function toggleClientStatus(clientId) {
+    const user = StorageAPI.getUser(clientId);
+    const newStatus = !user.active;
+    
+    if (confirm(`¿Estás seguro de que quieres ${newStatus ? 'activar' : 'desactivar'} este cliente?`)) {
+        user.active = newStatus;
+        StorageAPI.updateUser(clientId, user);
+        
+        // Recargar la lista de clientes
+        loadRecentClients();
+        
+        alert(`Cliente ${newStatus ? 'activado' : 'desactivado'} exitosamente`);
+    }
+}
+
+// Funciones para manejar asesores
+function openWorkerModal(workerId = null) {
+    const modal = document.getElementById('user-modal');
+    const title = document.getElementById('user-modal-title');
+    const form = document.getElementById('user-form');
+    
+    if (workerId) {
+        // Verificar si es un asesor o admin
+        const asesor = StorageAPI.getAsesorById(workerId);
+        const user = StorageAPI.getUserById(workerId);
+        
+        if (asesor) {
+            title.textContent = 'Editar Asesor';
+            document.getElementById('user-name').value = asesor.name || '';
+            document.getElementById('user-email').value = asesor.email || '';
+            document.getElementById('user-password').value = '';
+            document.getElementById('user-password').required = false;
+            document.getElementById('user-role').value = 'accesor';
+            document.getElementById('user-whatsapp').value = asesor.whatsapp || '';
+            document.getElementById('user-department').value = asesor.department || 'Ventas';
+            document.getElementById('user-position').value = asesor.position || '';
+            document.getElementById('user-active').checked = asesor.active !== false;
+        } else if (user && user.role === 'admin') {
+            title.textContent = 'Editar Administrador';
+            document.getElementById('user-name').value = user.name || '';
+            document.getElementById('user-email').value = user.email || '';
+            document.getElementById('user-password').value = '';
+            document.getElementById('user-password').required = false;
+            document.getElementById('user-role').value = user.role;
+            document.getElementById('user-whatsapp').value = '';
+            document.getElementById('user-active').checked = user.active !== false;
+        }
+    } else {
+        title.textContent = 'Nuevo Trabajador';
+        form.reset();
+        document.getElementById('user-password').required = true;
+        document.getElementById('user-role').value = 'accesor';
+    }
+    
+    modal.style.display = 'block';
+}
+
+function editAsesor(asesorId) {
+    openWorkerModal(asesorId);
+}
+
+function editUser(userId) {
+    openWorkerModal(userId);
+}
+
+function toggleAsesorStatus(asesorId) {
+    const asesor = StorageAPI.getAsesorById(asesorId);
+    const newStatus = !asesor.active;
+    
+    if (confirm(`¿Estás seguro de que quieres ${newStatus ? 'activar' : 'desactivar'} este asesor?`)) {
+        StorageAPI.updateAsesor(asesorId, { active: newStatus });
+        loadWorkers();
+        alert(`Asesor ${newStatus ? 'activado' : 'desactivado'} exitosamente`);
+    }
+}
+
+function saveWorker() {
+    const form = document.getElementById('user-form');
+    const role = document.getElementById('user-role').value;
+    
+    const workerData = {
+        name: document.getElementById('user-name').value,
+        email: document.getElementById('user-email').value,
+        password: document.getElementById('user-password').value,
+        whatsapp: document.getElementById('user-whatsapp').value,
+        department: document.getElementById('user-department').value,
+        position: document.getElementById('user-position').value,
+        active: document.getElementById('user-active').checked,
+        createdAt: new Date().toISOString()
+    };
+    
+    if (!workerData.name || !workerData.email) {
+        alert('Por favor, completa todos los campos requeridos');
+        return;
+    }
+    
+    if (role === 'accesor') {
+        // Es un asesor
+        workerData.type = 'asesor';
+        workerData.hireDate = new Date().toISOString().split('T')[0];
+        
+        if (!workerData.password) {
+            alert('La contraseña es requerida para nuevos asesores');
+            return;
+        }
+        
+        StorageAPI.addAsesor(workerData);
+    } else if (role === 'admin') {
+        // Es un administrador
+        workerData.role = 'admin';
+        
+        if (!workerData.password) {
+            alert('La contraseña es requerida para nuevos administradores');
+            return;
+        }
+        
+        StorageAPI.addUser(workerData);
+    }
+    
+    closeUserModal();
+    loadWorkers();
+    alert('Trabajador guardado exitosamente');
 }
 
 // Función de debounce para la búsqueda

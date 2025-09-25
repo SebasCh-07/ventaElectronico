@@ -37,6 +37,116 @@ const HBDATA = {
       phone: '+573001112234',
       createdAt: '2024-01-03',
       lastLogin: null
+    },
+    {
+      id: 'c2',
+      role: 'client',
+      name: 'María Pérez',
+      email: 'maria.perez@email.com',
+      password: 'cliente123',
+      active: true,
+      phone: '+573001112240',
+      whatsapp: '+573001112240',
+      createdAt: '2024-01-10',
+      lastLogin: null
+    },
+    {
+      id: 'c3',
+      role: 'client',
+      name: 'Carlos López',
+      email: 'carlos.lopez@email.com',
+      password: 'cliente123',
+      active: true,
+      phone: '+573001112241',
+      whatsapp: '+573001112241',
+      createdAt: '2024-01-15',
+      lastLogin: null
+    },
+    {
+      id: 'c4',
+      role: 'client',
+      name: 'Ana García',
+      email: 'ana.garcia@email.com',
+      password: 'cliente123',
+      active: false,
+      phone: '+573001112242',
+      whatsapp: '+573001112242',
+      createdAt: '2024-01-20',
+      lastLogin: null
+    },
+    {
+      id: 'c5',
+      role: 'client',
+      name: 'Luis Martínez',
+      email: 'luis.martinez@email.com',
+      password: 'cliente123',
+      active: true,
+      phone: '+573001112243',
+      whatsapp: '+573001112243',
+      createdAt: '2024-01-25',
+      lastLogin: null
+    },
+    {
+      id: 'd2',
+      role: 'distributor',
+      name: 'Distribuidora Beta',
+      email: 'distri.beta@hb.local',
+      password: 'distri123',
+      active: true,
+      whatsapp: '+573001112244',
+      createdAt: '2024-01-05',
+      lastLogin: null
+    },
+    {
+      id: 'd3',
+      role: 'distributor',
+      name: 'Importaciones Gamma',
+      email: 'import.gamma@hb.local',
+      password: 'distri123',
+      active: true,
+      whatsapp: '+573001112245',
+      createdAt: '2024-01-12',
+      lastLogin: null
+    },
+    // Datos de asesores (no son usuarios de la plataforma, solo datos para gestión)
+    {
+      id: 'ase1',
+      type: 'asesor',
+      name: 'María González',
+      email: 'maria.gonzalez@hb.local',
+      phone: '+573001112236',
+      whatsapp: '+573001112236',
+      active: true,
+      department: 'Ventas',
+      position: 'Asesor Senior',
+      hireDate: '2023-06-15',
+      createdAt: '2024-01-04'
+    },
+    {
+      id: 'ase2',
+      type: 'asesor',
+      name: 'Carlos Rodríguez',
+      email: 'carlos.rodriguez@hb.local',
+      phone: '+573001112237',
+      whatsapp: '+573001112237',
+      active: true,
+      department: 'Soporte',
+      position: 'Asesor Técnico',
+      hireDate: '2023-08-20',
+      createdAt: '2024-01-05'
+    },
+    {
+      id: 'ase3',
+      type: 'asesor',
+      name: 'Ana Martínez',
+      email: 'ana.martinez@hb.local',
+      phone: '+573001112238',
+      whatsapp: '+573001112238',
+      active: false,
+      department: 'Ventas',
+      position: 'Asesor Junior',
+      hireDate: '2023-12-01',
+      createdAt: '2024-01-06'
     }
   ],
 

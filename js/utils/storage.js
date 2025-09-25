@@ -8,10 +8,12 @@
     session: 'hb_session',
     products: 'hb_products',
     cart: 'hb_cart',
+    wishlist: 'hb_wishlist',
     categories: 'hb_categories',
     orders: 'hb_orders',
     quotes: 'hb_quotes',
-    settings: 'hb_settings'
+    settings: 'hb_settings',
+    asesores: 'hb_asesores'
   };
 
   /**
@@ -53,6 +55,10 @@
       writeJson(STORAGE_KEYS.users, HBDATA.users);
       writeJson(STORAGE_KEYS.products, HBDATA.products);
       writeJson(STORAGE_KEYS.categories, HBDATA.categories);
+      
+      // Extraer asesores de los usuarios (solo los que tienen type: 'asesor')
+      const asesores = HBDATA.users.filter(user => user.type === 'asesor');
+      writeJson(STORAGE_KEYS.asesores, asesores);
     } else {
       // Fallback con datos básicos
     if(!readJson(STORAGE_KEYS.users)){
@@ -323,6 +329,45 @@
     return cart.reduce((total, item) => total + item.quantity, 0);
   }
 
+  // === WISHLIST ===
+  function getWishlist(){ 
+    return readJson(STORAGE_KEYS.wishlist, []); 
+  }
+  
+  function setWishlist(list){ 
+    writeJson(STORAGE_KEYS.wishlist, list); 
+  }
+
+  function addToWishlist(productId){
+    const wishlist = getWishlist();
+    if(!wishlist.includes(productId)){
+      wishlist.push(productId);
+      setWishlist(wishlist);
+    }
+    return wishlist;
+  }
+
+  function removeFromWishlist(productId){
+    const wishlist = getWishlist();
+    const filtered = wishlist.filter(id => id !== productId);
+    setWishlist(filtered);
+    return filtered;
+  }
+
+  function isInWishlist(productId){
+    const wishlist = getWishlist();
+    return wishlist.includes(productId);
+  }
+
+  function clearWishlist(){
+    setWishlist([]);
+  }
+
+  function getWishlistCount(){
+    const wishlist = getWishlist();
+    return wishlist.length;
+  }
+
   // === PEDIDOS ===
   function getOrders(){ 
     return readJson(STORAGE_KEYS.orders, []); 
@@ -413,6 +458,43 @@
     };
   }
 
+  // === ASESORES ===
+  function getAsesores(){
+    return readJson(STORAGE_KEYS.asesores, []);
+  }
+
+  function setAsesores(asesores){
+    writeJson(STORAGE_KEYS.asesores, asesores);
+  }
+
+  function getAsesorById(id){
+    const asesores = getAsesores();
+    return asesores.find(asesor => asesor.id === id) || null;
+  }
+
+  function updateAsesor(id, asesorData){
+    const asesores = getAsesores();
+    const index = asesores.findIndex(asesor => asesor.id === id);
+    if(index !== -1){
+      asesores[index] = { ...asesores[index], ...asesorData };
+      setAsesores(asesores);
+      return true;
+    }
+    return false;
+  }
+
+  function addAsesor(asesorData){
+    const asesores = getAsesores();
+    const newAsesor = {
+      ...asesorData,
+      id: asesorData.id || 'ase' + Date.now(),
+      createdAt: new Date().toISOString()
+    };
+    asesores.push(newAsesor);
+    setAsesores(asesores);
+    return newAsesor;
+  }
+
   // === UTILIDADES ===
   function clearAllData(){
     Object.values(STORAGE_KEYS).forEach(key => {
@@ -467,6 +549,9 @@
     // Usuarios
     getUsers, setUsers, getUserById, updateUser, addUser,
     
+    // Asesores
+    getAsesores, setAsesores, getAsesorById, updateAsesor, addAsesor,
+    
     // Productos
     getProducts, setProducts, getProductById, getProductsByOwner,
     getFeaturedProducts, getLowStockProducts, getOutOfStockProducts,
@@ -479,6 +564,10 @@
     // Carrito
     getCart, setCart, addToCart, removeFromCart, updateCartQuantity,
     clearCart, getCartTotal, getCartItemCount,
+    
+    // Wishlist
+    getWishlist, setWishlist, addToWishlist, removeFromWishlist,
+    isInWishlist, clearWishlist, getWishlistCount,
     
     // Pedidos
     getOrders, setOrders, addOrder, updateOrderStatus,

@@ -8,6 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
 </head>
 <body>
     <header class="site-header">
@@ -16,8 +23,6 @@
                 <span>Panel de Administración</span>
                 <div class="spacer"></div>
                 <span id="admin-welcome">Bienvenido, Admin</span>
-                <div class="spacer"></div>
-                <a href="../user/store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
             </div>
         </div>
         <div class="header-main">
@@ -38,7 +43,7 @@
         </div>
     </header>
 
-    <main class="container admin-dashboard">
+    <main class="container admin-dashboard" style="flex: 1;">
         <h1 class="page-title">Dashboard de Administración</h1>
         
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 24px;">
@@ -102,7 +107,7 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© 2025 H&B Importaciones - Panel Admin</small>
+            <small>&copy; <span id="year">2025</span> H&B Importaciones - Panel Admin</small>
         </div>
     </footer>
 

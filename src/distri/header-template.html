@@ -1,0 +1,40 @@
+<!-- Header Template para Distribuidor -->
+<header class="site-header">
+    <div class="topbar">
+        <div class="container topbar-content">
+            <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+            <div class="spacer"></div>
+            <span id="distri-welcome">Bienvenido a H&B Importaciones</span>
+            <div class="spacer"></div>
+            <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+            <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+            <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
+            <a href="../user/store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+        </div>
+    </div>
+    <div class="header-main">
+        <div class="container">
+            <div class="header-content">
+                <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
+                <div class="search">
+                    <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                    <input type="text" placeholder="Buscar por nombre, ID, SKU, marca...">
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
+                        <img src="../../image/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
+                        <span class="badge" id="wishlist-count">0</span>
+                        <span class="icon-label">Favoritos</span>
+                    </button>
+                    <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
+                        <img src="../../image/carrito.png" alt="Carrito" style="width:16px;height:16px;">
+                        <span class="badge" id="cart-count">0</span>
+                        <span class="cart-total" id="cart-total">$0,00</span>
+                        <span class="icon-label">Carrito</span>
+                    </button>
+                    <span id="logout-container"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

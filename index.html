@@ -19,6 +19,7 @@
                 <div class="spacer"></div>
                 <a href="src/user/location.html" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
                 <a href="src/user/track-order.html" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
                 <a href="index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
                 <a href="src/auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
@@ -333,7 +334,7 @@
                     <div class="cart-title-section">
                         <h2 id="cart-modal-title">Carrito de Compras</h2>
                         <button class="cart-close-btn" onclick="closeCartModal()">
-                            <span data-icon="x" style="width:24px;height:24px"></span>
+                            ×
                         </button>
                     </div>
                 </div>
@@ -362,6 +363,98 @@
                                         Continuar Comprando <span>&rarr;</span>
                                     </button>
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advisors Modal -->
+    <div id="advisors-modal" class="advisors-modal">
+        <div class="advisors-backdrop" onclick="closeAdvisorsModal()"></div>
+        <div class="advisors-panel">
+            <div class="advisors-content">
+                <div class="advisors-header">
+                    <div class="advisors-title-section">
+                        <h2>Nuestros Asesores</h2>
+                        <p>Elige con quién te gustaría contactar para recibir asesoría personalizada</p>
+                        <button class="advisors-close-btn" onclick="closeAdvisorsModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="advisors-grid">
+                    <!-- Asesor 1 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=MR" alt="María Rodríguez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>María Rodríguez</h3>
+                            <p class="advisor-role">Especialista en Laptops</p>
+                            <p class="advisor-description">Experta en equipos portátiles y soluciones empresariales</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('maria.rodriguez@hbimportaciones.com', 'María Rodríguez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 2 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=CL" alt="Carlos López" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Carlos López</h3>
+                            <p class="advisor-role">Especialista en Gaming</p>
+                            <p class="advisor-description">Conoce todo sobre equipos gaming y componentes de alta gama</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('carlos.lopez@hbimportaciones.com', 'Carlos López')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 3 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=AM" alt="Ana Martínez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Ana Martínez</h3>
+                            <p class="advisor-role">Especialista en Componentes</p>
+                            <p class="advisor-description">Experta en CPUs, GPUs y componentes de computadoras</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status busy">● Ocupada</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('ana.martinez@hbimportaciones.com', 'Ana Martínez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 4 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=DG" alt="Diego García" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Diego García</h3>
+                            <p class="advisor-role">Especialista en Monitores</p>
+                            <p class="advisor-description">Conoce las mejores opciones en monitores y displays</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('diego.garcia@hbimportaciones.com', 'Diego García')">
+                                    Contactar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -595,6 +688,7 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeCartModal();
+                    closeAdvisorsModal();
                 }
             });
 
@@ -605,6 +699,45 @@
 
         // Hacer la función global para que funcione con onclick
         window.redirectToLogin = redirectToLogin;
+
+        // ===== FUNCIONALIDAD DEL MODAL DE ASESORES =====
+        function openAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+            }
+        }
+
+        function closeAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // Restaurar scroll del body
+            }
+        }
+
+        function contactAdvisor(email, name) {
+            // Crear enlace de email
+            const subject = encodeURIComponent('Consulta desde H&B Importaciones');
+            const body = encodeURIComponent(`Hola ${name},\n\nMe gustaría recibir asesoría sobre productos disponibles.\n\nGracias.`);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            
+            // Abrir cliente de email
+            window.open(mailtoLink);
+            
+            // Mostrar notificación
+            if (window.Helpers && window.Helpers.showToast) {
+                window.Helpers.showToast(`Redirigiendo a ${name}`, 'info');
+            } else {
+                alert(`Redirigiendo a ${name}`);
+            }
+        }
+
+        // Hacer las funciones globales
+        window.openAdvisorsModal = openAdvisorsModal;
+        window.closeAdvisorsModal = closeAdvisorsModal;
+        window.contactAdvisor = contactAdvisor;
 
         // Función para mantener el carrito en 0 en la página principal
         function resetCartDisplay() {

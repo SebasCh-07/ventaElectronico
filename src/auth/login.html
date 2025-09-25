@@ -8,6 +8,219 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Mejorar distribución del formulario de registro */
+        .auth-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 2rem !important;
+            max-width: 1400px !important;
+            margin: 0 auto !important;
+            align-items: start !important;
+        }
+        
+        .auth-section {
+            background: white !important;
+            padding: 2.5rem !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+            height: fit-content !important;
+            width: 100% !important;
+        }
+        
+        .auth-section:first-child {
+            /* Login - sin scroll */
+        }
+        
+        .auth-section:last-child {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .auth-divider {
+            display: none !important;
+        }
+        
+        .auth-section:last-child::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .auth-section:last-child::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .auth-section:last-child::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        .auth-section:last-child::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+        
+        .field {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .field:has(.field-hint) {
+            margin-bottom: 1.5rem;
+        }
+        
+        .field label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .field input[type="text"],
+        .field input[type="email"],
+        .field input[type="tel"],
+        .field input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        
+        .field input[type="text"]:focus,
+        .field input[type="email"]:focus,
+        .field input[type="tel"]:focus,
+        .field input[type="password"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .field input[type="text"]::placeholder,
+        .field input[type="email"]::placeholder,
+        .field input[type="tel"]::placeholder,
+        .field input[type="password"]::placeholder {
+            color: #9ca3af;
+        }
+        
+        .field-hint {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+        
+        .field-hint::before {
+            content: '💡';
+            font-size: 14px;
+        }
+        
+        .field:has(.field-hint) {
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-field {
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 0;
+            background: white;
+            transition: all 0.2s ease;
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+        
+        .checkbox-label:hover .checkbox-custom {
+            border-color: #3b82f6;
+        }
+        
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+            content: '✓';
+            position: absolute;
+            top: -1px;
+            left: 3px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .checkbox-label a {
+            color: #3b82f6;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        
+        .checkbox-label a:hover {
+            color: #1d4ed8;
+            text-decoration: none;
+        }
+        
+        /* Forzar el grid en todos los casos */
+        .auth-grid > * {
+            display: block !important;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .auth-section:last-child {
+                max-height: none !important;
+            }
+        }
+        
+        /* Asegurar que el contenedor principal use el grid */
+        main .container .auth-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+        }
+    </style>
 </head>
 <body>
     <header class="site-header">
@@ -19,6 +232,7 @@
                 <div class="spacer"></div>
                 <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
                 <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
                 <a href="../../index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
                 <a href="login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
@@ -78,20 +292,87 @@
                         <button class="btn brand" type="submit">Acceso</button>
                     </div>
                 </form>
+                
+                <!-- Mensajes de entrega -->
+                <div class="delivery-info" style="margin-top: 2rem; padding: 1.25rem; background: #ffffff; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                    <h3 style="margin: 0 0 1.25rem 0; color: #374151; font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        <span data-icon="truck" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;color:#6b7280;"></span>
+                        Información de Entrega
+                    </h3>
+                    <div class="delivery-messages" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div class="delivery-message" style="padding: 1rem; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6;">
+                            <span style="color: #374151; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #3b82f6; font-size: 1.1rem;">📍</span>
+                                Realizamos entregas en Quito y a provincia
+                            </span>
+                        </div>
+                        <div class="delivery-message" style="padding: 1rem; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6;">
+                            <span style="color: #374151; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #f59e0b; font-size: 1.1rem;">⏱️</span>
+                                El tiempo de entrega depende del transporte de carga pesada
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </section>
-            <div class="auth-divider">
-                <span class="pill">O</span>
-            </div>
+            
             <section class="auth-section">
                 <h2 class="auth-title">Registrarse</h2>
                 <p class="auth-sub">Crea una nueva cuenta hoy para disfrutar de los beneficios de una experiencia de compra personalizada.</p>
-                <form onsubmit="event.preventDefault(); window.location.href='register.html'" class="form">
-                    <div class="field">
-                        <label for="reg-email">Dirección de correo electrónico</label>
-                        <input id="reg-email" type="email" placeholder="tu@correo.com">
+                <form id="register-form" class="form">
+                    <!-- Información Personal -->
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="firstName">Nombres *</label>
+                            <input id="firstName" type="text" required autocomplete="given-name" placeholder="Ingresa tus nombres">
+                        </div>
+                        <div class="field">
+                            <label for="lastName">Apellidos *</label>
+                            <input id="lastName" type="text" required autocomplete="family-name" placeholder="Ingresa tus apellidos">
+                        </div>
                     </div>
+
+                    <!-- Información de Contacto -->
+                    <div class="field">
+                        <label for="reg-email">Correo Electrónico *</label>
+                        <input id="reg-email" type="email" required autocomplete="email" placeholder="tu@email.com">
+                    </div>
+                    <div class="field">
+                        <label for="phone">Teléfono *</label>
+                        <input id="phone" type="tel" required autocomplete="tel" placeholder="+593 99 999 9999">
+                    </div>
+
+                    <!-- Seguridad -->
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="reg-password">Contraseña *</label>
+                            <input id="reg-password" type="password" required autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+                            <div class="field-hint">La contraseña debe tener al menos 8 caracteres</div>
+                        </div>
+                    <div class="field">
+                            <label for="confirmPassword">Confirmar Contraseña *</label>
+                            <input id="confirmPassword" type="password" required autocomplete="new-password" placeholder="Repite tu contraseña">
+                        </div>
+                    </div>
+
+                    <!-- Términos y Condiciones -->
+                    <div class="field checkbox-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" required>
+                            <span class="checkbox-custom"></span>
+                            Acepto los <a href="#" onclick="alert('Términos y Condiciones próximamente disponibles')">términos y condiciones</a> y la <a href="#" onclick="alert('Política de Privacidad próximamente disponible')">política de privacidad</a> *
+                        </label>
+                    </div>
+                    <div class="field checkbox-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter">
+                            <span class="checkbox-custom"></span>
+                            Quiero recibir ofertas y novedades por correo electrónico
+                        </label>
+                    </div>
+
                     <div class="actions" style="justify-content:flex-start;">
-                        <a class="btn" href="register.html">Registrarse</a>
+                        <button class="btn brand" type="submit">Crear Cuenta</button>
                     </div>
                 </form>
                 <div class="benefits">
@@ -211,5 +492,306 @@
             }
         });
     </script>
+    
+    <!-- Script para el formulario de registro -->
+    <script>
+        (function(){
+            const form = document.getElementById('register-form');
+            if(!form) return;
+
+            // Validación en tiempo real
+            function validateField(fieldId, validator, errorMessage) {
+                const field = document.getElementById(fieldId);
+                const fieldContainer = field.closest('.field');
+                
+                field.addEventListener('blur', () => {
+                    const isValid = validator(field.value);
+                    if (isValid) {
+                        fieldContainer.classList.remove('error');
+                        fieldContainer.classList.add('success');
+                    } else {
+                        fieldContainer.classList.remove('success');
+                        fieldContainer.classList.add('error');
+                    }
+                });
+            }
+
+            // Validadores
+            function validateName(value) {
+                return value.trim().length >= 2;
+            }
+
+            function validateEmail(value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(value);
+            }
+
+            function validatePhone(value) {
+                const phoneRegex = /^\+593\s?\d{2}\s?\d{3}\s?\d{4}$/;
+                return phoneRegex.test(value);
+            }
+
+            function validatePassword(value) {
+                return value.length >= 8;
+            }
+
+            function validateWhatsApp(value) {
+                const whatsappRegex = /^\+593\s?\d{2}\s?\d{3}\s?\d{4}$/;
+                return whatsappRegex.test(value);
+            }
+
+            // Aplicar validaciones
+            validateField('firstName', validateName, 'El nombre debe tener al menos 2 caracteres');
+            validateField('lastName', validateName, 'El apellido debe tener al menos 2 caracteres');
+            validateField('reg-email', validateEmail, 'Ingresa un correo electrónico válido');
+            validateField('phone', validatePhone, 'Ingresa un teléfono válido (+593 99 999 9999)');
+            validateField('reg-password', validatePassword, 'La contraseña debe tener al menos 8 caracteres');
+
+            // Validación de confirmación de contraseña
+            const confirmPasswordField = document.getElementById('confirmPassword');
+            const passwordField = document.getElementById('reg-password');
+            
+            function validatePasswordMatch() {
+                const confirmContainer = confirmPasswordField.closest('.field');
+                const passwordsMatch = passwordField.value === confirmPasswordField.value && confirmPasswordField.value.length > 0;
+                
+                if (passwordsMatch) {
+                    confirmContainer.classList.remove('error');
+                    confirmContainer.classList.add('success');
+                } else {
+                    confirmContainer.classList.remove('success');
+                    confirmContainer.classList.add('error');
+                }
+            }
+
+            confirmPasswordField.addEventListener('input', validatePasswordMatch);
+            passwordField.addEventListener('input', validatePasswordMatch);
+
+            form.addEventListener('submit', (e)=>{
+                e.preventDefault();
+                
+                // Obtener todos los campos del formulario
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('reg-email').value.trim().toLowerCase();
+                const phone = document.getElementById('phone').value.trim();
+                const password = document.getElementById('reg-password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = 'client'; // Rol por defecto: cliente
+                const terms = document.getElementById('terms').checked;
+                const newsletter = document.getElementById('newsletter').checked;
+
+                // Validaciones
+                if (!firstName || !lastName) {
+                    if (window.Helpers && window.Helpers.showToast) {
+                        window.Helpers.showToast('Por favor completa todos los campos obligatorios', 'warning');
+                    }
+                    return;
+                }
+
+                if (password.length < 8) {
+                    if (window.Helpers && window.Helpers.showToast) {
+                        window.Helpers.showToast('La contraseña debe tener al menos 8 caracteres', 'warning');
+                    }
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    if (window.Helpers && window.Helpers.showToast) {
+                        window.Helpers.showToast('Las contraseñas no coinciden', 'warning');
+                    }
+                    return;
+                }
+
+                if (!terms) {
+                    if (window.Helpers && window.Helpers.showToast) {
+                        window.Helpers.showToast('Debes aceptar los términos y condiciones', 'warning');
+                    }
+                    return;
+                }
+
+                const users = StorageAPI.getUsers();
+                if(users.some(u=>u.email.toLowerCase()===email)){
+                    if (window.Helpers && window.Helpers.showToast) {
+                        window.Helpers.showToast('Este correo ya está registrado', 'warning');
+                    }
+                    return;
+                }
+
+                const id = 'u' + Math.random().toString(36).slice(2,9);
+                const fullName = `${firstName} ${lastName}`;
+                const newUser = { 
+                    id, 
+                    role, 
+                    name: fullName,
+                    firstName,
+                    lastName,
+                    email, 
+                    phone,
+                    password, 
+                    active: true,
+                    newsletter,
+                    createdAt: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                StorageAPI.setUsers(users);
+                StorageAPI.setSession({ id, role, name: fullName });
+                
+                if (window.Helpers && window.Helpers.showToast) {
+                    window.Helpers.showToast('¡Cuenta creada con éxito! Bienvenido a H&B Importaciones', 'success', 3000);
+                }
+                
+                // Redirigir según parámetros URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectParam = urlParams.get('redirect');
+                
+                let redirectUrl = '../user/store.html'; // Por defecto va a la tienda
+                
+                // Si hay un parámetro de redirección, usarlo
+                if (redirectParam) {
+                    switch(redirectParam) {
+                        case 'store':
+                            redirectUrl = '../user/store.html';
+                            break;
+                        case 'admin':
+                            redirectUrl = '../admin/index.html';
+                            break;
+                        case 'distri':
+                            redirectUrl = '../distri/index.html';
+                            break;
+                    }
+                }
+                
+                // Redirigir después de un breve delay para mostrar el toast
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 2000);
+            });
+        })();
+        // ===== FUNCIONALIDAD DEL MODAL DE ASESORES =====
+        function openAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function contactAdvisor(email, name) {
+            const subject = encodeURIComponent('Consulta desde H&B Importaciones');
+            const body = encodeURIComponent(`Hola ${name},\n\nMe gustaría recibir asesoría sobre productos disponibles.\n\nGracias.`);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.open(mailtoLink);
+            alert(`Redirigiendo a ${name}`);
+        }
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAdvisorsModal();
+            }
+        });
+    </script>
+
+    <!-- Advisors Modal -->
+    <div id="advisors-modal" class="advisors-modal">
+        <div class="advisors-backdrop" onclick="closeAdvisorsModal()"></div>
+        <div class="advisors-panel">
+            <div class="advisors-content">
+                <div class="advisors-header">
+                    <div class="advisors-title-section">
+                        <h2>Nuestros Asesores</h2>
+                        <p>Elige con quién te gustaría contactar para recibir asesoría personalizada</p>
+                        <button class="advisors-close-btn" onclick="closeAdvisorsModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="advisors-grid">
+                    <!-- Asesor 1 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=MR" alt="María Rodríguez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>María Rodríguez</h3>
+                            <p class="advisor-role">Especialista en Laptops</p>
+                            <p class="advisor-description">Experta en equipos portátiles y soluciones empresariales</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('maria.rodriguez@hbimportaciones.com', 'María Rodríguez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 2 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=CL" alt="Carlos López" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Carlos López</h3>
+                            <p class="advisor-role">Especialista en Gaming</p>
+                            <p class="advisor-description">Conoce todo sobre equipos gaming y componentes de alta gama</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('carlos.lopez@hbimportaciones.com', 'Carlos López')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 3 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=AM" alt="Ana Martínez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Ana Martínez</h3>
+                            <p class="advisor-role">Especialista en Componentes</p>
+                            <p class="advisor-description">Experta en CPUs, GPUs y componentes de computadoras</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status busy">● Ocupada</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('ana.martinez@hbimportaciones.com', 'Ana Martínez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 4 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=DG" alt="Diego García" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Diego García</h3>
+                            <p class="advisor-role">Especialista en Monitores</p>
+                            <p class="advisor-description">Conoce las mejores opciones en monitores y displays</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('diego.garcia@hbimportaciones.com', 'Diego García')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

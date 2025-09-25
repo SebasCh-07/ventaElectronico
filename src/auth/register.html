@@ -19,6 +19,7 @@
                 <div class="spacer"></div>
                 <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
                 <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
                 <a href="../../index.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
                 <a href="login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
             </div>
@@ -51,7 +52,7 @@
         </div>
     </header>
 
-    <main class="container" style="margin-bottom: 80px;">
+    <main class="container">
         <h1 class="page-title">Crear cuenta</h1>
         <section class="panel" style="max-width:520px;margin:12px auto 0;">
             <form id="register-form" class="form">
@@ -88,109 +89,141 @@
 
     <footer class="site-footer">
         <div class="container">
-            <div class="footer-content">
-                <!-- Logo y contacto principal -->
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <h3>H&B<span class="web-badge">web</span></h3>
-                        <p class="footer-tagline">Importaciones</p>
-                    </div>
-                    <div class="footer-contact">
-                        <p><span data-icon="headphones" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:8px"></span>¿Necesitas ayuda? ¡Contáctanos!</p>
-                        <p class="contact-phone"><strong>(+593) 099-484-6405</strong></p>
-                    </div>
-                    <div class="footer-address">
-                        <h4>Visítanos</h4>
-                        <p>Quito - Ecuador</p>
-                        <p>Av. Amazonas y República</p>
-                    </div>
-                </div>
-
-                <!-- Encuentra rápido -->
-                <div class="footer-section">
-                    <h4>Encuéntralo rápido</h4>
-                    <ul class="footer-links">
-                        <li><a href="../user/store.html">Laptops & Computadores</a></li>
-                        <li><a href="../user/store.html">Monitores</a></li>
-                        <li><a href="../user/store.html">Componentes</a></li>
-                        <li><a href="../user/store.html">Celulares & Tablets</a></li>
-                        <li><a href="../user/store.html">TVs & Proyectores</a></li>
-                        <li><a href="../user/store.html">Gaming</a></li>
-                    </ul>
-                </div>
-
-                <!-- Atención al cliente -->
-                <div class="footer-section">
-                    <h4>Atención al Cliente</h4>
-                    <ul class="footer-links">
-                        <li><a href="#contact">Centro de Ayuda</a></li>
-                        <li><a href="#shipping">Información de Envío</a></li>
-                        <li><a href="#returns">Política de Devoluciones</a></li>
-                        <li><a href="#warranty">Garantías</a></li>
-                        <li><a href="#terms">Términos y Condiciones</a></li>
-                        <li><a href="#privacy">Política de Privacidad</a></li>
-                    </ul>
-                </div>
-
-                <!-- Newsletter y redes -->
-                <div class="footer-section">
-                    <h4>Mantente Conectado</h4>
-                    <p class="newsletter-text">Suscríbete para recibir las últimas ofertas y novedades</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="tu@email.com" class="newsletter-input">
-                        <button type="submit" class="newsletter-btn">
-                            <span data-icon="arrow-right" style="width:16px;height:16px"></span>
-                        </button>
-                    </form>
-                    <div class="social-links">
-                        <a href="#" class="social-link" title="Facebook">
-                            <span data-icon="facebook" style="width:18px;height:18px"></span>
-                        </a>
-                        <a href="#" class="social-link" title="Instagram">
-                            <span data-icon="instagram" style="width:18px;height:18px"></span>
-                        </a>
-                        <a href="#" class="social-link" title="WhatsApp">
-                            <span data-icon="phone" style="width:18px;height:18px"></span>
-                        </a>
-                        <a href="#" class="social-link" title="Email">
-                            <span data-icon="mail" style="width:18px;height:18px"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer bottom -->
-            <div class="footer-bottom">
-                <div class="footer-legal">
-                    <p>© <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
-                    <p class="footer-location">Quito, Ecuador</p>
-                </div>
-            </div>
+            <small>© <span id="year"></span> H&B Importaciones</small>
         </div>
     </footer>
 
     <script src="../../js/utils/storage.js"></script>
-    <script src="../../js/utils/helpers.js"></script>
     <script src="../../js/utils/icons.js"></script>
     <script src="../../js/utils/ui.js"></script>
     <script src="../../js/utils/sticky-header.js"></script>
     <script src="../../js/register.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
-        
-        // Agregar parámetro de redirección a los enlaces de login
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirectParam = urlParams.get('redirect');
-            
-            if (redirectParam) {
-                // Actualizar todos los enlaces a login.html
-                const loginLinks = document.querySelectorAll('a[href="login.html"]');
-                loginLinks.forEach(link => {
-                    link.href = `login.html?redirect=${redirectParam}`;
-                });
+
+        // ===== FUNCIONALIDAD DEL MODAL DE ASESORES =====
+        function openAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function contactAdvisor(email, name) {
+            const subject = encodeURIComponent('Consulta desde H&B Importaciones');
+            const body = encodeURIComponent(`Hola ${name},\n\nMe gustaría recibir asesoría sobre productos disponibles.\n\nGracias.`);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.open(mailtoLink);
+            alert(`Redirigiendo a ${name}`);
+        }
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAdvisorsModal();
             }
         });
     </script>
+
+    <!-- Advisors Modal -->
+    <div id="advisors-modal" class="advisors-modal">
+        <div class="advisors-backdrop" onclick="closeAdvisorsModal()"></div>
+        <div class="advisors-panel">
+            <div class="advisors-content">
+                <div class="advisors-header">
+                    <div class="advisors-title-section">
+                        <h2>Nuestros Asesores</h2>
+                        <p>Elige con quién te gustaría contactar para recibir asesoría personalizada</p>
+                        <button class="advisors-close-btn" onclick="closeAdvisorsModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="advisors-grid">
+                    <!-- Asesor 1 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=MR" alt="María Rodríguez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>María Rodríguez</h3>
+                            <p class="advisor-role">Especialista en Laptops</p>
+                            <p class="advisor-description">Experta en equipos portátiles y soluciones empresariales</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('maria.rodriguez@hbimportaciones.com', 'María Rodríguez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 2 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=CL" alt="Carlos López" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Carlos López</h3>
+                            <p class="advisor-role">Especialista en Gaming</p>
+                            <p class="advisor-description">Conoce todo sobre equipos gaming y componentes de alta gama</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('carlos.lopez@hbimportaciones.com', 'Carlos López')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 3 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=AM" alt="Ana Martínez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Ana Martínez</h3>
+                            <p class="advisor-role">Especialista en Componentes</p>
+                            <p class="advisor-description">Experta en CPUs, GPUs y componentes de computadoras</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status busy">● Ocupada</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('ana.martinez@hbimportaciones.com', 'Ana Martínez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 4 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=DG" alt="Diego García" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Diego García</h3>
+                            <p class="advisor-role">Especialista en Monitores</p>
+                            <p class="advisor-description">Conoce las mejores opciones en monitores y displays</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('diego.garcia@hbimportaciones.com', 'Diego García')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

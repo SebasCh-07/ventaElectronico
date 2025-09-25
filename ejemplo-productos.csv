@@ -1,0 +1,6 @@
+nombre,descripcion,precio_publico,precio_distribuidor,stock,sku,marca,destacado
+iPhone 15 Pro 128GB,iPhone 15 Pro con chip A17 Pro y cámara de 48MP,4500000,3800000,8,IPH15P-128,Apple,TRUE
+Samsung Galaxy S24 Ultra,Galaxy S24 Ultra con S Pen y cámara de 200MP,4200000,3500000,6,GAL-S24U-256,Samsung,TRUE
+MacBook Air M2 13",MacBook Air con chip M2 y pantalla Liquid Retina,3800000,3200000,4,MBA-M2-13,Apple,TRUE
+iPad Pro 12.9" M4,iPad Pro con chip M4 y pantalla Liquid Retina XDR,5200000,4500000,3,IPADP-12.9-M4,Apple,FALSE
+AirPods Pro 2da Gen,Auriculares inalámbricos con cancelación de ruido,850000,680000,12,AIRPODS-PRO-G2,Apple,FALSE

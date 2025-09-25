@@ -21,7 +21,7 @@
     }
 
     // Actualizar mensaje de bienvenida
-    const welcomeEl = document.getElementById('distributor-welcome');
+    const welcomeEl = document.getElementById('distri-welcome');
     if (welcomeEl) {
       welcomeEl.textContent = `Bienvenido, ${session.name}`;
     }
@@ -31,6 +31,13 @@
     loadCategories();
     updateCartHeader();
     updateWishlistHeader();
+    
+    // Inicializar botón de logout
+    const logoutContainer = document.getElementById('logout-container');
+    if (logoutContainer) {
+      const logoutBtn = UI.createLogoutButton();
+      logoutContainer.appendChild(logoutBtn);
+    }
 
     // Event listeners
     setupEventListeners();
@@ -107,44 +114,52 @@
     const discount = Math.round(((publicPrice - distributorPrice) / publicPrice) * 100);
     
     return `
-      <div class="card">
-        <div class="card-media">
+      <div class="product-card-compact" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e5e7eb;border-radius:8px;background:white;transition:all 0.2s ease;">
+        <div class="product-image-compact" style="width:60px;height:60px;background:#f8fafc;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #e5e7eb;flex-shrink:0;">
           ${product.image ? 
-            `<img src="${product.image}" alt="${product.name}" loading="lazy">` :
-            `<div class="placeholder-image">
-              <span data-icon="package" style="width: 48px; height: 48px; color: #d1d5db;"></span>
-            </div>`
+            `<img src="${product.image}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;">` :
+            `<span data-icon="package" style="width:24px;height:24px;color:#6b7280;"></span>`
           }
-          ${product.featured ? '<div class="featured-badge">Destacado</div>' : ''}
-          ${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}
         </div>
-        <div class="card-body">
-          <div class="card-title">${product.name}</div>
-          <div class="card-meta">
-            <div class="price-container">
-              <div class="price-comparison">
-                <span class="price-publico">${UI.formatPrice(publicPrice)}</span>
-                <span class="price-distribuidor">${UI.formatPrice(distributorPrice)}</span>
-                <span class="price-label">Precio Distribuidor</span>
-              </div>
-            </div>
-            <div class="stock ${stockStatus}">${stockText}</div>
+        <div class="product-info-compact" style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <h3 style="font-size:14px;font-weight:600;color:#374151;margin:0;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${product.name}</h3>
+            ${product.featured ? '<span style="background:#8b5cf6;color:white;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;">DESTACADO</span>' : ''}
+            ${discount > 0 ? `<span style="background:#ef4444;color:white;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;">-${discount}%</span>` : ''}
           </div>
-          <div class="card-description">${product.description || 'Sin descripción disponible'}</div>
-          <div class="card-actions">
-            <button class="btn secondary" onclick="viewProduct('${product.id}')">
-              <span data-icon="eye" style="width:16px;height:16px;margin-right:6px;"></span>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+            ${product.brand || 'Sin marca'} • ${product.category || 'Sin categoría'}
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:12px;">
+            <div style="display:flex;gap:4px;">
+              <span style="color:#6b7280;">Público:</span>
+              <span style="text-decoration:line-through;color:#9ca3af;">${UI.formatPrice(publicPrice)}</span>
+            </div>
+            <div style="display:flex;gap:4px;">
+              <span style="color:#6b7280;">Distribuidor:</span>
+              <span style="font-weight:600;color:#3b82f6;">${UI.formatPrice(distributorPrice)}</span>
+            </div>
+            <div style="display:flex;gap:4px;">
+              <span style="color:#6b7280;">Stock:</span>
+              <span style="font-weight:600;color:${isOutOfStock ? '#dc2626' : isLowStock ? '#f59e0b' : '#059669'};">${product.stock || 0}</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-actions-compact" style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+          <div style="display:flex;gap:6px;">
+            <button class="btn secondary" onclick="viewProduct('${product.id}')" style="padding:4px 8px;font-size:11px;">
+              <span data-icon="eye" style="width:12px;height:12px;margin-right:4px;"></span>
               Ver
             </button>
-            <button class="btn brand" onclick="addToCart('${product.id}')" ${isOutOfStock ? 'disabled' : ''}>
-              <span data-icon="shopping-cart" style="width:16px;height:16px;margin-right:6px;"></span>
+            <button class="btn brand" onclick="addToCart('${product.id}')" ${isOutOfStock ? 'disabled' : ''} style="padding:4px 8px;font-size:11px;">
+              <span data-icon="shopping-cart" style="width:12px;height:12px;margin-right:4px;"></span>
               Agregar
             </button>
-            <button class="btn" onclick="addToWishlist('${product.id}')" style="margin-top: 8px; font-size: 12px; padding: 6px 12px;">
-              <img src="../../image/carrito/corazon.png" alt="Favoritos" style="width:14px;height:14px;margin-right:4px;">
-              Favoritos
-            </button>
           </div>
+          <button class="btn" onclick="addToWishlist('${product.id}')" style="font-size:10px;padding:3px 6px;width:100%;">
+            <img src="../../image/corazon.png" alt="Favoritos" style="width:12px;height:12px;margin-right:3px;">
+            Favoritos
+          </button>
         </div>
       </div>
     `;
@@ -355,14 +370,14 @@
    */
   function openWishlistModal(){
     loadWishlistItems();
-    document.getElementById('wishlist-modal').style.display = 'block';
+    document.getElementById('wishlist-modal').classList.add('active');
   }
 
   /**
    * Cierra el modal de wishlist
    */
   function closeWishlistModal(){
-    document.getElementById('wishlist-modal').style.display = 'none';
+    document.getElementById('wishlist-modal').classList.remove('active');
   }
 
   /**
@@ -502,14 +517,14 @@
    */
   function openCartModal() {
     loadCartItems();
-    document.getElementById('cart-modal').style.display = 'block';
+    document.getElementById('cart-modal').classList.add('active');
   }
 
   /**
    * Cierra el modal del carrito
    */
   function closeCartModal() {
-    document.getElementById('cart-modal').style.display = 'none';
+    document.getElementById('cart-modal').classList.remove('active');
   }
 
   /**
@@ -517,7 +532,7 @@
    */
   function loadCartItems() {
     const cart = StorageAPI.getCart();
-    const container = document.getElementById('cart-items');
+    const container = document.getElementById('cart-items-container');
     const totalEl = document.getElementById('cart-modal-total');
     
     if (!container) return;
@@ -623,6 +638,14 @@
     alert('Función de checkout en desarrollo');
   }
 
+  /**
+   * Función de logout
+   */
+  function logout() {
+    localStorage.removeItem('hb_session');
+    window.location.href = '../auth/login.html';
+  }
+
   // Funciones globales
   window.addToCart = addToCart;
   window.openCartModal = openCartModal;
@@ -636,6 +659,7 @@
   window.removeFromWishlist = removeFromWishlist;
   window.addToCartFromWishlist = addToCartFromWishlist;
   window.addAllToCart = addAllToCart;
+  window.logout = logout;
 
   // Inicializar cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', initSearch);

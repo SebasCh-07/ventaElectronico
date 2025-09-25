@@ -157,7 +157,7 @@
               Agregar
             </button>
             <button class="btn" onclick="addToWishlist('${product.id}')" style="margin-top: 8px; font-size: 12px; padding: 6px 12px;">
-              <img src="../../image/carrito/corazon.png" alt="Favoritos" style="width:14px;height:14px;margin-right:4px;">
+              <img src="../../image/corazon.png" alt="Favoritos" style="width:14px;height:14px;margin-right:4px;">
               Favoritos
             </button>
           </div>
@@ -551,7 +551,7 @@
     }
 
     // Actualizar mensaje de bienvenida
-    const welcomeEl = document.getElementById('distributor-welcome');
+    const welcomeEl = document.getElementById('distri-welcome');
     if (welcomeEl) {
       welcomeEl.textContent = `Bienvenido, ${session.name}`;
     }

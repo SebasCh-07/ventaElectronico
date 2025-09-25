@@ -8,6 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
 </head>
 <body>
     <header class="site-header">
@@ -16,8 +23,6 @@
                 <span>Panel de Administración</span>
                 <div class="spacer"></div>
                 <span id="admin-welcome">Bienvenido, Admin</span>
-                <div class="spacer"></div>
-                <a href="store.html" class="top-link"><span data-icon="home" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ir a Tienda</a>
             </div>
         </div>
         <div class="header-main">
@@ -38,7 +43,7 @@
         </div>
     </header>
 
-    <main class="container admin-dashboard">
+    <main class="container admin-dashboard" style="flex: 1;">
         <h1 class="page-title">Gestión de Usuarios</h1>
         
         <!-- Pestañas -->
@@ -140,6 +145,7 @@
                             <select id="user-role" class="form-control" required>
                                 <option value="">Seleccionar rol</option>
                                 <option value="admin">Administrador</option>
+                                <option value="accesor">Accesor</option>
                                 <option value="distributor">Distribuidor</option>
                                 <option value="client">Cliente</option>
                             </select>
@@ -147,6 +153,21 @@
                         <div id="whatsapp-field" style="margin-bottom:16px;display:none;">
                             <label for="user-whatsapp" style="display:block;font-weight:600;margin-bottom:6px;">WhatsApp</label>
                             <input type="text" id="user-whatsapp" class="form-control" placeholder="+57 300 111 2233">
+                        </div>
+                        <div id="asesor-fields" style="display:none;">
+                            <div style="margin-bottom:16px;">
+                                <label for="user-department" style="display:block;font-weight:600;margin-bottom:6px;">Departamento</label>
+                                <select id="user-department" class="form-control">
+                                    <option value="Ventas">Ventas</option>
+                                    <option value="Soporte">Soporte</option>
+                                    <option value="Técnico">Técnico</option>
+                                    <option value="Administración">Administración</option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom:16px;">
+                                <label for="user-position" style="display:block;font-weight:600;margin-bottom:6px;">Cargo</label>
+                                <input type="text" id="user-position" class="form-control" placeholder="Asesor Senior, Asesor Técnico, etc.">
+                            </div>
                         </div>
                         <div style="margin-bottom:16px;">
                             <label style="display:flex;align-items:center;gap:8px;">
@@ -158,7 +179,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn" onclick="closeUserModal()">Cancelar</button>
-                    <button class="btn brand" onclick="saveUser()">Guardar Usuario</button>
+                    <button class="btn brand" onclick="saveWorker()">Guardar Trabajador</button>
                 </div>
                 </div>
             </div>
@@ -167,7 +188,7 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© 2025 H&B Importaciones - Panel Admin</small>
+            <small>&copy; <span id="year">2025</span> H&B Importaciones - Panel Admin</small>
         </div>
     </footer>
 

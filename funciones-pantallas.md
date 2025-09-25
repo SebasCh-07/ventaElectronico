@@ -254,3 +254,4 @@ Este documento describe la función específica de cada pantalla que conforma el
 ---
 
 **Desarrollado para H&B Importaciones - Sistema de E-commerce Tecnológico**
+

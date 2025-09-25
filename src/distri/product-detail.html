@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto - H&B Importaciones</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <div class="container topbar-content">
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
+                <div class="spacer"></div>
+                <span id="distri-welcome">Bienvenido a H&B Importaciones</span>
+                <div class="spacer"></div>
+                <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
+                <a href="../user/store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar por nombre, ID, SKU, marca...">
+                    </div>
+                    <div class="header-actions">
+                        <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
+                            <img src="../../image/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
+                            <span class="badge" id="wishlist-count">0</span>
+                            <span class="icon-label">Favoritos</span>
+                        </button>
+                        <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
+                            <img src="../../image/carrito.png" alt="Carrito" style="width:16px;height:16px;">
+                            <span class="badge" id="cart-count">0</span>
+                            <span class="cart-total" id="cart-total">$0,00</span>
+                            <span class="icon-label">Carrito</span>
+                        </button>
+                        <span id="logout-container"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación por pestañas -->
+    <nav class="distributor-tabs">
+        <div class="container">
+            <div class="tabs-nav">
+                <a href="index.html" class="tab-link"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
+                <a href="search.html" class="tab-link"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
+                <a href="orders.html" class="tab-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="product-detail-page">
+        <div class="container">
+            <!-- Back Button -->
+            <div class="back-navigation">
+                <button class="back-btn" onclick="goBack()">
+                    <span data-icon="arrow-left" style="width:20px;height:20px;margin-right:8px"></span>
+                    Volver atrás
+                </button>
+            </div>
+
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="index.html">Catálogo</a>
+                <span class="separator">›</span>
+                <span id="breadcrumb-category">Categoría</span>
+                <span class="separator">›</span>
+                <span id="breadcrumb-product">Producto</span>
+            </nav>
+
+            <!-- Product Detail -->
+            <div class="product-detail-container">
+                <div class="product-images">
+                    <div class="main-image">
+                        <div class="image-placeholder">
+                            <div class="placeholder-content">
+                                <span data-icon="image" style="width:64px;height:64px;color:var(--text-muted)"></span>
+                                <p>Imagen del producto</p>
+                                <small>Aquí se mostrará la imagen principal</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-thumbnails">
+                        <div class="thumbnail active">
+                            <div class="thumbnail-placeholder">
+                                <span data-icon="image" style="width:24px;height:24px;color:var(--text-muted)"></span>
+                            </div>
+                        </div>
+                        <div class="thumbnail">
+                            <div class="thumbnail-placeholder">
+                                <span data-icon="image" style="width:24px;height:24px;color:var(--text-muted)"></span>
+                            </div>
+                        </div>
+                        <div class="thumbnail">
+                            <div class="thumbnail-placeholder">
+                                <span data-icon="image" style="width:24px;height:24px;color:var(--text-muted)"></span>
+                            </div>
+                        </div>
+                        <div class="thumbnail">
+                            <div class="thumbnail-placeholder">
+                                <span data-icon="image" style="width:24px;height:24px;color:var(--text-muted)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <div class="product-header">
+                        <span class="product-category" id="product-category">Categoría</span>
+                        <h1 class="product-title" id="product-title">Nombre del Producto</h1>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <span class="rating-text">(4.2) 128 reseñas</span>
+                        </div>
+                    </div>
+
+                    <div class="product-pricing">
+                        <div class="price-container">
+                            <span class="current-price" id="product-price">$0,00</span>
+                            <span class="original-price" id="product-original-price" style="display: none;">$0,00</span>
+                            <span class="discount-badge" id="discount-badge" style="display: none;">-20%</span>
+                        </div>
+                        <div class="price-note" id="price-note" style="display: none;">
+                            💡 Precio distribuidor
+                        </div>
+                    </div>
+
+                    <div class="product-description">
+                        <h3>Descripción del Producto</h3>
+                        <p id="product-description">Descripción detallada del producto...</p>
+                    </div>
+
+                    <div class="product-specs">
+                        <h3>Especificaciones</h3>
+                        <div class="specs-grid" id="product-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">SKU:</span>
+                                <span class="spec-value" id="product-sku">N/A</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Marca:</span>
+                                <span class="spec-value" id="product-brand">N/A</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Categoría:</span>
+                                <span class="spec-value" id="product-category-spec">N/A</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Stock:</span>
+                                <span class="spec-value" id="product-stock">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <label for="quantity">Cantidad:</label>
+                            <div class="quantity-controls">
+                                <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="99">
+                                <button type="button" class="quantity-btn" onclick="increaseQuantity()">+</button>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn brand add-to-cart-btn" onclick="addToCartFromDetail()">
+                                <span data-icon="cart" style="width:18px;height:18px;margin-right:8px"></span>
+                                Agregar al Carrito
+                            </button>
+                            <button class="btn secondary wishlist-btn" onclick="addToWishlist()">
+                                <span data-icon="heart" style="width:18px;height:18px;margin-right:8px"></span>
+                                Lista de Deseos
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-features">
+                        <div class="feature-item">
+                            <span class="feature-icon" data-icon="truck"></span>
+                            <div class="feature-text">
+                                <strong>Envío Gratis</strong>
+                                <span>En compras superiores a $500,000</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon" data-icon="shield"></span>
+                            <div class="feature-text">
+                                <strong>Garantía</strong>
+                                <span>1 año de garantía del fabricante</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon" data-icon="refresh"></span>
+                            <div class="feature-text">
+                                <strong>Devoluciones</strong>
+                                <span>30 días para devoluciones</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <section class="related-products">
+                <h2>Productos Relacionados</h2>
+                <div class="related-grid" id="related-products">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeCartModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="cart-modal-title">Carrito de Compras</h2>
+                        <button class="cart-close-btn" onclick="closeCartModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-items-section">
+                    <div id="cart-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-subtotal">
+                            <span>Subtotal</span>
+                            <span id="cart-modal-total">$0,00</span>
+                        </div>
+                        <p class="cart-shipping-note">Envío y taxes calculados en checkout.</p>
+                        <div class="cart-actions">
+                            <button class="btn brand cart-checkout-btn" onclick="proceedToCheckout()">
+                                Ir a pagar
+                            </button>
+                        </div>
+                        <a href="#" class="continue-shopping" onclick="closeCartModal()">
+                            o Continuar Comprando →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeWishlistModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="wishlist-modal-title">Lista de Deseos</h2>
+                        <button class="cart-close-btn" onclick="closeWishlistModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-items-section">
+                    <div id="wishlist-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-actions">
+                            <button class="btn brand" onclick="addAllToCart()" id="add-all-btn" style="display: none;">
+                                Agregar Todos al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/icons.js"></script>
+    <script src="../../js/auth-simple.js"></script>
+    <script src="../../js/distri/catalog.js"></script>
+    <script src="js/product-detail.js"></script>
+</body>
+</html>

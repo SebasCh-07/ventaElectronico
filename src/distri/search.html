@@ -13,31 +13,32 @@
     <header class="site-header">
         <div class="topbar">
             <div class="container topbar-content">
-                <span>Panel de Distribuidor</span>
+                <span>Lunes a Viernes 09:00 a 18:00 | Sábados 09:00 a 13:00</span>
                 <div class="spacer"></div>
-                <span id="distributor-welcome">Bienvenido, Distribuidor</span>
+                <span id="distri-welcome">Bienvenido a H&B Importaciones</span>
                 <div class="spacer"></div>
-                <a href="store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
-                <a href="../auth/login.html" class="top-link" id="login-link"><span data-icon="user" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Mi Cuenta</a>
+                <a href="#" class="top-link"><span data-icon="location" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Ubicación</a>
+                <a href="#" class="top-link"><span data-icon="truck" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Rastrear pedido</a>
+                <button class="top-link" onclick="openAdvisorsModal()" style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:0;margin:0"><span data-icon="users" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Asesores</button>
+                <a href="../user/store.html" class="top-link"><span data-icon="store" style="width:14px;height:14px;display:inline-block;vertical-align:-2px"></span> Tienda</a>
             </div>
         </div>
         <div class="header-main">
             <div class="container">
                 <div class="header-content">
                     <a class="brand" href="index.html">H&B<span class="web-badge">distri</span></a>
-                    <nav class="nav">
-                        <a href="index.html" class="nav-link"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
-                        <a href="search.html" class="nav-link active"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
-                        <a href="orders.html" class="nav-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
-                    </nav>
+                    <div class="search">
+                        <span class="search-icon" data-icon="search" style="width:18px;height:18px"></span>
+                        <input type="text" placeholder="Buscar por nombre, ID, SKU, marca...">
+                    </div>
                     <div class="header-actions">
                         <button class="icon-btn" onclick="openWishlistModal()" title="Lista de deseos">
-                            <img src="../../image/carrito/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
+                            <img src="../../image/corazon.png" alt="Favoritos" style="width:16px;height:16px;">
                             <span class="badge" id="wishlist-count">0</span>
                             <span class="icon-label">Favoritos</span>
                         </button>
                         <button class="icon-btn" onclick="openCartModal()" title="Ver carrito">
-                            <img src="../../image/carrito/carrito.png" alt="Carrito" style="width:16px;height:16px;">
+                            <img src="../../image/carrito.png" alt="Carrito" style="width:16px;height:16px;">
                             <span class="badge" id="cart-count">0</span>
                             <span class="cart-total" id="cart-total">$0,00</span>
                             <span class="icon-label">Carrito</span>
@@ -48,6 +49,17 @@
             </div>
         </div>
     </header>
+
+    <!-- Navegación por pestañas -->
+    <nav class="distributor-tabs">
+        <div class="container">
+            <div class="tabs-nav">
+                <a href="index.html" class="tab-link"><span data-icon="store" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Catálogo</a>
+                <a href="search.html" class="tab-link active"><span data-icon="search" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Buscar</a>
+                <a href="orders.html" class="tab-link"><span data-icon="shopping-cart" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px"></span>Mis Pedidos</a>
+            </div>
+        </div>
+    </nav>
 
     <main class="container">
         <!-- Breadcrumb -->
@@ -100,27 +112,45 @@
         </div>
     </main>
 
-    <!-- Modal del carrito -->
-    <div id="cart-modal" class="modal-overlay" style="display:none;">
-        <div class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Carrito de Compras</h2>
-                    <button class="modal-close" onclick="closeCartModal()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="cart-items">
-                        <!-- Los items del carrito se cargarán aquí -->
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeCartModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="cart-modal-title">Carrito de Compras</h2>
+                        <button class="cart-close-btn" onclick="closeCartModal()">
+                            ×
+                        </button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
-                        <div style="font-weight:600;font-size:18px;">
-                            Total: <span id="cart-modal-total">$0,00</span>
+
+                <div class="cart-items-section">
+                    <div id="cart-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-subtotal">
+                            <span>Subtotal</span>
+                            <span id="cart-modal-total">$0,00</span>
                         </div>
-                        <div style="display:flex;gap:12px;">
-                            <button class="btn" onclick="closeCartModal()">Seguir Comprando</button>
-                            <button class="btn brand" onclick="proceedToCheckout()">Proceder al Pago</button>
+                        <p class="cart-shipping-note">Envío y taxes calculados en checkout.</p>
+                        <div class="cart-actions">
+                            <button class="btn brand cart-checkout-btn" onclick="proceedToCheckout()">
+                                Ir a pagar
+                            </button>
+                            <div class="cart-continue-shopping">
+                                <p>
+                                    o 
+                                    <button class="cart-continue-btn" onclick="closeCartModal()">
+                                        Continuar Comprando <span>&rarr;</span>
+                                    </button>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -128,23 +158,42 @@
         </div>
     </div>
 
-    <!-- Modal de wishlist -->
-    <div id="wishlist-modal" class="modal-overlay" style="display:none;">
-        <div class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Lista de Deseos</h2>
-                    <button class="modal-close" onclick="closeWishlistModal()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="wishlist-items">
-                        <!-- Los items de la wishlist se cargarán aquí -->
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="cart-modal">
+        <div class="cart-backdrop" onclick="closeWishlistModal()"></div>
+        <div class="cart-panel">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <div class="cart-title-section">
+                        <h2 id="wishlist-modal-title">Lista de Deseos</h2>
+                        <button class="cart-close-btn" onclick="closeWishlistModal()">
+                            ×
+                        </button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div style="display:flex;gap:12px;justify-content:flex-end;">
-                        <button class="btn" onclick="addAllToCart()">Agregar Todo al Carrito</button>
-                        <button class="btn" onclick="closeWishlistModal()">Cerrar</button>
+
+                <div class="cart-items-section">
+                    <div id="wishlist-items-container" class="cart-items-list">
+                        <!-- Los productos se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="cart-summary">
+                        <div class="cart-actions">
+                            <button class="btn brand cart-checkout-btn" onclick="addAllToCart()">
+                                <span data-icon="cart" style="width:18px;height:18px;margin-right:8px"></span>
+                                Agregar Todo al Carrito
+                            </button>
+                            <div class="cart-continue-shopping">
+                                <p>
+                                    o 
+                                    <button class="cart-continue-btn" onclick="closeWishlistModal()">
+                                        Continuar Comprando <span>&rarr;</span>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,7 +202,63 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>© <span id="year"></span> H&B Importaciones - Panel Distribuidor</small>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>H&B Importaciones</h3>
+                    <p>Especialistas en tecnología y componentes electrónicos de alta calidad para el mercado ecuatoriano.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <span data-icon="facebook" style="width:20px;height:20px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <span data-icon="instagram" style="width:20px;height:20px"></span>
+                        </a>
+                        <a href="#" class="social-link" title="WhatsApp">
+                            <span data-icon="message-circle" style="width:20px;height:20px"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Panel de Distribuidor</h4>
+                    <ul>
+                        <li><a href="index.html">Catálogo de Productos</a></li>
+                        <li><a href="search.html">Buscar Productos</a></li>
+                        <li><a href="orders.html">Mis Pedidos</a></li>
+                        <li><a href="../user/store.html">Ir a Tienda</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Herramientas</h4>
+                    <ul>
+                        <li><a href="#" onclick="alert('Calculadora de precios próximamente')">Calculadora de Precios</a></li>
+                        <li><a href="#" onclick="alert('Catálogo PDF próximamente')">Catálogo PDF</a></li>
+                        <li><a href="#" onclick="alert('Soporte técnico próximamente')">Soporte Técnico</a></li>
+                        <li><a href="#" onclick="alert('Capacitaciones próximamente')">Capacitaciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Soporte Técnico</h4>
+                    <div class="contact-info">
+                        <p><strong>Email:</strong> soporte@hbyimportaciones.com</p>
+                        <p><strong>Teléfono:</strong> +593 2 234-5678</p>
+                        <p><strong>WhatsApp:</strong> +593 99 123-4567</p>
+                        <p><strong>Horario:</strong> Lun-Vie 8:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; <span id="year"></span> H&B Importaciones. Todos los derechos reservados.</p>
+                    <div class="footer-links">
+                        <a href="#" onclick="alert('Términos y Condiciones próximamente')">Términos y Condiciones</a>
+                        <a href="#" onclick="alert('Política de Privacidad próximamente')">Política de Privacidad</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -164,6 +269,130 @@
     <script src="../../js/distri/search.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ===== FUNCIONALIDAD DEL MODAL DE ASESORES =====
+        function openAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAdvisorsModal() {
+            const modal = document.getElementById('advisors-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function contactAdvisor(email, name) {
+            const subject = encodeURIComponent('Consulta desde H&B Importaciones - Distribuidor');
+            const body = encodeURIComponent(`Hola ${name},\n\nSoy distribuidor y me gustaría recibir asesoría sobre productos y condiciones especiales.\n\nGracias.`);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.open(mailtoLink);
+            alert(`Redirigiendo a ${name}`);
+        }
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAdvisorsModal();
+            }
+        });
     </script>
+
+    <!-- Advisors Modal -->
+    <div id="advisors-modal" class="advisors-modal">
+        <div class="advisors-backdrop" onclick="closeAdvisorsModal()"></div>
+        <div class="advisors-panel">
+            <div class="advisors-content">
+                <div class="advisors-header">
+                    <div class="advisors-title-section">
+                        <h2>Nuestros Asesores</h2>
+                        <p>Elige con quién te gustaría contactar para recibir asesoría personalizada</p>
+                        <button class="advisors-close-btn" onclick="closeAdvisorsModal()">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="advisors-grid">
+                    <!-- Asesor 1 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=MR" alt="María Rodríguez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>María Rodríguez</h3>
+                            <p class="advisor-role">Especialista en Laptops</p>
+                            <p class="advisor-description">Experta en equipos portátiles y soluciones empresariales</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('maria.rodriguez@hbimportaciones.com', 'María Rodríguez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 2 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=CL" alt="Carlos López" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Carlos López</h3>
+                            <p class="advisor-role">Especialista en Gaming</p>
+                            <p class="advisor-description">Conoce todo sobre equipos gaming y componentes de alta gama</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('carlos.lopez@hbimportaciones.com', 'Carlos López')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 3 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=AM" alt="Ana Martínez" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Ana Martínez</h3>
+                            <p class="advisor-role">Especialista en Componentes</p>
+                            <p class="advisor-description">Experta en CPUs, GPUs y componentes de computadoras</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status busy">● Ocupada</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('ana.martinez@hbimportaciones.com', 'Ana Martínez')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesor 4 -->
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">
+                            <img src="https://via.placeholder.com/80x80?text=DG" alt="Diego García" />
+                        </div>
+                        <div class="advisor-info">
+                            <h3>Diego García</h3>
+                            <p class="advisor-role">Especialista en Monitores</p>
+                            <p class="advisor-description">Conoce las mejores opciones en monitores y displays</p>
+                            <div class="advisor-contact">
+                                <span class="advisor-status online">● En línea</span>
+                                <button class="advisor-contact-btn" onclick="contactAdvisor('diego.garcia@hbimportaciones.com', 'Diego García')">
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

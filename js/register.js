@@ -21,9 +21,7 @@
 
     const users = StorageAPI.getUsers();
     if(users.some(u=>u.email.toLowerCase()===email)){
-      if (window.Helpers && window.Helpers.showToast) {
-        window.Helpers.showToast('Este correo ya está registrado', 'warning');
-      }
+      alert('Este correo ya está registrado');
       return;
     }
     const id = 'u' + Math.random().toString(36).slice(2,9);
@@ -32,30 +30,21 @@
     users.push(newUser);
     StorageAPI.setUsers(users);
     StorageAPI.setSession({ id, role, name });
-    if (window.Helpers && window.Helpers.showToast) {
-      window.Helpers.showToast('Cuenta creada con éxito', 'success', 2000);
-    }
-    // Redirigir según el rol y parámetros URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectParam = urlParams.get('redirect');
-    
-    let redirectUrl = '../../index.html';
-    
-    // Usar redirección por rol por defecto
+    alert('Cuenta creada con éxito');
+    // Redirigir según el rol
     switch(role) {
       case 'admin':
-        redirectUrl = '../admin/index.html';
+        window.location.href = '../admin/index.html';
         break;
       case 'distributor':
-        redirectUrl = '../distri/index.html';
+        window.location.href = '../distri/index.html';
         break;
       case 'client':
-        // Los clientes siempre van a store.html
-        redirectUrl = '../user/store.html';
+        window.location.href = '../user/index.html';
         break;
+      default:
+        window.location.href = '../../index.html';
     }
-    
-    window.location.href = redirectUrl;
   });
 })();
 
